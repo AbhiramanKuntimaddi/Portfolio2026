@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
 	motion,
 	useScroll,
@@ -45,7 +45,7 @@ const technicalManifest: SkillGroup[] = [
 	},
 ];
 
-export const Skills = () => {
+export function Skills(): JSX.Element {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [activeIndex, setActiveIndex] = useState(0);
 
@@ -60,7 +60,7 @@ export const Skills = () => {
 		restDelta: 0.001,
 	});
 
-	// Intro Fade Out Logic
+	// Intro Fade Out (0.0 -> 0.12)
 	const introOpacity = useTransform(smoothProgress, [0, 0.08, 0.12], [1, 1, 0]);
 	const introScale = useTransform(smoothProgress, [0, 0.12], [1, 0.95]);
 	const introBlur = useTransform(
@@ -69,9 +69,12 @@ export const Skills = () => {
 		["blur(0px)", "blur(10px)"]
 	);
 
-	// Content Reveal Logic
+	// Content Reveal (0.12 -> 0.18)
 	const contentOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 1]);
 	const contentY = useTransform(smoothProgress, [0.12, 0.2], [40, 0]);
+
+	// Background Digit Opacity: Only start showing AFTER the intro is gone
+	const bgDigitOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 0.04]);
 
 	useMotionValueEvent(smoothProgress, "change", (latest) => {
 		const adjusted = Math.max(0, (latest - 0.15) / 0.85);
@@ -95,9 +98,9 @@ export const Skills = () => {
 								filter: introBlur,
 							}}
 							className="absolute inset-0 flex flex-col justify-center px-6 md:px-20 z-30 pointer-events-none">
-							<motion.span className="text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
-								{"The Capabilities"}
-							</motion.span>
+							<span className="text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
+								The Capabilities
+							</span>
 							<h2 className="text-5xl md:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl">
 								Mastering the <br />
 								<span className="text-accent italic">Technical Stack.</span>
@@ -112,7 +115,6 @@ export const Skills = () => {
 						<motion.div
 							style={{ opacity: contentOpacity, y: contentY }}
 							className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 w-full z-10">
-							{/* LEFT: Tracker */}
 							<div className="md:col-span-5 flex flex-col justify-center border-l border-foreground/5 pl-8 space-y-10">
 								{technicalManifest.map((item, i) => {
 									const start = 0.15 + (i / technicalManifest.length) * 0.85;
@@ -130,7 +132,6 @@ export const Skills = () => {
 								})}
 							</div>
 
-							{/* RIGHT: Content Blocks */}
 							<div className="md:col-span-7 h-100 flex items-center relative">
 								{technicalManifest.map((item, i) => (
 									<SkillContentBlock
@@ -146,8 +147,10 @@ export const Skills = () => {
 						</motion.div>
 					</div>
 
-					{/* BACKGROUND ROLLING DIGIT */}
-					<div className="absolute right-10 bottom-10 pointer-events-none select-none opacity-[0.04]">
+					{/* BACKGROUND ROLLING DIGIT (Now with delayed opacity) */}
+					<motion.div
+						style={{ opacity: bgDigitOpacity }}
+						className="absolute right-10 bottom-10 pointer-events-none select-none">
 						<AnimatePresence mode="popLayout">
 							<motion.span
 								key={activeIndex}
@@ -159,19 +162,27 @@ export const Skills = () => {
 								{technicalManifest[activeIndex].id.slice(1)}
 							</motion.span>
 						</AnimatePresence>
-					</div>
+					</motion.div>
 				</div>
 			</div>
 		</section>
 	);
-};
+}
 
-const GroupTitle: React.FC<{
+// Sub-components as standard functions
+interface GroupTitleProps {
 	title: string;
 	progress: MotionValue<number>;
 	range: [number, number];
 	isActive: boolean;
-}> = ({ title, progress, range, isActive }) => {
+}
+
+function GroupTitle({
+	title,
+	progress,
+	range,
+	isActive,
+}: GroupTitleProps): JSX.Element {
 	const opacity = useTransform(
 		progress,
 		[range[0], range[0] + 0.05, range[1] - 0.05, range[1]],
@@ -192,15 +203,23 @@ const GroupTitle: React.FC<{
 			{title}
 		</motion.h3>
 	);
-};
+}
 
-const SkillContentBlock: React.FC<{
+interface SkillContentProps {
 	item: SkillGroup;
 	index: number;
 	total: number;
 	progress: MotionValue<number>;
 	offset: number;
-}> = ({ item, index, total, progress, offset }) => {
+}
+
+function SkillContentBlock({
+	item,
+	index,
+	total,
+	progress,
+	offset,
+}: SkillContentProps): JSX.Element {
 	const sectionWidth = (1 - offset) / total;
 	const start = offset + index * sectionWidth;
 	const end = start + sectionWidth;
@@ -247,4 +266,4 @@ const SkillContentBlock: React.FC<{
 			</div>
 		</motion.div>
 	);
-};
+}

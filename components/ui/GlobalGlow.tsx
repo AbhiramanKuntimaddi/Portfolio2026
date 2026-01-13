@@ -1,16 +1,23 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
 export const GlobalGlow = () => {
-    const mouseX = useMotionValue(0);
-    const mouseY = useMotionValue(0);
+	const [mounted, setMounted] = useState(false);
 
-    // Tightened radius (400px) and condensed Gaussian stops
-    const smoothGradient = useTransform(
-        [mouseX, mouseY],
-        ([x, y]) => `
+	// Delay setMounted to next frame to avoid cascading renders
+	useEffect(() => {
+		const id = requestAnimationFrame(() => setMounted(true));
+		return () => cancelAnimationFrame(id);
+	}, []);
+
+	const mouseX = useMotionValue(0);
+	const mouseY = useMotionValue(0);
+
+	const smoothGradient = useTransform(
+		[mouseX, mouseY],
+		([x, y]) => `
             radial-gradient(
                 400px circle at ${x}px ${y}px, 
                 rgba(0, 89, 255, 0.15) 0%, 
@@ -19,27 +26,25 @@ export const GlobalGlow = () => {
                 transparent 80%
             )
         `
-    );
+	);
 
-    useEffect(() => {
-        const handleMouseMove = (e: MouseEvent) => {
-            mouseX.set(e.clientX);
-            mouseY.set(e.clientY);
-        };
+	useEffect(() => {
+		const handleMouseMove = (e: MouseEvent) => {
+			mouseX.set(e.clientX);
+			mouseY.set(e.clientY);
+		};
+		window.addEventListener("mousemove", handleMouseMove);
+		return () => window.removeEventListener("mousemove", handleMouseMove);
+	}, [mouseX, mouseY]);
 
-        window.addEventListener("mousemove", handleMouseMove);
-        return () => window.removeEventListener("mousemove", handleMouseMove);
-    }, [mouseX, mouseY]);
+	if (!mounted) return null; // Render nothing on server
 
-    return (
-        <div className="pointer-events-none fixed inset-0 z-1">
-            <motion.div
-                className="absolute inset-0"
-                style={{ 
-                    background: smoothGradient,
-                    mixBlendMode: "screen" 
-                }}
-            />
-        </div>
-    );
+	return (
+		<div className="pointer-events-none fixed inset-0 z-1">
+			<motion.div
+				className="absolute inset-0"
+				style={{ background: smoothGradient, mixBlendMode: "screen" }}
+			/>
+		</div>
+	);
 };
