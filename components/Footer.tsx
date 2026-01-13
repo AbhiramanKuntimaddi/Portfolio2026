@@ -1,6 +1,8 @@
 "use client";
 
+import React from "react";
 import { motion } from "framer-motion";
+import { FiCircle } from "react-icons/fi";
 
 interface FooterProps {
 	className?: string;
@@ -10,7 +12,7 @@ interface FooterProps {
  * Standard Footer Component
  * Optimized for a clean, technical exit at the bottom of the document flow.
  */
-export function Footer({ className = "" }: FooterProps): JSX.Element {
+export const Footer: React.FC<FooterProps> = ({ className = "" }) => {
 	const currentYear = new Date().getFullYear();
 
 	return (
@@ -52,4 +54,4 @@ export function Footer({ className = "" }: FooterProps): JSX.Element {
 			</div>
 		</motion.footer>
 	);
-}
+};
