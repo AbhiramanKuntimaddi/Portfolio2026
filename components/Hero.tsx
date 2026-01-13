@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import {
 	motion,
 	Variants,
@@ -27,7 +27,7 @@ const fadeUp: Variants = {
 	},
 };
 
-export const Hero = () => {
+export function Hero() {
 	const targetRef = useRef<HTMLDivElement>(null);
 
 	const { scrollYProgress } = useScroll({
@@ -35,17 +35,14 @@ export const Hero = () => {
 		offset: ["start start", "end start"],
 	});
 
-	// ELASTIC PHYSICS CONFIGURATION
-	// stiffness: Higher = faster response.
-	// damping: Lower = more "springy" oscillation / elasticity.
 	const smoothScroll = useSpring(scrollYProgress, {
-		stiffness: 60, // Reduced for a more "drifting" feel
-		damping: 20, // Reduced to allow for a slight elastic bounce
-		mass: 0.5, // Added mass for momentum
+		stiffness: 60,
+		damping: 20,
+		mass: 0.5,
 		restDelta: 0.001,
 	});
 
-	// CONTENT ANIMATIONS (Tied to smoothScroll for the elastic effect)
+	// Main content transforms
 	const contentScale = useTransform(smoothScroll, [0, 0.5], [1, 0.85]);
 	const contentOpacity = useTransform(smoothScroll, [0, 0.45], [1, 0]);
 	const contentBlur = useTransform(
@@ -54,10 +51,8 @@ export const Hero = () => {
 		["blur(0px)", "blur(25px)"]
 	);
 
-	// Sub-parallax for the metadata (moves faster than the rest for depth)
 	const metaY = useTransform(smoothScroll, [0, 1], [0, -150]);
 
-	// NAVIGATE_DOWN BUTTON ANIMATIONS
 	const navDownOpacity = useTransform(smoothScroll, [0, 0.1], [1, 0]);
 	const navDownY = useTransform(smoothScroll, [0, 0.1], [0, 30]);
 
@@ -76,7 +71,7 @@ export const Hero = () => {
 					initial="hidden"
 					animate="visible"
 					className="flex-1 flex flex-col justify-center max-w-400 mx-auto w-full">
-					{/* HEADER: NAME & TITLE */}
+					{/* HEADER */}
 					<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-24 md:mb-32">
 						<motion.div variants={fadeUp} className="lg:col-span-8">
 							<h2 className="text-[clamp(3rem,10vw,7rem)] font-bold text-foreground leading-[0.85] uppercase tracking-[0.025em]">
@@ -152,7 +147,7 @@ export const Hero = () => {
 						</motion.div>
 					</div>
 
-					{/* METADATA STRIP with Elastic Parallax */}
+					{/* METADATA STRIP */}
 					<motion.div
 						style={{ y: metaY }}
 						variants={fadeUp}
@@ -180,7 +175,7 @@ export const Hero = () => {
 					</motion.div>
 				</motion.div>
 
-				{/* THE BUTTON */}
+				{/* NAVIGATE DOWN BUTTON */}
 				<motion.div
 					style={{ opacity: navDownOpacity, y: navDownY }}
 					initial={{ opacity: 0, y: 10 }}
@@ -213,4 +208,4 @@ export const Hero = () => {
 			</div>
 		</section>
 	);
-};
+}

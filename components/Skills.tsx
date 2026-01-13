@@ -45,7 +45,7 @@ const technicalManifest: SkillGroup[] = [
 	},
 ];
 
-export function Skills(): JSX.Element {
+export function Skills() {
 	const containerRef = useRef<HTMLDivElement>(null);
 	const [activeIndex, setActiveIndex] = useState(0);
 
@@ -73,7 +73,7 @@ export function Skills(): JSX.Element {
 	const contentOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 1]);
 	const contentY = useTransform(smoothProgress, [0.12, 0.2], [40, 0]);
 
-	// Background Digit Opacity: Only start showing AFTER the intro is gone
+	// Background Digit Opacity
 	const bgDigitOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 0.04]);
 
 	useMotionValueEvent(smoothProgress, "change", (latest) => {
@@ -90,7 +90,7 @@ export function Skills(): JSX.Element {
 			<div ref={containerRef} className="relative h-[800vh]">
 				<div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
 					<div className="max-w-7xl mx-auto w-full px-6 md:px-20 relative h-full flex items-center">
-						{/* 1. CINEMATIC INTRO HEADER */}
+						{/* 1. Intro */}
 						<motion.div
 							style={{
 								opacity: introOpacity,
@@ -111,7 +111,7 @@ export function Skills(): JSX.Element {
 							</p>
 						</motion.div>
 
-						{/* 2. MAIN STICKY INTERFACE */}
+						{/* 2. Main Interface */}
 						<motion.div
 							style={{ opacity: contentOpacity, y: contentY }}
 							className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 w-full z-10">
@@ -147,16 +147,16 @@ export function Skills(): JSX.Element {
 						</motion.div>
 					</div>
 
-					{/* BACKGROUND ROLLING DIGIT (Now with delayed opacity) */}
+					{/* Background Digit */}
 					<motion.div
 						style={{ opacity: bgDigitOpacity }}
 						className="absolute right-10 bottom-10 pointer-events-none select-none">
 						<AnimatePresence mode="popLayout">
 							<motion.span
 								key={activeIndex}
-								initial={{ y: "40%", opacity: 0, filter: "blur(15px)" }}
-								animate={{ y: "0%", opacity: 1, filter: "blur(0px)" }}
-								exit={{ y: "-40%", opacity: 0, filter: "blur(15px)" }}
+								initial={{ y: "40%", opacity: 0 }}
+								animate={{ y: "0%", opacity: 1 }}
+								exit={{ y: "-40%", opacity: 0 }}
 								transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
 								className="block text-[30vw] font-bold text-foreground italic leading-none font-sans">
 								{technicalManifest[activeIndex].id.slice(1)}
@@ -169,7 +169,7 @@ export function Skills(): JSX.Element {
 	);
 }
 
-// Sub-components as standard functions
+// Sub-components
 interface GroupTitleProps {
 	title: string;
 	progress: MotionValue<number>;
@@ -177,12 +177,7 @@ interface GroupTitleProps {
 	isActive: boolean;
 }
 
-function GroupTitle({
-	title,
-	progress,
-	range,
-	isActive,
-}: GroupTitleProps): JSX.Element {
+function GroupTitle({ title, progress, range, isActive }: GroupTitleProps) {
 	const opacity = useTransform(
 		progress,
 		[range[0], range[0] + 0.05, range[1] - 0.05, range[1]],
@@ -219,7 +214,7 @@ function SkillContentBlock({
 	total,
 	progress,
 	offset,
-}: SkillContentProps): JSX.Element {
+}: SkillContentProps) {
 	const sectionWidth = (1 - offset) / total;
 	const start = offset + index * sectionWidth;
 	const end = start + sectionWidth;

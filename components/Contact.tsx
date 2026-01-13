@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState, ChangeEvent, FormEvent } from "react";
+import { useRef, useState, ChangeEvent, FormEvent } from "react";
 import {
 	motion,
 	Variants,
@@ -34,7 +34,7 @@ interface FormData {
 	message: string;
 }
 
-export const Contact: React.FC = () => {
+export function Contact() {
 	const targetRef = useRef<HTMLDivElement>(null);
 	const [status, setStatus] = useState<"IDLE" | "SENDING" | "SUCCESS">("IDLE");
 	const [formData, setFormData] = useState<FormData>({
@@ -47,6 +47,7 @@ export const Contact: React.FC = () => {
 		target: targetRef,
 		offset: ["start end", "end start"],
 	});
+
 	const smoothScroll = useSpring(scrollYProgress, {
 		stiffness: 60,
 		damping: 20,
@@ -198,9 +199,9 @@ export const Contact: React.FC = () => {
 			</motion.div>
 		</section>
 	);
-};
+}
 
-const InputField = ({
+function InputField({
 	label,
 	name,
 	type = "text",
@@ -216,45 +217,47 @@ const InputField = ({
 	value: string;
 	onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
 	textarea?: boolean;
-}) => (
-	<div className="flex flex-col gap-3 relative group border-b border-foreground/10 pb-2 focus-within:border-accent/50 transition-colors duration-500">
-		<label className="text-foreground font-semibold tracking-widest text-[10px] uppercase opacity-40 group-focus-within:opacity-100 transition-opacity">
-			{label}
-		</label>
-		<div className="relative overflow-hidden">
-			{textarea ? (
-				<textarea
-					required
-					name={name}
-					rows={4}
-					value={value}
-					onChange={onChange}
-					placeholder={placeholder}
-					className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest resize-none w-full relative z-10"
-				/>
-			) : (
-				<input
-					required
-					name={name}
-					type={type}
-					value={value}
-					onChange={onChange}
-					placeholder={placeholder}
-					className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest w-full relative z-10"
-				/>
-			)}
-			<AnimatePresence>
-				{!value && (
-					<motion.span
-						initial={{ opacity: 0, x: -10 }}
-						animate={{ opacity: 0.1, x: 0 }}
-						exit={{ opacity: 0, x: 10, filter: "blur(5px)" }}
-						className="absolute left-0 top-0 text-foreground pointer-events-none font-sans text-lg md:text-xl tracking-widest whitespace-nowrap">
-						{placeholder}
-					</motion.span>
+}) {
+	return (
+		<div className="flex flex-col gap-3 relative group border-b border-foreground/10 pb-2 focus-within:border-accent/50 transition-colors duration-500">
+			<label className="text-foreground font-semibold tracking-widest text-[10px] uppercase opacity-40 group-focus-within:opacity-100 transition-opacity">
+				{label}
+			</label>
+			<div className="relative overflow-hidden">
+				{textarea ? (
+					<textarea
+						required
+						name={name}
+						rows={4}
+						value={value}
+						onChange={onChange}
+						placeholder={placeholder}
+						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest resize-none w-full relative z-10"
+					/>
+				) : (
+					<input
+						required
+						name={name}
+						type={type}
+						value={value}
+						onChange={onChange}
+						placeholder={placeholder}
+						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest w-full relative z-10"
+					/>
 				)}
-			</AnimatePresence>
+				<AnimatePresence>
+					{!value && (
+						<motion.span
+							initial={{ opacity: 0, x: -10 }}
+							animate={{ opacity: 0.1, x: 0 }}
+							exit={{ opacity: 0, x: 10, filter: "blur(5px)" }}
+							className="absolute left-0 top-0 text-foreground pointer-events-none font-sans text-lg md:text-xl tracking-widest whitespace-nowrap">
+							{placeholder}
+						</motion.span>
+					)}
+				</AnimatePresence>
+			</div>
+			<motion.div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-accent w-0 group-focus-within:w-full transition-all duration-500 ease-in-out" />
 		</div>
-		<motion.div className="absolute bottom-0 left-1/2 -translate-x-1/2 h-0.5 bg-accent w-0 group-focus-within:w-full transition-all duration-500 ease-in-out" />
-	</div>
-);
+	);
+}

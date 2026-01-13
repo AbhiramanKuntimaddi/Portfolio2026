@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { motion, useMotionValue, useTransform } from "framer-motion";
 
-export const GlobalGlow = () => {
+export function GlobalGlow() {
 	const [mounted, setMounted] = useState(false);
 
-	// Delay setMounted to next frame to avoid cascading renders
+	// Delay mount to avoid server-side rendering issues
 	useEffect(() => {
 		const id = requestAnimationFrame(() => setMounted(true));
 		return () => cancelAnimationFrame(id);
@@ -18,14 +18,14 @@ export const GlobalGlow = () => {
 	const smoothGradient = useTransform(
 		[mouseX, mouseY],
 		([x, y]) => `
-            radial-gradient(
-                400px circle at ${x}px ${y}px, 
-                rgba(0, 89, 255, 0.15) 0%, 
-                rgba(0, 89, 255, 0.08) 25%, 
-                rgba(0, 89, 255, 0.02) 50%, 
-                transparent 80%
-            )
-        `
+			radial-gradient(
+				400px circle at ${x}px ${y}px,
+				rgba(0, 89, 255, 0.15) 0%,
+				rgba(0, 89, 255, 0.08) 25%,
+				rgba(0, 89, 255, 0.02) 50%,
+				transparent 80%
+			)
+		`
 	);
 
 	useEffect(() => {
@@ -37,7 +37,7 @@ export const GlobalGlow = () => {
 		return () => window.removeEventListener("mousemove", handleMouseMove);
 	}, [mouseX, mouseY]);
 
-	if (!mounted) return null; // Render nothing on server
+	if (!mounted) return null;
 
 	return (
 		<div className="pointer-events-none fixed inset-0 z-1">
@@ -47,4 +47,4 @@ export const GlobalGlow = () => {
 			/>
 		</div>
 	);
-};
+}

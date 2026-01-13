@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
 	motion,
 	useScroll,
@@ -81,9 +81,9 @@ const projects: Project[] = [
 	},
 ];
 
-export const Projects: React.FC = () => {
+export function Projects() {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [activeIndex, setActiveIndex] = useState<number>(0);
+	const [activeIndex, setActiveIndex] = useState(0);
 
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
@@ -109,7 +109,7 @@ export const Projects: React.FC = () => {
 	const contentOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 1]);
 	const contentY = useTransform(smoothProgress, [0.12, 0.2], [20, 0]);
 
-	// Background digit - Matches the Skill logic (low master opacity)
+	// Background digit opacity
 	const bgDigitOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 0.04]);
 
 	// Update active index based on scroll
@@ -167,7 +167,7 @@ export const Projects: React.FC = () => {
 						</motion.div>
 					</div>
 
-					{/* Background Digit - UPDATED TO MATCH SKILLS STYLE */}
+					{/* Background Digit */}
 					<motion.div
 						style={{ opacity: bgDigitOpacity }}
 						className="absolute right-10 bottom-10 pointer-events-none select-none">
@@ -189,16 +189,26 @@ export const Projects: React.FC = () => {
 			</div>
 		</section>
 	);
-};
+}
 
-const ProjectBlock: React.FC<{
+// Project block sub-component
+interface ProjectBlockProps {
 	project: Project;
 	index: number;
 	total: number;
 	progress: MotionValue<number>;
 	offset: number;
 	isActive: boolean;
-}> = ({ project, index, total, progress, offset, isActive }) => {
+}
+
+function ProjectBlock({
+	project,
+	index,
+	total,
+	progress,
+	offset,
+	isActive,
+}: ProjectBlockProps) {
 	const sectionWidth = (1 - offset) / total;
 	const start = offset + index * sectionWidth;
 	const end = start + sectionWidth;
@@ -312,4 +322,4 @@ const ProjectBlock: React.FC<{
 			</div>
 		</motion.div>
 	);
-};
+}

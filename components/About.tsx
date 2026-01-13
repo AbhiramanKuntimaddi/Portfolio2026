@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
 import {
 	motion,
 	useScroll,
@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 
 // Individual word scrubbing
-const ScrubbedWord = ({
+function ScrubbedWord({
 	word,
 	progress,
 	start,
@@ -22,7 +22,7 @@ const ScrubbedWord = ({
 	progress: MotionValue<number>;
 	start: number;
 	end: number;
-}) => {
+}) {
 	const opacity = useTransform(progress, [start, end], [0.1, 1]);
 	const y = useTransform(progress, [start, end], [10, 0]);
 	return (
@@ -30,10 +30,10 @@ const ScrubbedWord = ({
 			{word}
 		</motion.span>
 	);
-};
+}
 
 // Scrubbed text container
-const ScrubbedText = ({
+function ScrubbedText({
 	text,
 	progress,
 	range,
@@ -41,7 +41,7 @@ const ScrubbedText = ({
 	text: string;
 	progress: MotionValue<number>;
 	range: [number, number];
-}) => {
+}) {
 	const words = text.split(" ");
 	return (
 		<span>
@@ -60,9 +60,9 @@ const ScrubbedText = ({
 			})}
 		</span>
 	);
-};
+}
 
-export const About = () => {
+export function About() {
 	const containerRef = useRef<HTMLDivElement>(null);
 
 	// Scroll tracking
@@ -110,12 +110,10 @@ export const About = () => {
 
 	return (
 		<section className="relative bg-transparent">
-			{/* Tall container for sticky scroll scrub */}
 			<div ref={containerRef} className="relative h-[220vh]">
-				{/* Sticky inner container */}
 				<div className="sticky top-0 h-screen flex items-center justify-center">
 					<div className="w-full max-w-6xl px-6 md:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
-						{/* LEFT: IMAGE with depth */}
+						{/* LEFT: IMAGE */}
 						<div className="lg:col-span-5 flex justify-center lg:justify-start relative">
 							<motion.div
 								onMouseMove={handleMouseMove}
@@ -130,7 +128,7 @@ export const About = () => {
 									transformStyle: "preserve-3d",
 								}}
 								className="relative w-full max-w-72">
-								{/* Background glow layer */}
+								{/* Glow background */}
 								<div className="absolute -inset-4 rounded-lg bg-linear-to-tr from-[#001a4d] to-[#00072d] opacity-30 blur-3xl -z-10" />
 								<div
 									className="absolute -inset-3 border border-white/5 rounded-sm"
@@ -216,4 +214,4 @@ export const About = () => {
 			</div>
 		</section>
 	);
-};
+}

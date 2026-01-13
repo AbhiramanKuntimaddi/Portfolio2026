@@ -14,10 +14,11 @@ export default function RootLayout({
 }) {
 	return (
 		<html lang="en" className="scroll-smooth">
-			{/* Apply the Rich Black background to the body */}
 			<body className="antialiased relative bg-[#00072d] min-h-screen">
+				{/* Global mouse-follow glow */}
 				<GlobalGlow />
-				{/* Ensure children are relative so they stay above the fixed glow */}
+
+				{/* Main content is above the glow */}
 				<div className="relative z-10">{children}</div>
 			</body>
 		</html>

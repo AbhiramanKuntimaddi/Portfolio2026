@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import { useRef, useState } from "react";
 import {
 	motion,
 	useScroll,
@@ -63,9 +63,9 @@ const experiences: ExperienceData[] = [
 	},
 ];
 
-export const Experience: React.FC = () => {
+export function Experience() {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const [currentYear, setCurrentYear] = useState<string>(experiences[0].year);
+	const [currentYear, setCurrentYear] = useState(experiences[0].year);
 
 	const { scrollYProgress } = useScroll({
 		target: containerRef,
@@ -78,11 +78,7 @@ export const Experience: React.FC = () => {
 		restDelta: 0.001,
 	});
 
-	/**
-	 * APPLE-STYLE REVEAL LOGIC
-	 * 0.0 -> 0.15: Intro text is center stage, then scales/fades out.
-	 * 0.10 -> 0.20: The Tracker and Experience items slide in from the blur.
-	 */
+	// Intro animation
 	const introScale = useTransform(smoothProgress, [0, 0.1], [1, 0.95]);
 	const introOpacity = useTransform(smoothProgress, [0, 0.08, 0.12], [1, 1, 0]);
 	const introBlur = useTransform(
@@ -91,19 +87,19 @@ export const Experience: React.FC = () => {
 		["blur(0px)", "blur(10px)"]
 	);
 
+	// Content reveal
 	const contentOpacity = useTransform(smoothProgress, [0.12, 0.18], [0, 1]);
 	const contentY = useTransform(smoothProgress, [0.12, 0.2], [20, 0]);
 
-	useMotionValueEvent(smoothProgress, "change", (latest: number) => {
-		// We map the experience cycle to start after the intro (0.15 to 1.0)
-		const adjustedProgress = Math.max(0, (latest - 0.15) / 0.85);
+	// Update current year based on scroll
+	useMotionValueEvent(smoothProgress, "change", (latest) => {
+		const adjusted = Math.max(0, (latest - 0.15) / 0.85);
 		const index = Math.min(
-			Math.floor(adjustedProgress * experiences.length),
+			Math.floor(adjusted * experiences.length),
 			experiences.length - 1
 		);
-		if (experiences[index].year !== currentYear) {
+		if (experiences[index].year !== currentYear)
 			setCurrentYear(experiences[index].year);
-		}
 	});
 
 	return (
@@ -111,7 +107,7 @@ export const Experience: React.FC = () => {
 			<div ref={containerRef} className="relative h-[800vh]">
 				<div className="sticky top-0 h-screen w-full overflow-hidden flex items-center">
 					<div className="max-w-7xl mx-auto w-full px-6 md:px-20 relative h-full flex items-center">
-						{/* 1. CINEMATIC INTRO HEADER */}
+						{/* Intro */}
 						<motion.div
 							style={{
 								opacity: introOpacity,
@@ -120,7 +116,7 @@ export const Experience: React.FC = () => {
 							}}
 							className="absolute inset-0 flex flex-col justify-center px-6 md:px-20 z-30">
 							<motion.span className="text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
-								{"The work experience"}
+								The work experience
 							</motion.span>
 							<h2 className="text-5xl md:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.9] max-w-4xl">
 								Scaling systems through <br />
@@ -134,15 +130,14 @@ export const Experience: React.FC = () => {
 							</p>
 						</motion.div>
 
-						{/* 2. THE MAIN INTERFACE (Revealed on scroll) */}
+						{/* Main Content */}
 						<motion.div
 							style={{ opacity: contentOpacity, y: contentY }}
 							className="grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 w-full z-10">
-							{/* LEFT: THE TRACKER */}
+							{/* Tracker */}
 							<div className="md:col-span-4 flex flex-col justify-center border-l border-foreground/10 pl-8">
 								<div className="space-y-6">
 									{experiences.map((exp, i) => {
-										// Offset mapping so titles light up correctly after intro
 										const start = 0.15 + (i / experiences.length) * 0.85;
 										const end = 0.15 + ((i + 1) / experiences.length) * 0.85;
 										return (
@@ -158,7 +153,7 @@ export const Experience: React.FC = () => {
 								</div>
 							</div>
 
-							{/* RIGHT: CONTENT BLOCKS */}
+							{/* Content Blocks */}
 							<div className="md:col-span-8 h-125 flex items-center relative ml-0 md:ml-12">
 								{experiences.map((exp, i) => (
 									<ContentBlock
@@ -167,14 +162,14 @@ export const Experience: React.FC = () => {
 										index={i}
 										total={experiences.length}
 										progress={smoothProgress}
-										offset={0.15} // Start after intro
+										offset={0.15}
 									/>
 								))}
 							</div>
 						</motion.div>
 					</div>
 
-					{/* BACKGROUND YEAR (Apple-style subtle depth) */}
+					{/* Background Year */}
 					<motion.div
 						style={{
 							opacity: useTransform(smoothProgress, [0.15, 0.25], [0, 0.05]),
@@ -188,9 +183,9 @@ export const Experience: React.FC = () => {
 			</div>
 		</section>
 	);
-};
+}
 
-const RollingDigit: React.FC<{ digit: string }> = ({ digit }) => {
+function RollingDigit({ digit }: { digit: string }) {
 	return (
 		<div className="relative h-[30vw] w-[18vw] md:w-[15vw] flex justify-center">
 			<AnimatePresence mode="popLayout">
@@ -206,14 +201,19 @@ const RollingDigit: React.FC<{ digit: string }> = ({ digit }) => {
 			</AnimatePresence>
 		</div>
 	);
-};
+}
 
-const ExperienceTitle: React.FC<{
+function ExperienceTitle({
+	title,
+	progress,
+	range,
+	isActive,
+}: {
 	title: string;
 	progress: MotionValue<number>;
 	range: [number, number];
 	isActive: boolean;
-}> = ({ title, progress, range, isActive }) => {
+}) {
 	const opacity = useTransform(
 		progress,
 		[range[0], range[0] + 0.05, range[1] - 0.05, range[1]],
@@ -234,15 +234,21 @@ const ExperienceTitle: React.FC<{
 			{title}
 		</motion.h3>
 	);
-};
+}
 
-const ContentBlock: React.FC<{
+function ContentBlock({
+	exp,
+	index,
+	total,
+	progress,
+	offset,
+}: {
 	exp: ExperienceData;
 	index: number;
 	total: number;
 	progress: MotionValue<number>;
 	offset: number;
-}> = ({ exp, index, total, progress, offset }) => {
+}) {
 	const sectionWidth = (1 - offset) / total;
 	const start = offset + index * sectionWidth;
 	const end = start + sectionWidth;
@@ -281,4 +287,4 @@ const ContentBlock: React.FC<{
 			</p>
 		</motion.div>
 	);
-};
+}
