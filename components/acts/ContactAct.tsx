@@ -63,10 +63,10 @@ export function ContactAct() {
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-16">
 					<div className="lg:col-span-8">
 						<h2 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-foreground leading-[0.85] uppercase tracking-tight">
-							<span className="block overflow-visible">
+							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 								<span className="contact-headline-line block">Initialize</span>
 							</span>
-							<span className="block overflow-visible">
+							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 								<span className="contact-headline-line block text-accent tracking-wide italic font-medium">
 									Transmission
 								</span>

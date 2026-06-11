@@ -12,10 +12,10 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
 						The Capabilities
 					</span>
 					<h2 className="text-5xl md:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl [word-spacing:0.14em]">
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="skills-intro-line block">Mastering the</span>
 						</span>
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="skills-intro-line block text-accent italic">
 								Technical Stack.
 							</span>

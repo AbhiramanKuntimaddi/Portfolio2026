@@ -13,10 +13,10 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 						ARCHIVE_2024-2026
 					</span>
 					<h2 className="text-5xl md:text-8xl font-bold font-sans text-foreground uppercase leading-[0.85] tracking-tight max-w-4xl [word-spacing:0.14em]">
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="projects-intro-line block">Project</span>
 						</span>
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="projects-intro-line block text-accent italic">
 								Evolution.
 							</span>

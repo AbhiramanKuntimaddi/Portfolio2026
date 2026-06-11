@@ -15,10 +15,10 @@ export function HeroAct({
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-24 md:mb-32">
 					<div className="lg:col-span-8">
 						<h2 className="hero-name text-[clamp(3rem,10vw,7rem)] font-bold text-foreground leading-[0.85] uppercase tracking-[0.025em]">
-							<span className="block overflow-visible">
+							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 								<span className="hero-name-line block">Abhiraman</span>
 							</span>
-							<span className="block overflow-visible">
+							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 								<span className="hero-name-line block text-accent tracking-[0.05em]">
 									Kuntimaddi
 								</span>
@@ -32,7 +32,7 @@ export function HeroAct({
 						</div>
 					</div>
 
-					<div className="hero-meta-right lg:col-span-4 lg:text-right lg:pb-[3.75rem]">
+					<div className="hero-meta-right lg:col-span-4 lg:text-right lg:pb-15">
 						<p className="text-xs md:text-sm lg:text-base text-foreground/60 font-mono uppercase tracking-[0.2em] leading-relaxed">
 							Based in Germany
 							<br />

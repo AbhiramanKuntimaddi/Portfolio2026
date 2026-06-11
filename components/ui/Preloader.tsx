@@ -59,7 +59,7 @@ export function Preloader() {
 	return (
 		<div
 			ref={rootRef}
-			className="fixed inset-0 z-100 bg-background flex flex-col justify-between p-6 md:p-12 lg:p-16">
+			className="fixed inset-0 z-[100] bg-background flex flex-col justify-between p-6 md:p-12 lg:p-16">
 			<div className="pl-top flex justify-between items-center">
 				<span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] text-accent/70">
 					Portfolio_System

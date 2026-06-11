@@ -14,12 +14,12 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
 						The work experience
 					</span>
 					<h2 className="text-5xl md:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.9] max-w-4xl [word-spacing:0.14em]">
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="exp-intro-line block">
 								Scaling systems through
 							</span>
 						</span>
-						<span className="block overflow-visible">
+						<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 							<span className="exp-intro-line block text-accent italic">
 								architectural precision.
 							</span>

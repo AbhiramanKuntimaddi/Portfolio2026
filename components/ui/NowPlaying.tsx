@@ -95,17 +95,17 @@ export function NowPlaying() {
 					/>
 				)}
 				<span className="flex flex-col items-start min-w-0">
-					<span className="text-sm text-foreground font-medium truncate max-w-[180px] group-hover:text-accent transition-colors">
+					<span className="text-sm text-foreground font-medium truncate max-w-45 group-hover:text-accent transition-colors">
 						{track.title}
 					</span>
-					<span className="text-[11px] text-foreground/50 truncate max-w-[180px]">
+					<span className="text-[11px] text-foreground/50 truncate max-w-45">
 						{track.artist}
 					</span>
 				</span>
-				<span className="flex items-end gap-[2px] h-4 ml-1">
-					<span className="np-bar w-[2px] bg-accent" style={{ animationDelay: "0ms" }} />
-					<span className="np-bar w-[2px] bg-accent" style={{ animationDelay: "150ms" }} />
-					<span className="np-bar w-[2px] bg-accent" style={{ animationDelay: "300ms" }} />
+				<span className="flex items-end gap-0.5 h-4 ml-1">
+					<span className="np-bar w-0.5 bg-accent" style={{ animationDelay: "0ms" }} />
+					<span className="np-bar w-0.5 bg-accent" style={{ animationDelay: "150ms" }} />
+					<span className="np-bar w-0.5 bg-accent" style={{ animationDelay: "300ms" }} />
 				</span>
 			</a>
 		</div>

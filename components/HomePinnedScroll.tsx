@@ -192,28 +192,33 @@ export function HomePinnedScroll() {
 					const s = itemsStart + i * itemDur;
 					tl.fromTo(
 						gsap.utils.toArray(b.children),
-						{ opacity: 0, y: 30, filter: "blur(8px)" },
 						{
+							yPercent: 80,
+							opacity: 0,
+							clipPath: "inset(0% 0% 100% 0%)",
+						},
+						{
+							yPercent: 0,
 							opacity: 1,
-							y: 0,
-							filter: "blur(0px)",
-							duration: 0.18,
-							ease: "power3.out",
-							stagger: 0.02,
+							clipPath: "inset(0% 0% -30% 0%)",
+							duration: 0.26,
+							ease: "power4.out",
+							stagger: 0.05,
 						},
 						s
 					);
 					if (i < blocks.length - 1) {
 						tl.to(
-							b,
+							gsap.utils.toArray(b.children),
 							{
+								yPercent: -80,
 								opacity: 0,
-								y: -30,
-								filter: "blur(8px)",
-								duration: 0.18,
-								ease: "power2.in",
+								clipPath: "inset(100% 0% 0% 0%)",
+								duration: 0.22,
+								ease: "power3.in",
+								stagger: 0.04,
 							},
-							s + itemDur - 0.18
+							s + itemDur - 0.22
 						);
 					}
 				});
