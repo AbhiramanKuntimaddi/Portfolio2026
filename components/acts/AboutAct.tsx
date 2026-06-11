@@ -18,7 +18,7 @@ function MaskWords({
 			{text.split(" ").map((word, i) => (
 				<span
 					key={i}
-					className="mask-word inline-block overflow-hidden mr-[0.25em] pb-[0.22em] -mb-[0.22em]">
+					className="mask-word inline-block overflow-visible mr-[0.25em]">
 					<span
 						className={`word inline-block ${
 							accentFrom !== undefined && i >= accentFrom

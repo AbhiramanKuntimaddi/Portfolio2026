@@ -1,5 +1,7 @@
 "use client";
 
+import { NowPlaying } from "@/components/ui/NowPlaying";
+
 export function HeroAct({
 	onNext,
 	onContact,
@@ -10,13 +12,13 @@ export function HeroAct({
 	return (
 		<section className="hero-act absolute inset-0 flex flex-col p-6 md:p-12 lg:p-16 overflow-hidden">
 			<div className="hero-content flex-1 flex flex-col justify-center max-w-400 mx-auto w-full">
-				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start mb-24 md:mb-32">
+				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-end mb-24 md:mb-32">
 					<div className="lg:col-span-8">
 						<h2 className="hero-name text-[clamp(3rem,10vw,7rem)] font-bold text-foreground leading-[0.85] uppercase tracking-[0.025em]">
-							<span className="block overflow-hidden pb-[0.05em]">
+							<span className="block overflow-visible">
 								<span className="hero-name-line block">Abhiraman</span>
 							</span>
-							<span className="block overflow-hidden pb-[0.05em]">
+							<span className="block overflow-visible">
 								<span className="hero-name-line block text-accent tracking-[0.05em]">
 									Kuntimaddi
 								</span>
@@ -30,13 +32,11 @@ export function HeroAct({
 						</div>
 					</div>
 
-					<div className="hero-meta-right lg:col-span-4 lg:text-right lg:pt-4">
+					<div className="hero-meta-right lg:col-span-4 lg:text-right lg:pb-[3.75rem]">
 						<p className="text-xs md:text-sm lg:text-base text-foreground/60 font-mono uppercase tracking-[0.2em] leading-relaxed">
 							Based in Germany
 							<br />
 							M.Sc Computer Sciences
-							<br />
-							Specializing in Scalable Systems
 						</p>
 					</div>
 				</div>
@@ -84,27 +84,28 @@ export function HeroAct({
 					</div>
 				</div>
 
-				<div className="hero-strip mt-24 grid grid-cols-1 sm:grid-cols-3 gap-12 border-t border-foreground/5 pt-12">
-					{[
-						{
-							label: "PROFESSIONAL ROOTS",
-							desc: "Building industrial systems & scalable solutions",
-						},
-						{
-							label: "CREATIVE FOCUS",
-							desc: "Crafting interfaces, websites & digital experiences",
-						},
-						{ label: "ACADEMIC FOUNDATION", desc: "M.Sc Computer Science" },
-					].map((item, i) => (
-						<div key={i} className="hero-strip-item flex flex-col gap-2">
-							<span className="text-[11px] sm:text-sm uppercase tracking-[0.25em] text-accent/50 font-bold">
-								{item.label}
-							</span>
-							<span className="text-sm text-foreground/60 font-medium tracking-wide leading-snug">
-								{item.desc}
-							</span>
-						</div>
-					))}
+				<div className="hero-strip mt-20 grid grid-cols-1 sm:grid-cols-3 gap-10 items-center border-t border-foreground/5 pt-12">
+					<div className="hero-strip-item flex flex-col gap-2">
+						<span className="text-[11px] sm:text-sm uppercase tracking-[0.25em] text-accent/50 font-bold">
+							Professional Roots
+						</span>
+						<span className="text-sm text-foreground/60 font-medium tracking-wide leading-snug">
+							Building industrial systems &amp; scalable solutions
+						</span>
+					</div>
+
+					<div className="hero-strip-item flex justify-center">
+						<NowPlaying />
+					</div>
+
+					<div className="hero-strip-item flex flex-col gap-2 sm:text-right sm:items-end">
+						<span className="text-[11px] sm:text-sm uppercase tracking-[0.25em] text-accent/50 font-bold">
+							Creative Focus
+						</span>
+						<span className="text-sm text-foreground/60 font-medium tracking-wide leading-snug">
+							Crafting interfaces, websites &amp; digital experiences
+						</span>
+					</div>
 				</div>
 			</div>
 

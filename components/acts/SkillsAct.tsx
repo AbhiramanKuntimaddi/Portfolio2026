@@ -11,11 +11,11 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
 					<span className="skills-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
 						The Capabilities
 					</span>
-					<h2 className="text-5xl md:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl">
-						<span className="block overflow-hidden pb-[0.05em]">
+					<h2 className="text-5xl md:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl [word-spacing:0.14em]">
+						<span className="block overflow-visible">
 							<span className="skills-intro-line block">Mastering the</span>
 						</span>
-						<span className="block overflow-hidden pb-[0.05em]">
+						<span className="block overflow-visible">
 							<span className="skills-intro-line block text-accent italic">
 								Technical Stack.
 							</span>
@@ -32,7 +32,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
 						{skillGroups.map((item, i) => (
 							<h3
 								key={item.id}
-								className={`text-2xl md:text-5xl font-light tracking-tighter uppercase transition-all duration-500 ${
+								className={`text-2xl md:text-5xl font-light tracking-tighter uppercase [word-spacing:0.14em] transition-all duration-500 ${
 									activeIndex === i
 										? "text-accent opacity-100"
 										: "text-foreground opacity-30"

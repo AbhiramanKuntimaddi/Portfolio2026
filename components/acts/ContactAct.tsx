@@ -63,10 +63,10 @@ export function ContactAct() {
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-16">
 					<div className="lg:col-span-8">
 						<h2 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-foreground leading-[0.85] uppercase tracking-tight">
-							<span className="block overflow-hidden pb-[0.05em]">
+							<span className="block overflow-visible">
 								<span className="contact-headline-line block">Initialize</span>
 							</span>
-							<span className="block overflow-hidden pb-[0.05em]">
+							<span className="block overflow-visible">
 								<span className="contact-headline-line block text-accent tracking-wide italic font-medium">
 									Transmission
 								</span>
@@ -162,12 +162,12 @@ export function ContactAct() {
 									{...(c.external
 										? { target: "_blank", rel: "noopener noreferrer" }
 										: {})}
-									className="group block border-b border-foreground/10 pb-4 transition-transform duration-300 hover:translate-x-2">
-									<span className="block text-[10px] uppercase tracking-widest text-foreground/60 mb-2 font-normal opacity-60 group-hover:opacity-100 transition-opacity">
+									className="group flex items-center justify-between border-b border-foreground/10 pb-4 transition-transform duration-300 hover:translate-x-2">
+									<span className="text-xl md:text-2xl text-foreground font-medium transition-colors group-hover:text-accent">
 										{c.label}
 									</span>
-									<span className="text-xl md:text-2xl text-foreground font-medium transition-colors group-hover:text-accent break-all">
-										{c.value}
+									<span className="text-accent font-mono text-sm opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0">
+										↗
 									</span>
 								</a>
 							))}

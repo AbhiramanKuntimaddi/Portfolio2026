@@ -12,11 +12,11 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 					<span className="projects-intro-label text-accent font-bold tracking-widest text-[10px] uppercase mb-6 opacity-60">
 						ARCHIVE_2024-2026
 					</span>
-					<h2 className="text-5xl md:text-8xl font-bold font-sans text-foreground uppercase leading-[0.85] tracking-tight max-w-4xl">
-						<span className="block overflow-hidden pb-[0.05em]">
+					<h2 className="text-5xl md:text-8xl font-bold font-sans text-foreground uppercase leading-[0.85] tracking-tight max-w-4xl [word-spacing:0.14em]">
+						<span className="block overflow-visible">
 							<span className="projects-intro-line block">Project</span>
 						</span>
-						<span className="block overflow-hidden pb-[0.05em]">
+						<span className="block overflow-visible">
 							<span className="projects-intro-line block text-accent italic">
 								Evolution.
 							</span>
@@ -43,7 +43,7 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 									</span>
 								</div>
 
-								<h3 className="text-4xl md:text-7xl font-bold text-foreground uppercase tracking-tight leading-[0.9]">
+								<h3 className="text-4xl md:text-7xl font-bold text-foreground uppercase tracking-tight leading-[0.9] [word-spacing:0.14em]">
 									{project.title}
 								</h3>
 

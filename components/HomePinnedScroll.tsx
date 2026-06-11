@@ -79,7 +79,7 @@ export function HomePinnedScroll() {
 				.from(
 					".hero-nav",
 					{ opacity: 0, y: 12, duration: 0.6, ease: "expo.out" },
-					"-=0.05"
+					"-=0.1"
 				);
 
 			const off = loaderSignal.onComplete(() => heroIn.play());
