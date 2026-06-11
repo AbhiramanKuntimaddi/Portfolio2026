@@ -12,7 +12,7 @@ export interface Project {
 export const projects: Project[] = [
   {
     id: "01",
-    title: "Spandana Puppala",
+    title: "Spandana Puppala Official Portfolio",
     category: "Personal Brand Platform // Portfolio",
     description:
       "Designing and developing a high-fidelity portfolio platform for Spandana Puppala, founder of SP Design Studio. The platform showcases her multidisciplinary work across interior design and music, supported by a custom CMS for dynamic content management.",
