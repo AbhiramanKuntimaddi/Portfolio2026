@@ -94,15 +94,16 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 
 									<div className="hidden sm:flex flex-col border-l border-foreground/10 pl-6">
 										<div className="flex items-center gap-2">
-											<div
-												className={`w-2 h-2 rounded-full ${
+											<div className={`w-2 h-2 rounded-full ${
 													project.status === "ONGOING"
-														? "bg-orange-400 animate-pulse shadow-[0_0_6px_rgba(251,146,60,0.8)]"
-														: project.status === "COMPLETED"
-															? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]"
-															: "bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.7)]"
+													? "bg-orange-400 animate-pulse shadow-[0_0_6px_rgba(251,146,60,0.8)]"
+													: project.status === "COMPLETED"
+														? "bg-green-500 shadow-[0_0_6px_rgba(34,197,94,0.8)]"
+														: project.status === "UPCOMING"
+														? "bg-violet-400 shadow-[0_0_6px_rgba(167,139,250,0.8)]"
+														: "bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.7)]"
 												}`}
-											/>
+												/>
 											<span className="text-[8px] font-mono text-foreground/60 uppercase tracking-widest">
 												Status: {project.status}
 											</span>

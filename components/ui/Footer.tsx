@@ -16,17 +16,16 @@ export function Footer({ className = "" }: FooterProps) {
 			const tl = gsap.timeline({
 				scrollTrigger: {
 					trigger: ref.current,
-					start: "top 92%",
-					end: "top 55%",
-					scrub: 1,
+					start: "top 85%",
+					toggleActions: "play none none reverse",
 				},
 			});
 
 			tl.from(".footer-line", {
 				scaleX: 0,
 				transformOrigin: "left",
-				duration: 0.5,
-				ease: "power2.out",
+				duration: 0.7,
+				ease: "power3.out",
 			})
 				.from(
 					".footer-reveal",
@@ -34,16 +33,16 @@ export function Footer({ className = "" }: FooterProps) {
 						opacity: 0,
 						y: 40,
 						filter: "blur(6px)",
-						duration: 0.6,
+						duration: 0.9,
 						ease: "power3.out",
 						stagger: 0.15,
 					},
-					"-=0.3"
+					"-=0.4"
 				)
 				.from(
 					".footer-copy",
-					{ opacity: 0, y: 20, duration: 0.5, ease: "power2.out" },
-					"-=0.2"
+					{ opacity: 0, y: 20, duration: 0.7, ease: "power2.out" },
+					"-=0.3"
 				);
 		},
 		{ scope: ref }

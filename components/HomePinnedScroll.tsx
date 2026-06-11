@@ -11,7 +11,7 @@ import { SkillsAct } from "@/components/acts/SkillsAct";
 import { ExperienceAct } from "@/components/acts/ExperienceAct";
 import { ProjectsAct } from "@/components/acts/ProjectsAct";
 import { ContactAct } from "@/components/acts/ContactAct";
-import { Footer } from "@/components/acts/Footer";
+import { Footer } from "@/components/ui/Footer";
 
 interface CycRange {
 	key: "skills" | "exp" | "projects";
