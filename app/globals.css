@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-/* 1. MAP LOCAL FILES TO FONT WEIGHTS */
 @font-face {
 	font-family: "ClashDisplay";
 	src: url("/fonts/ClashDisplay-Extralight.otf") format("opentype");
@@ -43,14 +42,11 @@
 	font-style: normal;
 }
 
-/* 2. TAILWIND THEME */
 @theme {
-	/* Strict 3-Color Palette */
-	--color-background: #040811; /* Rich Deep Navy */
-	--color-foreground: #dcdee2; /* Main Text */
-	--color-accent: #1b54ff; /* Text Pop / Highlighters */
+	--color-background: #040811;
+	--color-foreground: #dcdee2;
+	--color-accent: #1b54ff;
 
-	/* ClashDisplay is now the primary, Geist as fallback */
 	--font-sans: "ClashDisplay", "Geist", sans-serif;
 }
 
@@ -60,20 +56,33 @@
 	--accent: #1b54ff;
 }
 
-/* 3. GLOBAL STYLES */
 body {
 	background-color: var(--background);
 	color: var(--foreground);
 	font-family: var(--font-sans);
-
-	/* Precision Typography */
-	letter-spacing: -0.02em; /* Adjusted slightly for Clash Display */
+	letter-spacing: -0.02em;
 	line-height: 1.2;
 	-webkit-font-smoothing: antialiased;
 }
 
-/* Electric Blue Selection */
 ::selection {
 	background-color: var(--accent);
 	color: #ffffff;
+}
+
+html.lenis,
+html.lenis body {
+	height: auto;
+}
+
+.lenis.lenis-smooth {
+	scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+	overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+	overflow: hidden;
 }

@@ -1,50 +1,56 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion, useMotionValue, useTransform } from "framer-motion";
+import { useRef } from "react";
+import { gsap, useGSAP } from "@/lib/gsap";
 
 export function GlobalGlow() {
-	const [mounted, setMounted] = useState(false);
+	const ref = useRef<HTMLDivElement>(null);
+	const pos = useRef({ x: 0, y: 0 });
 
-	// Delay mount to avoid server-side rendering issues
-	useEffect(() => {
-		const id = requestAnimationFrame(() => setMounted(true));
-		return () => cancelAnimationFrame(id);
-	}, []);
+	useGSAP(
+		() => {
+			if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-	const mouseX = useMotionValue(0);
-	const mouseY = useMotionValue(0);
+			const el = ref.current!;
+			pos.current = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
 
-	const smoothGradient = useTransform(
-		[mouseX, mouseY],
-		([x, y]) => `
-			radial-gradient(
-				400px circle at ${x}px ${y}px,
-				rgba(0, 89, 255, 0.15) 0%,
-				rgba(0, 89, 255, 0.08) 25%,
-				rgba(0, 89, 255, 0.02) 50%,
-				transparent 80%
-			)
-		`
+			const render = () => {
+				el.style.setProperty("--glow-x", `${pos.current.x}px`);
+				el.style.setProperty("--glow-y", `${pos.current.y}px`);
+			};
+			render();
+
+			const xTo = gsap.quickTo(pos.current, "x", {
+				duration: 0.6,
+				ease: "power3.out",
+				onUpdate: render,
+			});
+			const yTo = gsap.quickTo(pos.current, "y", {
+				duration: 0.6,
+				ease: "power3.out",
+				onUpdate: render,
+			});
+
+			const onMove = (e: MouseEvent) => {
+				xTo(e.clientX);
+				yTo(e.clientY);
+			};
+
+			window.addEventListener("mousemove", onMove);
+			return () => window.removeEventListener("mousemove", onMove);
+		},
+		{ scope: ref }
 	);
 
-	useEffect(() => {
-		const handleMouseMove = (e: MouseEvent) => {
-			mouseX.set(e.clientX);
-			mouseY.set(e.clientY);
-		};
-		window.addEventListener("mousemove", handleMouseMove);
-		return () => window.removeEventListener("mousemove", handleMouseMove);
-	}, [mouseX, mouseY]);
-
-	if (!mounted) return null;
-
 	return (
-		<div className="pointer-events-none fixed inset-0 z-1">
-			<motion.div
-				className="absolute inset-0"
-				style={{ background: smoothGradient, mixBlendMode: "screen" }}
-			/>
-		</div>
+		<div
+			ref={ref}
+			className="pointer-events-none fixed inset-0 z-0"
+			style={{
+				background:
+					"radial-gradient(400px circle at var(--glow-x, 50%) var(--glow-y, 50%), rgba(27, 84, 255, 0.15) 0%, rgba(27, 84, 255, 0.08) 25%, rgba(27, 84, 255, 0.02) 50%, transparent 80%)",
+				mixBlendMode: "screen",
+			}}
+		/>
 	);
 }

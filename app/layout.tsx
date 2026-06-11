@@ -1,10 +1,18 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { GlobalGlow } from "@/components/ui/GlobalGlow";
+import { LenisProvider } from "@/components/ui/LenisProvider";
+import { Preloader } from "@/components/ui/Preloader";
 
 export const metadata: Metadata = {
 	title: "Abhiraman Kuntimaddi",
 	description: "INTELLIGENT SYSTEMS ENGINEER",
+};
+
+export const viewport: Viewport = {
+	width: "device-width",
+	initialScale: 1,
+	themeColor: "#040811",
 };
 
 export default function RootLayout({
@@ -13,13 +21,13 @@ export default function RootLayout({
 	children: React.ReactNode;
 }) {
 	return (
-		<html lang="en" className="scroll-smooth">
-			<body className="antialiased relative bg-[#00072d] min-h-screen">
-				{/* Global mouse-follow glow */}
+		<html lang="en">
+			<body className="antialiased relative bg-background min-h-screen">
+				<Preloader />
 				<GlobalGlow />
-
-				{/* Main content is above the glow */}
-				<div className="relative z-10">{children}</div>
+				<LenisProvider>
+					<div className="relative z-10">{children}</div>
+				</LenisProvider>
 			</body>
 		</html>
 	);
