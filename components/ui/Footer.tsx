@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 
 interface FooterProps {
 	className?: string;
@@ -55,30 +56,32 @@ export function Footer({ className = "" }: FooterProps) {
 			<div className="max-w-7xl mx-auto relative pt-10">
 				<div className="footer-line absolute top-0 left-0 h-px w-full bg-accent/30" />
 				<div className="flex flex-col md:flex-row justify-between gap-8 md:gap-0 items-start md:items-center">
-					<div className="footer-reveal flex flex-col gap-2">
-						<span className="text-[9px] font-mono tracking-[0.2em] text-foreground/30 uppercase">
-							V.2026 // Portfolio System
+					<div className="footer-reveal flex flex-col gap-1.5">
+						<span className="text-[11px] font-mono text-foreground/45 tracking-wide">
+							<span className="text-accent/60">{"//"}</span> v.2026
 						</span>
-						<span className="text-[10px] font-mono tracking-widest text-foreground/40 uppercase">
-							Crafted with Next.js, GSAP & Tailwind
+						<span className="text-[11px] font-mono text-foreground/45 tracking-wide">
+							<span className="text-accent/60">{"//"}</span> animated by{" "}
+							<span className="text-foreground/70">GSAP</span> + scrolled by{" "}
+							<span className="text-foreground/70">Lenis</span> · styled by{" "}
+							<span className="text-foreground/70">TailwindCSS</span>
+						</span>
+						<span className="text-[11px] font-mono text-foreground/45 tracking-wide">
+							<span className="text-accent/60">{"//"}</span> stored in{" "}
+							<span className="text-foreground/70">Supabase</span> · delivered
+							through <span className="text-foreground/70">Resend</span> ·
+							shipped by <span className="text-foreground/70">NextJS</span>
 						</span>
 					</div>
 
-					<div className="footer-reveal flex items-center gap-3">
-						<div className="flex gap-2">
-							<div className="w-2 h-2 rounded-full bg-accent animate-pulse shadow-[0_0_10px_rgba(27,84,255,0.3)]" />
-							<div className="w-2 h-2 rounded-full bg-foreground/10" />
-							<div className="w-2 h-2 rounded-full bg-foreground/10" />
-						</div>
-						<span className="text-[8px] font-mono tracking-[0.3em] text-foreground/20 uppercase">
-							SYS_READY
-						</span>
+					<div className="footer-reveal">
+						<StatusBadge />
 					</div>
 				</div>
 
 				<div className="footer-copy mt-12 text-center">
-					<p className="text-[9px] font-mono text-foreground/20 tracking-[0.2em] uppercase">
-						&copy; {currentYear} Abhiraman Kuntimaddi. All rights reserved.
+					<p className="text-[11px] font-mono text-foreground/25 tracking-wide">
+						© {currentYear} Abhiraman Kuntimaddi
 					</p>
 				</div>
 			</div>

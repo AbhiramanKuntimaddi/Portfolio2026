@@ -1,6 +1,7 @@
 "use client";
 
 import { NowPlaying } from "@/components/ui/NowPlaying";
+import { StatusBadge } from "@/components/ui/StatusBadge";
 
 export function HeroAct({
 	onNext,
@@ -32,12 +33,15 @@ export function HeroAct({
 						</div>
 					</div>
 
-					<div className="hero-meta-right lg:col-span-4 lg:text-right lg:pb-15">
+					<div className="hero-meta-right lg:col-span-4 flex flex-col gap-4 lg:items-end lg:text-right lg:pb-15">
 						<p className="text-xs md:text-sm lg:text-base text-foreground/60 font-mono uppercase tracking-[0.2em] leading-relaxed">
 							Based in Germany
 							<br />
 							M.Sc Computer Sciences
 						</p>
+						<div className="hero-status">
+							<StatusBadge align="right" />
+						</div>
 					</div>
 				</div>
 

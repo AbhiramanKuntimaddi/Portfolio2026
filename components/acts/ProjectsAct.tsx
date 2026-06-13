@@ -67,8 +67,8 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 											href={project.link}
 											className="group relative flex items-center gap-3 px-6 py-3 border border-accent/30 overflow-hidden transition-colors duration-300">
 											<div className="absolute inset-0 bg-accent translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-out" />
-											<span className="relative z-10 text-[11px] font-mono tracking-[0.3em] uppercase text-accent group-hover:text-background transition-colors duration-300">
-												Access_Full_Briefing
+											<span className="relative z-10 text-[11px] font-mono tracking-wide text-accent group-hover:text-background transition-colors duration-300 lowercase">
+												read more
 											</span>
 											<svg
 												className="relative z-10 w-4 h-4 text-accent group-hover:text-background group-hover:translate-x-1 transition-all duration-300"
@@ -85,8 +85,8 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 										</a>
 									) : (
 										<div className="flex items-center gap-3 px-6 py-3 border border-accent/20 bg-accent/10 opacity-40 cursor-not-allowed">
-											<span className="text-[11px] font-mono tracking-[0.3em] uppercase text-accent/60">
-												DATA_RESTRICTED
+											<span className="text-[11px] font-mono tracking-wide text-accent/60 lowercase">
+												archived
 											</span>
 											<FiLock className="w-4 h-4 text-accent/60" />
 										</div>
@@ -104,13 +104,10 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
 														: "bg-red-500 shadow-[0_0_6px_rgba(239,68,68,0.7)]"
 												}`}
 												/>
-											<span className="text-[8px] font-mono text-foreground/60 uppercase tracking-widest">
-												Status: {project.status}
+											<span className="text-[9px] font-mono text-foreground/50 lowercase tracking-wide">
+												{project.status.toLowerCase()}
 											</span>
 										</div>
-										<span className="text-[8px] font-mono text-foreground/30 uppercase tracking-widest mt-1">
-											Node: {project.id}
-										</span>
 									</div>
 								</div>
 							</div>

@@ -36,7 +36,9 @@ const channels = [
 ];
 
 export function ContactAct() {
-	const [status, setStatus] = useState<"IDLE" | "SENDING" | "SUCCESS">("IDLE");
+	const [status, setStatus] = useState<
+		"IDLE" | "SENDING" | "SUCCESS" | "ERROR"
+	>("IDLE");
 	const [formData, setFormData] = useState<FormData>({
 		name: "",
 		email: "",
@@ -50,10 +52,21 @@ export function ContactAct() {
 		setFormData((prev) => ({ ...prev, [name]: value }));
 	};
 
-	const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
+	const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
 		e.preventDefault();
 		setStatus("SENDING");
-		setTimeout(() => setStatus("SUCCESS"), 1500);
+		try {
+			const res = await fetch("/api/contact", {
+				method: "POST",
+				headers: { "Content-Type": "application/json" },
+				body: JSON.stringify(formData),
+			});
+			if (!res.ok) throw new Error();
+			setStatus("SUCCESS");
+			setFormData({ name: "", email: "", message: "" });
+		} catch {
+			setStatus("ERROR");
+		}
 		setTimeout(() => setStatus("IDLE"), 4000);
 	};
 
@@ -62,18 +75,22 @@ export function ContactAct() {
 			<div className="contact-wrap max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full">
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-16">
 					<div className="lg:col-span-8">
+						<p className="contact-sub font-mono text-[11px] md:text-xs text-foreground/40 mb-6 tracking-wide">
+							<span className="text-accent/70">{"// "}</span>
+							drop a message
+						</p>
 						<h2 className="text-[clamp(2.5rem,8vw,6rem)] font-bold text-foreground leading-[0.85] uppercase tracking-tight">
 							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-								<span className="contact-headline-line block">Initialize</span>
+								<span className="contact-headline-line block">Let&apos;s</span>
 							</span>
 							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
 								<span className="contact-headline-line block text-accent tracking-wide italic font-medium">
-									Transmission
+									Connect.
 								</span>
 							</span>
 						</h2>
-						<p className="contact-sub mt-4 text-foreground/70 font-sans text-sm md:text-base tracking-wide font-light leading-relaxed">
-							Reach out via the form below, the channels listed, or directly at{" "}
+						<p className="contact-sub mt-6 text-foreground/60 font-sans text-sm md:text-base tracking-wide font-light leading-relaxed max-w-xl">
+							Form below, the channels on the right, or write me directly at{" "}
 							<a
 								href="mailto:abhiraman21696@icloud.com"
 								className="text-accent hover:underline">
@@ -81,12 +98,6 @@ export function ContactAct() {
 							</a>
 							.
 						</p>
-						<div className="contact-sub flex items-center gap-6 mt-6">
-							<div className="h-px w-12 bg-accent/50" />
-							<p className="text-[10px] tracking-widest text-accent uppercase font-normal">
-								/ Contact_Interface_v1.0
-							</p>
-						</div>
 					</div>
 				</div>
 
@@ -95,26 +106,26 @@ export function ContactAct() {
 						<form onSubmit={handleSubmit} className="space-y-12">
 							<div className="grid grid-cols-1 md:grid-cols-2 gap-12">
 								<InputField
-									label="01_Identity"
+									label="name"
 									name="name"
-									placeholder="Your full name"
+									placeholder="your name"
 									value={formData.name}
 									onChange={handleInputChange}
 								/>
 								<InputField
-									label="02_Secure_Channel"
+									label="email"
 									name="email"
 									type="email"
-									placeholder="Your email address"
+									placeholder="you@somewhere.com"
 									value={formData.email}
 									onChange={handleInputChange}
 								/>
 							</div>
 
 							<InputField
-								label="03_Transmission_Data"
+								label="message"
 								name="message"
-								placeholder="Type your message here..."
+								placeholder="what's on your mind?"
 								value={formData.message}
 								onChange={handleInputChange}
 								textarea
@@ -129,12 +140,14 @@ export function ContactAct() {
 								</span>
 								<div className="flex flex-col">
 									<div className="flex items-baseline gap-1">
-										<span className="text-accent text-[11px] md:text-xs font-bold tracking-widest uppercase transition-colors duration-500 group-hover:text-foreground">
+										<span className="text-accent text-[11px] md:text-xs font-bold tracking-widest transition-colors duration-500 group-hover:text-foreground lowercase">
 											{status === "IDLE"
-												? "Execute Send"
+												? "send"
 												: status === "SENDING"
-													? "Transmitting..."
-													: "Data Received"}
+													? "sending…"
+													: status === "SUCCESS"
+														? "sent ✓"
+														: "failed — try again"}
 										</span>
 										<span className="text-accent/40 select-none">();</span>
 									</div>
@@ -151,8 +164,9 @@ export function ContactAct() {
 					</div>
 
 					<div className="contact-fade lg:col-span-5 border-t lg:border-t-0 lg:border-l border-foreground/10 lg:pl-16 pt-12 lg:pt-0">
-						<h3 className="text-accent font-bold tracking-widest text-[10px] uppercase mb-10 opacity-60">
-							Alternate Channels
+						<h3 className="font-mono text-[11px] md:text-xs mb-10 tracking-wide">
+							<span className="text-accent/70">{"// "}</span>
+							<span className="text-foreground/40">elsewhere</span>
 						</h3>
 						<div className="space-y-8">
 							{channels.map((c) => (
@@ -197,11 +211,16 @@ function InputField({
 	textarea?: boolean;
 }) {
 	return (
-		<div className="flex flex-col gap-3 relative group border-b border-foreground/10 pb-2 focus-within:border-accent/50 transition-colors duration-500">
-			<label className="text-foreground font-semibold tracking-widest text-[10px] uppercase opacity-40 group-focus-within:opacity-100 transition-opacity">
+		<div className="flex flex-col gap-2 relative group border-b border-foreground/10 pb-2 focus-within:border-accent/50 transition-colors duration-500">
+			<label className="font-mono text-[11px] text-foreground/40 group-focus-within:text-accent transition-colors lowercase tracking-wide">
 				{label}
 			</label>
-			<div className="relative overflow-hidden">
+			<div className="relative flex items-baseline gap-2">
+				<span
+					aria-hidden
+					className="font-mono text-foreground/25 group-focus-within:text-accent transition-colors select-none">
+					$
+				</span>
 				{textarea ? (
 					<textarea
 						required
@@ -210,7 +229,7 @@ function InputField({
 						value={value}
 						onChange={onChange}
 						placeholder={placeholder}
-						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest resize-none w-full relative z-10"
+						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 resize-none w-full relative z-10"
 					/>
 				) : (
 					<input
@@ -220,7 +239,7 @@ function InputField({
 						value={value}
 						onChange={onChange}
 						placeholder={placeholder}
-						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 tracking-widest w-full relative z-10"
+						className="bg-transparent border-none outline-none text-foreground font-sans text-lg md:text-xl placeholder:text-foreground/20 w-full relative z-10"
 					/>
 				)}
 			</div>

@@ -52,6 +52,11 @@ export function HomePinnedScroll() {
 					"<"
 				)
 				.from(
+					".hero-status",
+					{ opacity: 0, y: 10, duration: 0.5, ease: "expo.out" },
+					"-=0.25"
+				)
+				.from(
 					".hero-meta-right",
 					{ opacity: 0, y: 16, duration: 0.6, ease: "expo.out" },
 					"<"
@@ -166,6 +171,9 @@ export function HomePinnedScroll() {
 					);
 
 				const introOut = startT + 1.4;
+				const itemsStart = startT + 1.85;
+				const itemDur = 0.6;
+
 				tl.to(
 					`.${cfg.intro}-intro`,
 					{
@@ -183,10 +191,12 @@ export function HomePinnedScroll() {
 						{ opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
 						introOut + 0.05
 					)
-					.fromTo(cfg.bg, { opacity: 0 }, { opacity: 0.05, duration: 0.3 }, introOut + 0.05);
-
-				const itemsStart = startT + 1.85;
-				const itemDur = 0.6;
+					.fromTo(
+						cfg.bg,
+						{ opacity: 0 },
+						{ opacity: 0.05, duration: 0.4, ease: "power2.out" },
+						itemsStart - 0.1
+					);
 				const blocks = gsap.utils.toArray<HTMLElement>(cfg.block);
 				blocks.forEach((b, i) => {
 					const s = itemsStart + i * itemDur;
@@ -230,6 +240,10 @@ export function HomePinnedScroll() {
 					count: blocks.length,
 				});
 
+				for (let li = 0; li < blocks.length; li++) {
+					tl.addLabel(`${cfg.key}-${li}`, itemsStart + li * itemDur + itemDur * 0.45);
+				}
+				
 				const itemsEnd = itemsStart + blocks.length * itemDur;
 				tl.to(
 					cfg.content,

@@ -92,6 +92,25 @@ html.lenis body {
 	animation: np-eq 0.9s ease-in-out infinite;
 }
 
+.np-caret {
+	width: 2px;
+	height: 0.9em;
+	border-radius: 9999px;
+	background: var(--accent);
+	opacity: 0.8;
+	animation: np-caret-soft 2s ease-in-out infinite;
+}
+
+@keyframes np-caret-soft {
+	0%,
+	100% {
+		opacity: 0.8;
+	}
+	50% {
+		opacity: 0.45;
+	}
+}
+
 @keyframes np-eq {
 	0%,
 	100% {
