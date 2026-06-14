@@ -15,16 +15,16 @@ export function HeroAct({
 			<div className="hero-content flex-1 flex flex-col justify-center max-w-400 mx-auto w-full">
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8 items-start lg:items-end mb-10 sm:mb-16 lg:mb-32">
 					<div className="lg:col-span-8">
-						<h2 className="hero-name text-[clamp(2.5rem,11vw,7rem)] font-bold text-foreground leading-[0.85] uppercase tracking-[0.025em]">
-							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-								<span className="hero-name-line block">Abhiraman</span>
-							</span>
-							<span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-								<span className="hero-name-line block text-accent tracking-[0.05em]">
-									Kuntimaddi
-								</span>
-							</span>
-						</h2>
+						<h2 className="hero-name font-bold text-foreground leading-[0.85] uppercase tracking-wider text-4xl sm:text-6xl md:text-6xl lg:text-7xl xl:text-8xl 2xl:text-[9rem]">
+    <span className="block overflow-hidden py-[0.1em] pr-[0.05em]">
+        <span className="hero-name-line block">Abhiraman</span>
+    </span>
+    <span className="block overflow-hidden py-[0.1em] pr-[0.15em] -mr-[0.15em]">
+        <span className="hero-name-line block text-accent tracking-widest whitespace-nowrap">
+            Kuntimaddi
+        </span>
+    </span>
+</h2>
 						<div className="flex items-center gap-6 mt-8">
 							<div className="hero-sub-line h-px w-12 bg-accent/50" />
 							<p className="hero-sub-text text-sm md:text-lg tracking-[0.3em] text-accent font-medium uppercase">

@@ -11,7 +11,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                     <span className="skills-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
                         The Capabilities
                     </span>
-                    <h2 className="text-5xl md:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl [word-spacing:0.14em]">
+                    <h2 className="text-5xl lg:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl [word-spacing:0.14em]">
                         <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
                             <span className="skills-intro-line block">Mastering the</span>
                         </span>
@@ -27,9 +27,9 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                     </p>
                 </div>
 
-                <div className="skills-content grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 w-full z-10">
+                <div className="skills-content grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24 w-full z-10">
                     {/* Desktop Sidebar: Shows all groups */}
-                    <div className="hidden md:flex md:col-span-5 flex-col justify-center border-l border-foreground/5 pl-8 space-y-10">
+                    <div className="hidden lg:flex lg:col-span-5 flex-col justify-center border-l border-foreground/5 pl-8 space-y-10">
                         {skillGroups.map((item, i) => (
                             <h3
                                 key={item.id}
@@ -44,7 +44,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                     </div>
 
                     {/* Content Area */}
-                    <div className="md:col-span-7 h-100 flex items-center relative">
+                    <div className="lg:col-span-7 h-100 flex items-center relative">
                         {skillGroups.map((item, i) => (
                             <div
                                 key={item.id}
@@ -55,7 +55,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                                 }`}
                             >
                                 {/* Mobile-only Active Group Title */}
-                                <h3 className="block md:hidden text-3xl font-light tracking-tighter uppercase text-accent [word-spacing:0.14em]">
+                                <h3 className="block lg:hidden text-3xl font-light tracking-tighter uppercase text-accent [word-spacing:0.14em]">
                                     {item.group}
                                 </h3>
 

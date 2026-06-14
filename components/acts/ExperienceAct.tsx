@@ -13,7 +13,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
           <span className="exp-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
             The work experience
           </span>
-          <h2 className="text-5xl md:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.9] max-w-4xl [word-spacing:0.14em]">
+          <h2 className="text-5xl lg:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.9] max-w-4xl [word-spacing:0.14em]">
             <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
               <span className="exp-intro-line block">
                 Scaling systems through
@@ -31,8 +31,8 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
           </p>
         </div>
 
-        <div className="exp-content grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 w-full z-10">
-          <div className="hidden md:flex md:col-span-4 flex-col justify-center border-l border-foreground/10 pl-8">
+        <div className="exp-content grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-20 w-full z-10">
+          <div className="hidden lg:flex lg:col-span-4 flex-col justify-center border-l border-foreground/10 pl-8">
             <div className="space-y-6">
               {experiences.map((exp, i) => (
                 <h3
@@ -49,7 +49,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
             </div>
           </div>
 
-          <div className="md:col-span-8 h-125 flex items-center relative ml-0 md:ml-12">
+          <div className="lg:col-span-8 h-125 flex items-center relative ml-0 lg:ml-12">
             {experiences.map((exp, i) => (
               <div
                 key={exp.id}
@@ -59,7 +59,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
                     : "opacity-0 pointer-events-none"
                 }`}
               >
-                <h3 className="block md:hidden text-2xl font-semibold tracking-tight uppercase font-sans text-accent [word-spacing:0.14em]">
+                <h3 className="block lg:hidden text-2xl font-semibold tracking-tight uppercase font-sans text-accent [word-spacing:0.14em]">
                   {exp.title}
                 </h3>
 
@@ -69,7 +69,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
                   </span>
                   <div className="h-px w-16 bg-accent/30" />
                 </div>
-                <h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-foreground leading-[0.95] tracking-tighter uppercase font-sans [word-spacing:0.14em]">
+                <h2 className="text-3xl sm:text-5xl lg:text-7xl font-bold text-foreground leading-[0.95] tracking-tighter uppercase font-sans [word-spacing:0.14em]">
                   {exp.company}
                 </h2>
                 <p className="text-foreground/60 text-lg md:text-2xl font-light leading-relaxed max-w-xl italic font-sans">

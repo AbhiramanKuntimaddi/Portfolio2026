@@ -1,7 +1,5 @@
 "use client";
 
-import { useRef } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
 interface FooterProps {
@@ -9,49 +7,10 @@ interface FooterProps {
 }
 
 export function Footer({ className = "" }: FooterProps) {
-  const ref = useRef<HTMLElement>(null);
   const currentYear = new Date().getFullYear();
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: ref.current,
-          start: "top 85%",
-          toggleActions: "play none none reverse",
-        },
-      });
-
-      tl.from(".footer-line", {
-        scaleX: 0,
-        transformOrigin: "left",
-        duration: 0.7,
-        ease: "power3.out",
-      })
-        .from(
-          ".footer-reveal",
-          {
-            opacity: 0,
-            y: 40,
-            filter: "blur(6px)",
-            duration: 0.9,
-            ease: "power3.out",
-            stagger: 0.15,
-          },
-          "-=0.4",
-        )
-        .from(
-          ".footer-copy",
-          { opacity: 0, y: 20, duration: 0.7, ease: "power2.out" },
-          "-=0.3",
-        );
-    },
-    { scope: ref },
-  );
 
   return (
     <footer
-      ref={ref}
       className={`w-full px-6 md:px-20 pb-12 md:pb-16 pt-20 md:pt-32 bg-transparent ${className}`}
     >
       <div className="max-w-7xl mx-auto relative pt-10">

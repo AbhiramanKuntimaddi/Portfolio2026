@@ -1,42 +1,15 @@
 "use client";
 
-import { useState, ChangeEvent, FormEvent, useEffect, useRef } from "react";
+import { useState, ChangeEvent, FormEvent } from "react";
 import { channels, type FormData, type ChannelItem } from "@/lib/data/form";
 
 export function ContactAct() {
-  const containerRef = useRef<HTMLOptionElement>(null);
   const [status, setStatus] = useState<"IDLE" | "SENDING" | "SUCCESS" | "ERROR">("IDLE");
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
     message: "",
   });
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-
-    const observer = new MutationObserver((mutations) => {
-      mutations.forEach((mutation) => {
-        if (mutation.attributeName === "style") {
-          const visibility = window.getComputedStyle(el).visibility;
-          const opacity = window.getComputedStyle(el).opacity;
-          
-          if (visibility === "visible" && parseFloat(opacity) > 0) {
-            requestAnimationFrame(() => {
-              if (el.scrollTop === 0) {
-                el.scrollTop = 1;
-                el.scrollTop = 0;
-              }
-            });
-          }
-        }
-      });
-    });
-
-    observer.observe(el, { attributes: true, attributeFilter: ["style"] });
-    return () => observer.disconnect();
-  }, []);
 
   const handleInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -64,12 +37,8 @@ export function ContactAct() {
   };
 
   return (
-    <section
-      ref={containerRef}
-      className="contact-act absolute inset-0 overflow-y-auto transform translate-z-0 backface-hidden will-change-transform"
-      data-lenis-prevent
-    >
-      <div className="contact-wrap min-h-full flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full py-20 md:py-16">
+    <section className="contact-act absolute inset-0 flex items-center justify-center overflow-hidden">
+      <div className="contact-wrap max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 md:mb-16">
           <div className="lg:col-span-8">
             <p className="contact-sub font-mono text-[11px] md:text-xs text-foreground/40 mb-6 tracking-wide">
