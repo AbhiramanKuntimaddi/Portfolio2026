@@ -71,13 +71,13 @@ export function AboutAct() {
 		<section
 			ref={rootRef}
 			className="about-act absolute inset-0 flex items-center justify-center">
-			<div className="about-content w-full max-w-6xl px-6 md:px-20 grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 items-center">
+			<div className="about-content w-full max-w-6xl px-6 md:px-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
 				<div className="lg:col-span-5 flex justify-center lg:justify-start relative">
 					<div
 						ref={imgRef}
 						onMouseMove={handleMouseMove}
 						onMouseLeave={handleMouseLeave}
-						className="about-img relative w-full max-w-72"
+						className="about-img relative w-full max-w-48 sm:max-w-60 lg:max-w-72"
 						style={{ perspective: 1000, transformStyle: "preserve-3d" }}>
 						<div className="absolute -inset-4 rounded-lg bg-linear-to-tr from-accent/25 to-background opacity-40 blur-3xl -z-10" />
 						<div
@@ -105,7 +105,7 @@ export function AboutAct() {
 					</div>
 				</div>
 
-				<div className="lg:col-span-7 flex flex-col justify-center space-y-12">
+				<div className="lg:col-span-7 flex flex-col justify-center space-y-8 lg:space-y-12">
 					<div className="about-quote max-w-2xl">
 						<span className="about-quote-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
 							The Philosophy
@@ -125,7 +125,7 @@ export function AboutAct() {
 						</cite>
 					</div>
 
-					<div className="border-l border-foreground/10 pl-8 max-w-xl flex flex-col gap-6">
+					<div className="border-l border-foreground/10 pl-6 lg:pl-8 max-w-xl flex flex-col gap-4 lg:gap-6">
 						<p className="text-foreground text-[clamp(1.1rem,1.9vw,1.5rem)] leading-relaxed font-light">
 							<MaskWords
 								className="about-p1"

@@ -11,11 +11,22 @@ export function Preloader() {
 
 	useGSAP(
 		() => {
-			if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+			const seen =
+				typeof sessionStorage !== "undefined" &&
+				sessionStorage.getItem("ak_preloaded");
+
+			if (
+				seen ||
+				window.matchMedia("(prefers-reduced-motion: reduce)").matches
+			) {
 				gsap.set(rootRef.current, { display: "none" });
 				loaderSignal.complete();
 				return;
 			}
+
+			try {
+				sessionStorage.setItem("ak_preloaded", "1");
+			} catch {}
 
 			const counter = { v: 0 };
 

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState, ChangeEvent, FormEvent } from "react";
+import { IconType } from "react-icons";
+import { FaLinkedinIn, FaGithub, FaInstagram } from "react-icons/fa6";
+import { FiMail } from "react-icons/fi";
 
 interface FormData {
 	name: string;
@@ -8,30 +11,40 @@ interface FormData {
 	message: string;
 }
 
-const channels = [
+const channels: {
+	label: string;
+	value: string;
+	href: string;
+	external: boolean;
+	Icon: IconType;
+}[] = [
 	{
 		label: "LinkedIn",
 		value: "abhiraman-kuntimaddi",
 		href: "https://www.linkedin.com/in/abhiraman-kuntimaddi-93b037112",
 		external: true,
+		Icon: FaLinkedinIn,
 	},
 	{
 		label: "GitHub",
 		value: "AbhiramanKuntimaddi",
 		href: "https://github.com/AbhiramanKuntimaddi",
 		external: true,
+		Icon: FaGithub,
 	},
 	{
 		label: "Instagram",
 		value: "@abhiraman.kuntimaddi",
 		href: "https://www.instagram.com/abhiraman.kuntimaddi/",
 		external: true,
+		Icon: FaInstagram,
 	},
 	{
 		label: "Email",
 		value: "abhiraman21696@gmail.com",
 		href: "mailto:abhiraman21696@gmail.com",
 		external: false,
+		Icon: FiMail,
 	},
 ];
 
@@ -71,9 +84,11 @@ export function ContactAct() {
 	};
 
 	return (
-		<section className="contact-act absolute inset-0 flex items-center overflow-y-auto py-16">
-			<div className="contact-wrap max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full">
-				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-12 md:mb-16">
+		<section
+			className="contact-act absolute inset-0 overflow-y-auto"
+			data-lenis-prevent>
+			<div className="contact-wrap min-h-full flex flex-col justify-center max-w-7xl mx-auto px-6 md:px-12 lg:px-16 w-full py-20 md:py-16">
+				<div className="grid grid-cols-1 lg:grid-cols-12 gap-8 mb-10 md:mb-16">
 					<div className="lg:col-span-8">
 						<p className="contact-sub font-mono text-[11px] md:text-xs text-foreground/40 mb-6 tracking-wide">
 							<span className="text-accent/70">{"// "}</span>
@@ -103,8 +118,8 @@ export function ContactAct() {
 
 				<div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
 					<div className="contact-fade lg:col-span-7">
-						<form onSubmit={handleSubmit} className="space-y-12">
-							<div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+						<form onSubmit={handleSubmit} className="space-y-8 md:space-y-12">
+							<div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12">
 								<InputField
 									label="name"
 									name="name"
@@ -163,12 +178,30 @@ export function ContactAct() {
 						</form>
 					</div>
 
-					<div className="contact-fade lg:col-span-5 border-t lg:border-t-0 lg:border-l border-foreground/10 lg:pl-16 pt-12 lg:pt-0">
-						<h3 className="font-mono text-[11px] md:text-xs mb-10 tracking-wide">
+					<div className="contact-fade lg:col-span-5 border-t lg:border-t-0 lg:border-l border-foreground/10 lg:pl-16 pt-8 lg:pt-0">
+						<h3 className="font-mono text-[11px] md:text-xs mb-6 lg:mb-10 tracking-wide">
 							<span className="text-accent/70">{"// "}</span>
 							<span className="text-foreground/40">elsewhere</span>
 						</h3>
-						<div className="space-y-8">
+
+						{/* mobile + tablet: horizontal icons */}
+						<div className="flex lg:hidden items-center gap-3">
+							{channels.map((c) => (
+								<a
+									key={c.label}
+									href={c.href}
+									aria-label={c.label}
+									{...(c.external
+										? { target: "_blank", rel: "noopener noreferrer" }
+										: {})}
+									className="w-11 h-11 flex items-center justify-center rounded-md border border-foreground/10 text-foreground/65 hover:text-accent hover:border-accent/40 transition-colors">
+									<c.Icon className="w-[18px] h-[18px]" />
+								</a>
+							))}
+						</div>
+
+						{/* desktop: labelled list */}
+						<div className="hidden lg:block space-y-8">
 							{channels.map((c) => (
 								<a
 									key={c.label}

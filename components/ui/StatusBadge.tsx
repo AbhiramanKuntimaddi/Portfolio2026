@@ -53,8 +53,7 @@ function StatusRow({
 	);
 }
 
-// Faster timings
-const TYPE_MS = 20;
+const TYPE_MS = 0.6;
 const DELETE_MS = 10;
 const HOLD_MS = 700;
 const GAP_MS = 80;

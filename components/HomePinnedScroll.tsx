@@ -398,12 +398,14 @@ export function HomePinnedScroll() {
 					contactStart + 0.4
 				);
 
+			tl.to(".contact-act", { duration: 0.6 }, contactStart + 1.10);
+
 			tl.addLabel("hero", 0)
 				.addLabel("about", 2.0)
 				.addLabel("skills", skillsStart + 0.9)
 				.addLabel("experience", expStart + 0.9)
 				.addLabel("projects", projStart + 0.9)
-				.addLabel("contact", contactStart + 0.6);
+				.addLabel("contact", contactStart + 1.2);
 
 			tlRef.current = tl;
 			const cleanupSnap = enableSectionSnap(tl);

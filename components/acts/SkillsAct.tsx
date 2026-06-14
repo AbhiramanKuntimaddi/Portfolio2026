@@ -28,7 +28,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
 				</div>
 
 				<div className="skills-content grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-24 w-full z-10">
-					<div className="md:col-span-5 flex flex-col justify-center border-l border-foreground/5 pl-8 space-y-10">
+					<div className="hidden md:flex md:col-span-5 flex-col justify-center border-l border-foreground/5 pl-8 space-y-10">
 						{skillGroups.map((item, i) => (
 							<h3
 								key={item.id}

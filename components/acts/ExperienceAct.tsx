@@ -32,7 +32,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
 				</div>
 
 				<div className="exp-content grid grid-cols-1 md:grid-cols-12 gap-12 md:gap-20 w-full z-10">
-					<div className="md:col-span-4 flex flex-col justify-center border-l border-foreground/10 pl-8">
+					<div className="hidden md:flex md:col-span-4 flex-col justify-center border-l border-foreground/10 pl-8">
 						<div className="space-y-6">
 							{experiences.map((exp, i) => (
 								<h3
@@ -59,7 +59,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
 									</span>
 									<div className="h-px w-16 bg-accent/30" />
 								</div>
-								<h2 className="text-5xl md:text-7xl font-bold text-foreground leading-[0.95] tracking-tighter uppercase font-sans [word-spacing:0.14em]">
+								<h2 className="text-3xl sm:text-5xl md:text-7xl font-bold text-foreground leading-[0.95] tracking-tighter uppercase font-sans [word-spacing:0.14em]">
 									{exp.company}
 								</h2>
 								<p className="text-foreground/60 text-lg md:text-2xl font-light leading-relaxed max-w-xl italic font-sans">
