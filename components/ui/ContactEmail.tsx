@@ -18,11 +18,7 @@ interface ContactEmailProps {
   message: string;
 }
 
-export const ContactEmail = ({
-  name,
-  email,
-  message,
-}: ContactEmailProps) => {
+export const ContactEmail = ({ name, email, message }: ContactEmailProps) => {
   return (
     <Html>
       <Head />
@@ -49,7 +45,12 @@ export const ContactEmail = ({
         <Body className="bg-background font-sans m-0 py-10 px-4 text-foreground">
           <Container className="max-w-140 mx-auto bg-surface border border-line rounded-xl overflow-hidden">
             <Section className="bg-background px-6 py-3.5 border-b border-line">
-              <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
+              <table
+                width="100%"
+                cellPadding={0}
+                cellSpacing={0}
+                role="presentation"
+              >
                 <tr>
                   <td align="left">
                     <span className="inline-block w-2.5 h-2.5 rounded-full bg-[#ff5f57]" />
@@ -131,7 +132,12 @@ export const ContactEmail = ({
             <Hr className="border-line m-0" />
 
             <Section className="px-8 py-5">
-              <table width="100%" cellPadding={0} cellSpacing={0} role="presentation">
+              <table
+                width="100%"
+                cellPadding={0}
+                cellSpacing={0}
+                role="presentation"
+              >
                 <tr>
                   <td align="left">
                     <Text className="text-[11px] font-mono text-muted m-0 tracking-wide">

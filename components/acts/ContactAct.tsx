@@ -4,7 +4,9 @@ import { useState, ChangeEvent, FormEvent } from "react";
 import { channels, type FormData, type ChannelItem } from "@/lib/data/form";
 
 export function ContactAct() {
-  const [status, setStatus] = useState<"IDLE" | "SENDING" | "SUCCESS" | "ERROR">("IDLE");
+  const [status, setStatus] = useState<
+    "IDLE" | "SENDING" | "SUCCESS" | "ERROR"
+  >("IDLE");
   const [formData, setFormData] = useState<FormData>({
     name: "",
     email: "",
