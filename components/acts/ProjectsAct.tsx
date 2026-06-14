@@ -12,12 +12,14 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
           <span className="projects-intro-label text-accent font-bold tracking-widest text-[10px] uppercase mb-6 opacity-60">
             ARCHIVE_2024-2026
           </span>
-          <h2 className="text-5xl lg:text-8xl font-bold font-sans text-foreground uppercase leading-[0.85] tracking-tight max-w-4xl [word-spacing:0.14em]">
-            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="projects-intro-line block">Project</span>
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold font-sans text-foreground uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="projects-intro-line block whitespace-normal md:whitespace-nowrap">
+                Project
+              </span>
             </span>
             <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="projects-intro-line block text-accent italic">
+              <span className="projects-intro-line block text-accent italic whitespace-normal md:whitespace-nowrap">
                 Evolution.
               </span>
             </span>
@@ -121,7 +123,7 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
         </div>
       </div>
 
-      <div className="projects-bgdigit absolute right-10 bottom-10 pointer-events-none select-none">
+      <div className="projects-bgdigit absolute right-0 bottom-0 pointer-events-none select-none flex justify-end pr-6 md:pr-14 lg:pr-20">
         <RollingDigit
           digit={
             projects[activeIndex].id.startsWith("0")

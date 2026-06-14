@@ -84,7 +84,7 @@ export default async function ProjectPage({
           </div>
         </div>
 
-        {images.length > 0 && (
+        {images.length > 0 ? (
           <div className="mt-14 grid grid-cols-1 sm:grid-cols-2 gap-4">
             {images.map((src, i) => (
               // eslint-disable-next-line @next/next/no-img-element
@@ -95,6 +95,16 @@ export default async function ProjectPage({
                 className="w-full rounded-md border border-foreground/10 object-cover"
               />
             ))}
+          </div>
+        ) : (
+          <div className="mt-14 border border-dashed border-foreground/10 rounded-md p-8 md:p-12 flex flex-col items-center justify-center text-center bg-foreground/[0.01]">
+            <p className="font-mono text-xs md:text-sm text-foreground/40 tracking-widest uppercase">
+              <span className="text-accent/60">{"// "}</span>
+              images_upload_pending
+            </p>
+            <p className="text-xs text-foreground/30 font-light mt-1.5 max-w-xs">
+              Visual assets for this deployment will be uploaded soon.
+            </p>
           </div>
         )}
 

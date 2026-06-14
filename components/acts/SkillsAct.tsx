@@ -11,17 +11,19 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
           <span className="skills-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
             The Capabilities
           </span>
-          <h2 className="text-5xl lg:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.85] max-w-4xl [word-spacing:0.14em]">
-            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="skills-intro-line block">Mastering the</span>
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="skills-intro-line block whitespace-normal md:whitespace-nowrap">
+                Mastering the
+              </span>
             </span>
             <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="skills-intro-line block text-accent italic">
+              <span className="skills-intro-line block text-accent italic whitespace-normal md:whitespace-nowrap">
                 Technical Stack.
               </span>
             </span>
           </h2>
-          <p className="skills-intro-p mt-8 text-foreground/40 text-lg md:text-xl font-light max-w-xl">
+          <p className="skills-intro-p mt-8 text-foreground/40 text-lg md:text-xl font-light max-w-xl font-sans">
             A deep dive into the languages, engines, and frameworks I use to
             translate complex problems into elegant digital solutions.
           </p>
@@ -82,7 +84,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
         </div>
       </div>
 
-      <div className="skills-bgdigit absolute right-10 bottom-10 pointer-events-none select-none">
+      <div className="skills-bgdigit absolute right-0 bottom-0 pointer-events-none select-none flex justify-end pr-6 md:pr-14 lg:pr-20">
         <RollingDigit
           digit={skillGroups[activeIndex].id.slice(1)}
           className="block text-[30vw] font-bold text-foreground italic leading-none font-sans"

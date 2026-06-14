@@ -13,14 +13,14 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
           <span className="exp-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
             The work experience
           </span>
-          <h2 className="text-5xl lg:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.9] max-w-4xl [word-spacing:0.14em]">
-            <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="exp-intro-line block">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+            <span className="block overflow-hidden pb-[0.05em]">
+              <span className="exp-intro-line block whitespace-normal md:whitespace-nowrap">
                 Scaling systems through
               </span>
             </span>
             <span className="block overflow-hidden pb-[0.12em] -mb-[0.12em]">
-              <span className="exp-intro-line block text-accent italic">
+              <span className="exp-intro-line block text-accent italic whitespace-normal md:whitespace-nowrap">
                 architectural precision.
               </span>
             </span>
@@ -81,12 +81,12 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
         </div>
       </div>
 
-      <div className="exp-bgyear absolute -right-4 md:-right-10 bottom-0 pointer-events-none select-none flex">
+      <div className="exp-bgyear absolute right-0 bottom-0 pointer-events-none select-none flex justify-end tracking-[-0.05em] pr-6 md:pr-14 lg:pr-20">
         {currentYear.split("").map((d, i) => (
           <RollingDigit
             key={i}
             digit={d}
-            className="block text-[35vw] md:text-[25vw] font-bold text-foreground italic leading-none font-sans"
+            className="block text-[32vw] md:text-[25vw] font-bold text-foreground italic leading-none font-sans"
           />
         ))}
       </div>
