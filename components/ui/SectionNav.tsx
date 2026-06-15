@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { loaderSignal } from "@/lib/loaderSignal";
 
 export interface NavItem {
   label: string;
@@ -23,8 +24,10 @@ export function SectionNav({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
+  const lineBg = useRef<HTMLDivElement>(null);
   const fill = useRef<HTMLDivElement>(null);
   const lines = useRef<(HTMLSpanElement | null)[]>([]);
+  const labels = useRef<(HTMLSpanElement | null)[]>([]);
   const dragging = useRef(false);
   const [active, setActive] = useState(0);
   const [enabled, setEnabled] = useState(false);
@@ -85,7 +88,65 @@ export function SectionNav({
         return positions[n - 1];
       };
 
+      const lineEls = lines.current.filter(Boolean) as HTMLSpanElement[];
+      const labelEls = labels.current.filter(Boolean) as HTMLSpanElement[];
+      let introDone = false;
+
+      gsap.set(root.current, { autoAlpha: 0, x: -8 });
+      gsap.set(lineBg.current, { scaleY: 0, transformOrigin: "top center" });
+      gsap.set(lineEls, { scaleX: 0, autoAlpha: 0 });
+
+      const clearLabel = (el: HTMLSpanElement) =>
+        gsap.set(el, { clearProps: "opacity,transform" });
+
+      const peekLabel = (el?: HTMLSpanElement) => {
+        if (!el || !introDone) return;
+        gsap.killTweensOf(el);
+        gsap
+          .timeline({ onComplete: () => clearLabel(el) })
+          .fromTo(
+            el,
+            { opacity: 0, x: -6 },
+            { opacity: 1, x: 0, duration: 0.2, ease: "power3.out" },
+          )
+          .to(el, { opacity: 0, x: 4, duration: 0.28, ease: "power2.in" }, "+=0.4");
+      };
+
+      const play = () => {
+        gsap
+          .timeline({
+            onComplete: () => {
+              introDone = true;
+            },
+          })
+          .to(root.current, { autoAlpha: 1, x: 0, duration: 0.5, ease: "power3.out" }, 0)
+          .to(lineBg.current, { scaleY: 1, duration: 0.7, ease: "power3.inOut" }, 0.1)
+          .to(
+            lineEls,
+            {
+              scaleX: 1,
+              autoAlpha: 1,
+              duration: 0.45,
+              ease: "power3.out",
+              stagger: 0.07,
+            },
+            0.45,
+          )
+          .to(
+            lineEls,
+            { scaleX: 3, duration: 0.22, ease: "power2.out", stagger: 0.06 },
+            ">-0.1",
+          )
+          .to(
+            lineEls,
+            { scaleX: 1, duration: 0.4, ease: "power3.inOut", stagger: 0.06 },
+            ">-0.15",
+          );
+      };
+      const offLoad = loaderSignal.onComplete(play);
+
       let lastActive = -1;
+      let lastPeek = -1;
       let cur = toDisp(Math.max(0, Math.min(1, getProgress())));
       const render = () => {
         const target = toDisp(Math.max(0, Math.min(1, getProgress())));
@@ -99,6 +160,15 @@ export function SectionNav({
         if (a !== lastActive) {
           lastActive = a;
           setActive(a);
+        }
+
+        const peekIdx = Math.min(
+          n - 1,
+          Math.max(0, Math.floor(cur * (n - 1) + 0.3)),
+        );
+        if (peekIdx !== lastPeek) {
+          lastPeek = peekIdx;
+          peekLabel(labelEls[peekIdx]);
         }
       };
 
@@ -158,6 +228,7 @@ export function SectionNav({
       window.addEventListener("pointerup", onUp);
 
       return () => {
+        offLoad();
         gsap.ticker.remove(render);
         window.removeEventListener("pointermove", onMagnet);
         tr?.removeEventListener("pointerdown", onDown);
@@ -190,8 +261,9 @@ export function SectionNav({
           data-cursor="link"
           onPointerEnter={() => setHovering(true)}
           onPointerLeave={() => setHovering(false)}
-          className="pointer-events-auto relative h-56 w-px cursor-pointer bg-foreground/15"
+          className="pointer-events-auto relative h-56 w-px cursor-pointer"
         >
+        <div ref={lineBg} className="absolute inset-0 w-px bg-foreground/15" />
         <div
           ref={fill}
           className="absolute left-0 top-0 h-full w-full origin-top bg-accent"
@@ -220,7 +292,12 @@ export function SectionNav({
                     : "w-2.5 bg-foreground/40 group-hover:bg-accent"
                 }`}
               />
-              <span className="pointer-events-none absolute left-13 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.25em] text-foreground/80 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <span
+                ref={(el) => {
+                  labels.current[i] = el;
+                }}
+                className="pointer-events-none absolute left-13 whitespace-nowrap font-mono text-[11px] uppercase tracking-[0.25em] text-foreground/80 opacity-0 transition-opacity duration-200 group-hover:opacity-100"
+              >
                 {item.name}
               </span>
             </button>
