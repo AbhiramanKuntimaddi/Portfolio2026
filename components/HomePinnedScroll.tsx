@@ -1,7 +1,13 @@
 "use client";
 
-import { useCallback, useRef, useState } from "react";
-import { gsap, useGSAP } from "@/lib/gsap";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
+import { gsap } from "@/lib/gsap";
 import { loaderSignal } from "@/lib/loaderSignal";
 import { lenisRef } from "@/lib/lenis";
 import { enableSectionSnap } from "@/lib/sectionSnap";
@@ -33,12 +39,14 @@ interface CycRange {
 export function HomePinnedScroll() {
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
+  const heroInRef = useRef<gsap.core.Timeline | null>(null);
   const idxRef = useRef({ skills: 0, exp: 0, projects: 0 });
   const [idx, setIdx] = useState({ skills: 0, exp: 0, projects: 0 });
   const [navPos, setNavPos] = useState<number[]>([]);
 
-  useGSAP(
-    () => {
+  useLayoutEffect(() => {
+    let off = () => {};
+    const ctx = gsap.context(() => {
       gsap.set(
         [
           ".about-act",
@@ -104,8 +112,25 @@ export function HomePinnedScroll() {
           "-=0.3",
         );
 
-      const off = loaderSignal.onComplete(() => heroIn.play());
+      heroInRef.current = heroIn;
+      off = loaderSignal.onComplete(() => heroIn.play());
+    }, wrapperRef);
 
+    return () => {
+      off();
+      ctx.revert();
+      heroInRef.current = null;
+    };
+  }, []);
+
+  useEffect(() => {
+    const w = window as Window & {
+      requestIdleCallback?: (cb: () => void) => number;
+      cancelIdleCallback?: (id: number) => void;
+    };
+    let ctx: ReturnType<typeof gsap.context> | undefined;
+    const run = () => {
+      ctx = gsap.context(() => {
       const ranges: CycRange[] = [];
 
       const tl = gsap.timeline({
@@ -118,7 +143,7 @@ export function HomePinnedScroll() {
           pin: true,
           anticipatePin: 1,
           onUpdate: (self) => {
-            if (self.progress > 0.01) heroIn.progress(1);
+            if (self.progress > 0.01) heroInRef.current?.progress(1);
             const t = self.progress * tl.duration();
             const next = { ...idxRef.current };
             let changed = false;
@@ -468,13 +493,20 @@ export function HomePinnedScroll() {
       const cleanupSnap = enableSectionSnap(tl);
 
       return () => {
-        off();
         cleanupSnap();
         tlRef.current = null;
       };
-    },
-    { scope: wrapperRef },
-  );
+      }, wrapperRef);
+    };
+    const handle = w.requestIdleCallback
+      ? w.requestIdleCallback(run)
+      : window.setTimeout(run, 1);
+    return () => {
+      if (w.cancelIdleCallback) w.cancelIdleCallback(handle);
+      else clearTimeout(handle);
+      ctx?.revert();
+    };
+  }, []);
 
   const getProgress = useCallback(
     () => tlRef.current?.scrollTrigger?.progress ?? 0,

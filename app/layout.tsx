@@ -1,8 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
+import { clashDisplay } from "./fonts";
 import { site, personSchema, websiteSchema } from "@/lib/site";
-import { GlobalGlow } from "@/components/ui/GlobalGlow";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import { ClientChrome } from "@/components/ui/ClientChrome";
 import { LenisProvider } from "@/components/ui/LenisProvider";
 import { Preloader } from "@/components/ui/Preloader";
 
@@ -65,7 +65,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={clashDisplay.variable}>
       <body className="antialiased relative bg-background min-h-screen">
         <script
           type="application/ld+json"
@@ -76,8 +76,7 @@ export default function RootLayout({
           dangerouslySetInnerHTML={{ __html: JSON.stringify(websiteSchema()) }}
         />
         <Preloader />
-        <GlobalGlow />
-        <CustomCursor />
+        <ClientChrome />
         <LenisProvider>
           <div className="relative z-10">{children}</div>
         </LenisProvider>
