@@ -1,6 +1,8 @@
+import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { projects } from "@/lib/data/projects";
+import { site } from "@/lib/site";
 
 const STATUS_DOT: Record<string, string> = {
   ONGOING: "bg-orange-400",
@@ -9,9 +11,42 @@ const STATUS_DOT: Record<string, string> = {
   ARCHIVED: "bg-red-500",
 };
 
+function findProject(slug: string) {
+  return projects.find((p) => p.link === `/archive/${slug}`);
+}
+
 export function generateStaticParams() {
   const slugs = new Set(projects.map((p) => p.link.replace("/archive/", "")));
   return Array.from(slugs).map((slug) => ({ slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const project = findProject(slug);
+  if (!project) return { title: "Project not found", robots: { index: false } };
+
+  const path = `/archive/${slug}`;
+  return {
+    title: project.title,
+    description: project.description,
+    alternates: { canonical: path },
+    openGraph: {
+      type: "article",
+      url: `${site.url}${path}`,
+      title: project.title,
+      description: project.description,
+      siteName: site.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.description,
+    },
+  };
 }
 
 export default async function ProjectPage({
@@ -20,13 +55,30 @@ export default async function ProjectPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const project = projects.find((p) => p.link === `/archive/${slug}`);
+  const project = findProject(slug);
   if (!project) notFound();
 
   const images = (project as { images?: string[] }).images ?? [];
+  const path = `/archive/${slug}`;
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    headline: project.title,
+    description: project.description,
+    url: `${site.url}${path}`,
+    dateCreated: project.year,
+    keywords: project.stack.join(", "),
+    author: { "@type": "Person", name: site.name, url: site.url },
+    isPartOf: { "@type": "WebSite", name: site.name, url: site.url },
+  };
 
   return (
     <main className="relative z-10 min-h-dvh bg-background">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <div className="max-w-4xl mx-auto px-6 md:px-12 lg:px-16 py-20 md:py-28">
         <Link
           href="/"

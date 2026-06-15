@@ -105,9 +105,10 @@ export function AboutAct() {
             >
               <Image
                 src="/images/Profile.jpg"
-                alt="Abhiraman Kuntimaddi"
+                alt="Abhiraman Kuntimaddi — Software & Machine Learning Engineer"
                 fill
                 priority
+                sizes="(max-width: 640px) 192px, (max-width: 1024px) 240px, 288px"
                 className="about-photo object-cover"
               />
             </div>
