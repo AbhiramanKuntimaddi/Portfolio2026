@@ -3,13 +3,7 @@
 import { NowPlaying } from "@/components/ui/NowPlaying";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 
-export function HeroAct({
-  onNext,
-  onContact,
-}: {
-  onNext?: () => void;
-  onContact?: () => void;
-}) {
+export function HeroAct({ onContact }: { onContact?: () => void }) {
   return (
     <section className="hero-act absolute inset-0 flex flex-col p-6 md:p-10 lg:p-16 overflow-y-auto xl:overflow-hidden">
       <div className="hero-content flex-1 flex flex-col justify-center max-w-350 mx-auto w-full py-4 md:py-0">
@@ -124,30 +118,6 @@ export function HeroAct({
         </div>
       </div>
 
-      <div className="hero-nav flex justify-center pt-6 md:pt-10 pb-2">
-        <button
-          onClick={onNext}
-          aria-label="Scroll to next section"
-          className="group relative flex items-baseline font-mono cursor-pointer"
-        >
-          <span className="text-accent mr-2 opacity-0 -translate-x-2 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 font-bold select-none">
-            &gt;
-          </span>
-          <div className="flex flex-col">
-            <div className="flex items-baseline gap-1">
-              <span className="text-accent/60 text-[10px] font-bold tracking-[0.3em] uppercase transition-colors duration-500 group-hover:text-foreground">
-                Navigate_Down
-              </span>
-              <span className="text-accent/30 select-none text-[10px]">
-                ();
-              </span>
-            </div>
-            <div className="mt-1 h-px w-full bg-accent/10 relative overflow-hidden">
-              <div className="absolute inset-0 bg-accent -translate-x-full group-hover:translate-x-0 transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]" />
-            </div>
-          </div>
-        </button>
-      </div>
     </section>
   );
 }

@@ -102,11 +102,6 @@ export function HomePinnedScroll() {
           ".hero-strip-item",
           { opacity: 0, y: 20, duration: 0.5, ease: "expo.out", stagger: 0.08 },
           "-=0.3",
-        )
-        .from(
-          ".hero-nav",
-          { opacity: 0, y: 12, duration: 0.6, ease: "expo.out" },
-          "-=0.1",
         );
 
       const off = loaderSignal.onComplete(() => heroIn.play());
@@ -528,10 +523,7 @@ export function HomePinnedScroll() {
         ref={wrapperRef}
         className="relative z-10 w-full h-dvh overflow-hidden"
       >
-        <HeroAct
-          onNext={() => scrollToLabel("about")}
-          onContact={() => scrollToLabel("contact")}
-        />
+        <HeroAct onContact={() => scrollToLabel("contact")} />
         <AboutAct />
         <SkillsAct activeIndex={idx.skills} />
         <ExperienceAct activeIndex={idx.exp} />
