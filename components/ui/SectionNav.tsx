@@ -28,6 +28,7 @@ export function SectionNav({
   const dragging = useRef(false);
   const [active, setActive] = useState(0);
   const [enabled, setEnabled] = useState(false);
+  const [hovering, setHovering] = useState(false);
 
   useEffect(() => {
     if (window.matchMedia("(hover: hover) and (pointer: fine)").matches)
@@ -170,15 +171,27 @@ export function SectionNav({
   if (!enabled) return null;
 
   return (
-    <div
-      ref={root}
-      className="pointer-events-none fixed left-7 top-1/2 z-60 -translate-y-1/2 select-none"
-    >
+    <>
       <div
-        ref={track}
-        data-cursor="link"
-        className="pointer-events-auto relative h-56 w-px cursor-pointer bg-foreground/15"
+        aria-hidden
+        className="pointer-events-none fixed inset-0 z-50 transition-[backdrop-filter,background-color] duration-500"
+        style={{
+          backdropFilter: hovering ? "blur(10px)" : "blur(0px)",
+          WebkitBackdropFilter: hovering ? "blur(10px)" : "blur(0px)",
+          backgroundColor: hovering ? "rgba(4,8,17,0.25)" : "transparent",
+        }}
+      />
+      <div
+        ref={root}
+        className="pointer-events-none fixed left-7 top-1/2 z-60 -translate-y-1/2 select-none"
       >
+        <div
+          ref={track}
+          data-cursor="link"
+          onPointerEnter={() => setHovering(true)}
+          onPointerLeave={() => setHovering(false)}
+          className="pointer-events-auto relative h-56 w-px cursor-pointer bg-foreground/15"
+        >
         <div
           ref={fill}
           className="absolute left-0 top-0 h-full w-full origin-top bg-accent"
@@ -212,7 +225,8 @@ export function SectionNav({
               </span>
             </button>
           ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
