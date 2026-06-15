@@ -76,6 +76,7 @@ export default async function ProjectPage({
             {project.stack.map((tech) => (
               <span
                 key={tech}
+                data-cursor="link"
                 className="px-3 py-1.5 bg-accent/5 border border-accent/20 text-accent text-[10px] font-mono tracking-widest uppercase rounded-sm"
               >
                 {tech}

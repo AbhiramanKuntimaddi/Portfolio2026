@@ -58,6 +58,7 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
                   {project.stack.map((tech) => (
                     <span
                       key={tech}
+                      data-cursor="link"
                       className="px-3 py-1 bg-accent/5 border border-accent/20 text-accent text-[9px] font-mono tracking-widest uppercase rounded-sm"
                     >
                       {tech}

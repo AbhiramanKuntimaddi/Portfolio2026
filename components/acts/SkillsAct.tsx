@@ -66,6 +66,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                   {item.skills.map((skill) => (
                     <span
                       key={skill}
+                      data-cursor="link"
                       className="px-4 py-2 border border-accent/20 text-foreground text-[12px] font-mono tracking-[0.3em] rounded-sm uppercase"
                     >
                       {skill}

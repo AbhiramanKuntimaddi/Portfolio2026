@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { GlobalGlow } from "@/components/ui/GlobalGlow";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import { LenisProvider } from "@/components/ui/LenisProvider";
 import { Preloader } from "@/components/ui/Preloader";
 
@@ -25,6 +26,7 @@ export default function RootLayout({
       <body className="antialiased relative bg-background min-h-screen">
         <Preloader />
         <GlobalGlow />
+        <CustomCursor />
         <LenisProvider>
           <div className="relative z-10">{children}</div>
         </LenisProvider>

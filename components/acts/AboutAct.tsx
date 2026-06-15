@@ -78,6 +78,7 @@ export function AboutAct() {
         <div className="lg:col-span-5 flex justify-center lg:justify-start relative">
           <div
             ref={imgRef}
+            data-cursor="default"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
             className="about-img relative w-full max-w-48 sm:max-w-60 lg:max-w-72"
@@ -105,7 +106,7 @@ export function AboutAct() {
               style={{ transform: "translateX(-50%) translateZ(50px)" }}
             >
               <span className="text-accent font-mono text-[10px] tracking-[0.3em] uppercase">
-                SYSTEM_USER: ABHIRAMAN
+                SYSTEM_USER: ABHIRAMAN KUNTIMADDI
               </span>
             </div>
           </div>

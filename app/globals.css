@@ -87,6 +87,77 @@ html.lenis body {
   overflow: hidden;
 }
 
+.cursor-none,
+.cursor-none * {
+  cursor: none !important;
+}
+
+.cur-ring {
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(27, 84, 255, 0.4);
+  border-radius: 9999px;
+  background: transparent;
+  transition:
+    width 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    height 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    opacity 0.25s ease;
+  will-change: transform, width, height;
+}
+
+.cur-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  background: var(--accent);
+  box-shadow: 0 0 8px rgba(27, 84, 255, 0.6);
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    border-radius 0.25s ease,
+    opacity 0.25s ease;
+  will-change: transform;
+}
+
+.cur-label {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.cur-root[data-state="link"] .cur-ring {
+  width: 54px;
+  height: 54px;
+  border-color: var(--accent);
+  background: rgba(27, 84, 255, 0.08);
+}
+.cur-root[data-state="link"] .cur-dot {
+  opacity: 0;
+}
+
+.cur-root[data-state="view"] .cur-ring {
+  width: 76px;
+  height: 76px;
+  border-color: var(--accent);
+  background: rgba(27, 84, 255, 0.1);
+}
+.cur-root[data-state="view"] .cur-dot {
+  opacity: 0;
+}
+.cur-root[data-state="view"] .cur-label {
+  opacity: 1;
+}
+
+.cur-root[data-state="text"] .cur-ring {
+  opacity: 0;
+}
+.cur-root[data-state="text"] .cur-dot {
+  width: 2px;
+  height: 26px;
+  border-radius: 2px;
+}
+
 .np-bar {
   height: 30%;
   animation: np-eq 0.9s ease-in-out infinite;
