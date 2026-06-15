@@ -8,29 +8,39 @@ function MaskWords({
   text,
   className,
   accentFrom,
+  emphasis,
 }: {
   text: string;
   className: string;
   accentFrom?: number;
+  emphasis?: string[];
 }) {
+  const emph = new Set((emphasis ?? []).map((w) => w.toLowerCase()));
   return (
     <span className={className}>
-      {text.split(" ").map((word, i) => (
-        <span
-          key={i}
-          className="mask-word inline-block overflow-visible mr-[0.25em]"
-        >
+      {text.split(" ").map((word, i) => {
+        const bare = word.replace(/[^a-zA-Z-]/g, "").toLowerCase();
+        const isEmph = emph.has(bare);
+        return (
           <span
-            className={`word inline-block ${
-              accentFrom !== undefined && i >= accentFrom
-                ? "text-accent italic font-medium"
-                : ""
-            }`}
+            key={i}
+            className="mask-word inline-block overflow-visible mr-[0.25em]"
           >
-            {word}
+            <span
+              {...(isEmph ? { "data-cursor": "word" } : {})}
+              className={`word inline-block transition-colors duration-300 ${
+                isEmph
+                  ? "text-accent font-medium not-italic border-b border-accent/40 hover:border-accent hover:text-foreground"
+                  : accentFrom !== undefined && i >= accentFrom
+                    ? "text-accent italic font-medium"
+                    : ""
+              }`}
+            >
+              {word}
+            </span>
           </span>
-        </span>
-      ))}
+        );
+      })}
     </span>
   );
 }
@@ -136,13 +146,20 @@ export function AboutAct() {
             <p className="text-foreground text-[clamp(1.1rem,1.9vw,1.5rem)] leading-relaxed font-light">
               <MaskWords
                 className="about-p1"
-                text="I build the unseen architecture — systems where behavior matters more than appearance. From backend services in Java or Python to modern web interfaces, I focus on clarity under real use."
+                text="I build the unseen architecture — systems where behavior matters more than appearance. From backend services and machine-learning models in Python to modern web interfaces, I focus on clarity under real use."
+                emphasis={[
+                  "architecture",
+                  "machine-learning",
+                  "models",
+                  "clarity",
+                ]}
               />
             </p>
             <p className="text-foreground/60 text-[clamp(0.95rem,1.6vw,1.2rem)] leading-relaxed font-light italic">
               <MaskWords
                 className="about-p2"
                 text="Good software feels obvious. My work is about removing friction until complexity fades and intent remains."
+                emphasis={["obvious", "friction", "intent"]}
               />
             </p>
           </div>

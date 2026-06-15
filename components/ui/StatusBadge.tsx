@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { job, openProjects, type SiteStatusState } from "@/lib/status";
+import {
+  getJobLine,
+  openProjects,
+  type SiteStatusLine,
+  type SiteStatusState,
+} from "@/lib/status";
 
 const STYLES: Record<
   SiteStatusState,
@@ -15,6 +20,11 @@ const STYLES: Record<
   working: {
     dot: "bg-orange-400",
     shadow: "shadow-[0_0_10px_rgba(251,146,60,0.55)]",
+    pulse: true,
+  },
+  busy: {
+    dot: "bg-red-500",
+    shadow: "shadow-[0_0_10px_rgba(239,68,68,0.6)]",
     pulse: true,
   },
   away: {
@@ -60,7 +70,7 @@ const HOLD_MS = 700;
 const GAP_MS = 80;
 
 export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
-  const [day, setDay] = useState<number | null>(null);
+  const [jobLine, setJobLine] = useState<SiteStatusLine | null>(null);
   const [typed, setTyped] = useState("");
 
   const opens = openProjects();
@@ -70,7 +80,7 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
   const phase = useRef<"typing" | "hold" | "deleting" | "gap">("typing");
 
   useEffect(() => {
-    setDay(new Date().getDay());
+    setJobLine(getJobLine());
   }, []);
 
   useEffect(() => {
@@ -129,10 +139,7 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
     };
   }, [opens]);
 
-  if (day === null) return null;
-
-  const isWeekday = day >= 1 && day <= 5;
-  const jobLine = isWeekday ? job.weekday : job.weekend;
+  if (jobLine === null) return null;
 
   return (
     <div
@@ -157,7 +164,22 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
         />
       )}
 
-      <StatusRow state={jobLine.state} label={jobLine.label} align={align} />
+      <StatusRow
+        state={jobLine.state}
+        align={align}
+        label={
+          jobLine.dnd ? (
+            <>
+              {jobLine.label}
+              <span className="ml-2 rounded-sm border border-red-400/40 px-1 py-px text-[8px] font-bold uppercase tracking-[0.2em] text-red-400/90">
+                dnd
+              </span>
+            </>
+          ) : (
+            jobLine.label
+          )
+        }
+      />
     </div>
   );
 }

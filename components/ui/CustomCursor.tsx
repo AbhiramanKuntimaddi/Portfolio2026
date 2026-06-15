@@ -36,6 +36,7 @@ export function CustomCursor() {
           const v = o.dataset.cursor;
           if (v === "view") return ["view", "view"];
           if (v === "link") return ["link", ""];
+          if (v === "word") return ["word", ""];
           if (v === "text") return ["text", ""];
           return ["default", ""];
         }

@@ -158,6 +158,16 @@ html.lenis body {
   border-radius: 2px;
 }
 
+.cur-root[data-state="word"] .cur-ring {
+  opacity: 0;
+}
+.cur-root[data-state="word"] .cur-dot {
+  width: 22px;
+  height: 7px;
+  border-radius: 2px;
+  box-shadow: 0 0 14px rgba(27, 84, 255, 0.85);
+}
+
 .np-bar {
   height: 30%;
   animation: np-eq 0.9s ease-in-out infinite;

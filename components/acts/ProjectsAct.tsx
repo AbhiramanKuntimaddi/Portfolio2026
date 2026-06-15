@@ -12,7 +12,7 @@ export function ProjectsAct({ activeIndex }: { activeIndex: number }) {
           <span className="projects-intro-label text-accent font-bold tracking-widest text-[10px] uppercase mb-6 opacity-60">
             ARCHIVE_2024-2026
           </span>
-          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold font-sans text-foreground uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold font-sans text-foreground uppercase leading-[0.95] md:leading-none w-full [word-spacing:0.14em]">
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="projects-intro-line block whitespace-normal md:whitespace-nowrap">
                 Project

@@ -11,9 +11,9 @@ export const experiences: ExperienceData[] = [
   {
     id: "01",
     year: "2024",
-    title: "Java Developer",
+    title: "Java & ML Engineer",
     company: "SoftDeCC Software",
-    desc: "Architecting E-Learning ecosystems. High-load Java EE systems meets complex SQL optimization.",
+    desc: "Architecting high-load Java EE e-learning platforms. Designed and shipped the recommendation systems now personalizing what every learner sees next.",
     context: "CURRENT_STATION",
   },
   {

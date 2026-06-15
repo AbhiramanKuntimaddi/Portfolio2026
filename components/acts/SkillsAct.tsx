@@ -11,7 +11,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
           <span className="skills-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
             The Capabilities
           </span>
-          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+          <h2 className="text-4xl md:text-6xl lg:text-8xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-none w-full [word-spacing:0.14em]">
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="skills-intro-line block whitespace-normal md:whitespace-nowrap">
                 Mastering the
@@ -34,7 +34,7 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
             {skillGroups.map((item, i) => (
               <h3
                 key={item.id}
-                className={`text-2xl md:text-5xl font-light tracking-tighter uppercase [word-spacing:0.14em] transition-all duration-500 ${
+                className={`text-2xl md:text-4xl xl:text-5xl font-light tracking-tighter uppercase whitespace-nowrap [word-spacing:0.14em] transition-all duration-500 ${
                   activeIndex === i
                     ? "text-accent opacity-100"
                     : "text-foreground opacity-30"
@@ -58,6 +58,13 @@ export function SkillsAct({ activeIndex }: { activeIndex: number }) {
                 <h3 className="block lg:hidden text-3xl font-light tracking-tighter uppercase text-accent [word-spacing:0.14em]">
                   {item.group}
                 </h3>
+
+                <div className="flex items-center gap-3">
+                  <span className="font-mono text-[11px] md:text-xs xl:text-sm tracking-[0.35em] uppercase text-accent/70">
+                    {item.role}
+                  </span>
+                  <div className="h-px flex-1 max-w-24 bg-accent/15" />
+                </div>
 
                 <p className="text-foreground text-lg md:text-2xl leading-relaxed max-w-xl font-light italic">
                   {item.desc}

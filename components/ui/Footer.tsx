@@ -36,7 +36,12 @@ export function Footer({ className = "" }: FooterProps) {
           </div>
 
           <div className="footer-reveal w-full md:w-auto flex justify-start md:justify-end">
-            <StatusBadge />
+            <div className="block md:hidden">
+              <StatusBadge align="left" />
+            </div>
+            <div className="hidden md:block">
+              <StatusBadge align="right" />
+            </div>
           </div>
         </div>
 

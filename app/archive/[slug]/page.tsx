@@ -98,7 +98,7 @@ export default async function ProjectPage({
             ))}
           </div>
         ) : (
-          <div className="mt-14 border border-dashed border-foreground/10 rounded-md p-8 md:p-12 flex flex-col items-center justify-center text-center bg-foreground/[0.01]">
+          <div className="mt-14 border border-dashed border-foreground/10 rounded-md p-8 md:p-12 flex flex-col items-center justify-center text-center bg-foreground/1">
             <p className="font-mono text-xs md:text-sm text-foreground/40 tracking-widest uppercase">
               <span className="text-accent/60">{"// "}</span>
               images_upload_pending
@@ -111,7 +111,7 @@ export default async function ProjectPage({
 
         <div className="mt-16 border-t border-foreground/10 pt-8">
           <Link
-            href="/#contact"
+            href="/?session=contact"
             className="group inline-flex items-baseline font-mono cursor-pointer"
           >
             <span className="text-accent text-[11px] md:text-xs font-bold tracking-[0.3em] uppercase transition-colors duration-300 group-hover:text-foreground">

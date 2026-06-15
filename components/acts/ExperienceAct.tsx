@@ -13,7 +13,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
           <span className="exp-intro-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
             The work experience
           </span>
-          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-[1.0] w-full [word-spacing:0.14em]">
+          <h2 className="text-4xl md:text-6xl lg:text-7xl font-bold text-foreground font-sans tracking-tight uppercase leading-[0.95] md:leading-none w-full [word-spacing:0.14em]">
             <span className="block overflow-hidden pb-[0.05em]">
               <span className="exp-intro-line block whitespace-normal md:whitespace-nowrap">
                 Scaling systems through
@@ -37,7 +37,7 @@ export function ExperienceAct({ activeIndex }: { activeIndex: number }) {
               {experiences.map((exp, i) => (
                 <h3
                   key={exp.id}
-                  className={`text-xl md:text-2xl font-semibold tracking-tight uppercase font-sans [word-spacing:0.14em] transition-all duration-500 ${
+                  className={`text-xl md:text-2xl font-semibold tracking-tight uppercase font-sans whitespace-nowrap [word-spacing:0.14em] transition-all duration-500 ${
                     activeIndex === i
                       ? "text-accent opacity-100"
                       : "text-foreground opacity-30"

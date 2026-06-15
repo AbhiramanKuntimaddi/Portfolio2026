@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { loaderSignal } from "@/lib/loaderSignal";
 import { lenisRef } from "@/lib/lenis";
@@ -12,6 +12,16 @@ import { ExperienceAct } from "@/components/acts/ExperienceAct";
 import { ProjectsAct } from "@/components/acts/ProjectsAct";
 import { ContactAct } from "@/components/acts/ContactAct";
 import { Footer } from "@/components/ui/Footer";
+import { SectionNav, type NavItem } from "@/components/ui/SectionNav";
+
+const NAV_ITEMS: NavItem[] = [
+  { label: "hero", name: "intro" },
+  { label: "about", name: "about" },
+  { label: "skills", name: "skills" },
+  { label: "experience", name: "experience" },
+  { label: "projects", name: "work" },
+  { label: "contact", name: "contact" },
+];
 
 interface CycRange {
   key: "skills" | "exp" | "projects";
@@ -25,6 +35,7 @@ export function HomePinnedScroll() {
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const idxRef = useRef({ skills: 0, exp: 0, projects: 0 });
   const [idx, setIdx] = useState({ skills: 0, exp: 0, projects: 0 });
+  const [navPos, setNavPos] = useState<number[]>([]);
 
   useGSAP(
     () => {
@@ -447,16 +458,18 @@ export function HomePinnedScroll() {
           contactStart + 0.4,
         );
 
-      tl.to(".contact-act", { duration: 1.5 }, contactStart + 1.2);
-
       tl.addLabel("hero", 0)
         .addLabel("about", 2.0)
         .addLabel("skills", skillsStart + 0.9)
         .addLabel("experience", expStart + 0.9)
         .addLabel("projects", projStart + 0.9)
-        .addLabel("contact", contactStart + 1.2);
+        .addLabel("contact", contactStart + 0.9);
 
       tlRef.current = tl;
+      const dur = tl.duration();
+      setNavPos(
+        NAV_ITEMS.map((it) => (dur ? (tl.labels[it.label] ?? 0) / dur : 0)),
+      );
       const cleanupSnap = enableSectionSnap(tl);
 
       return () => {
@@ -467,6 +480,20 @@ export function HomePinnedScroll() {
     },
     { scope: wrapperRef },
   );
+
+  const getProgress = useCallback(
+    () => tlRef.current?.scrollTrigger?.progress ?? 0,
+    [],
+  );
+
+  const scrollToProgress = useCallback((p: number) => {
+    const st = tlRef.current?.scrollTrigger;
+    if (!st) return;
+    const target = st.start + p * (st.end - st.start);
+    const lenis = lenisRef.get();
+    if (lenis) lenis.scrollTo(target, { immediate: true });
+    else window.scrollTo({ top: target });
+  }, []);
 
   const scrollToLabel = (label: string) => {
     const tl = tlRef.current;
@@ -511,6 +538,13 @@ export function HomePinnedScroll() {
         <ProjectsAct activeIndex={idx.projects} />
         <ContactAct />
       </div>
+      <SectionNav
+        items={NAV_ITEMS}
+        positions={navPos}
+        getProgress={getProgress}
+        scrollToProgress={scrollToProgress}
+        onJump={scrollToLabel}
+      />
       <Footer />
     </>
   );
