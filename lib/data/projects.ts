@@ -59,7 +59,7 @@ export const projects: Project[] = [
     ],
     year: "2026",
     link: "/archive/sp-design-studio",
-    status: "ONGOING",
+    status: "COMPLETED",
   },
   {
     id: "04",
