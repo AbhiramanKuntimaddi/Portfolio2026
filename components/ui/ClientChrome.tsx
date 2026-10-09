@@ -3,12 +3,8 @@
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 
-const GlobalGlow = dynamic(
-  () => import("@/components/ui/GlobalGlow").then((m) => m.GlobalGlow),
-  { ssr: false },
-);
-const CustomCursor = dynamic(
-  () => import("@/components/ui/CustomCursor").then((m) => m.CustomCursor),
+const DotField = dynamic(
+  () => import("@/components/ui/DotField").then((m) => m.DotField),
   { ssr: false },
 );
 
@@ -16,19 +12,20 @@ export function ClientChrome() {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    const ric = window.requestIdleCallback ?? ((cb: () => void) => setTimeout(cb, 250));
-    const id = ric(() => setShow(true));
-    return () => {
-      if (window.cancelIdleCallback) window.cancelIdleCallback(id as number);
-      else clearTimeout(id as unknown as ReturnType<typeof setTimeout>);
+    let done = false;
+    const reveal = () => {
+      if (done) return;
+      done = true;
+      setShow(true);
     };
+
+    const ric = window.requestIdleCallback;
+    if (ric) ric(reveal, { timeout: 1200 });
+    const t = window.setTimeout(reveal, 400);
+
+    return () => window.clearTimeout(t);
   }, []);
 
   if (!show) return null;
-  return (
-    <>
-      <GlobalGlow />
-      <CustomCursor />
-    </>
-  );
+  return <DotField />;
 }

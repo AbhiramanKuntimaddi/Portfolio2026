@@ -1,53 +1,73 @@
+import type { Text } from "@/lib/i18n";
+
 export interface SkillGroup {
   id: string;
-  group: string;
-  role: string;
-  skills: string[];
-  desc: string;
+  group: Text;
+  role: Text;
+  skills: (string | Text)[];
+  desc: Text;
 }
 
 export const skillGroups: SkillGroup[] = [
   {
     id: "01",
-    group: "The Logic",
-    role: "Foundation — Languages",
+    group: { en: "Languages", de: "Sprachen" },
+    role: { en: "Foundation", de: "Fundament" },
     skills: ["C", "C++", "Java", "Python", "TypeScript", "React"],
-    desc: "My core foundation. I build high-performance systems and scalable web architectures where clean logic meets type-safe precision.",
+    desc: {
+      en: "My base for everything: fast, reliable systems and web apps with clean, type-safe code.",
+      de: "Meine Basis für alles: schnelle, zuverlässige Systeme und Web-Apps mit sauberem, typsicherem Code.",
+    },
   },
   {
     id: "02",
-    group: "The Engine",
-    role: "Immersion — 3D & XR",
+    group: { en: "3D & XR", de: "3D & XR" },
+    role: { en: "Real-time 3D", de: "Echtzeit-3D" },
     skills: ["Unreal Engine 5", "Unity 3D", "Blender"],
-    desc: "Crafting immersive 3D environments. I specialize in spatial computing and real-time rendering pipelines for the next generation of XR.",
+    desc: {
+      en: "Real-time 3D scenes and XR prototypes in Unreal and Unity.",
+      de: "Echtzeit-3D-Szenen und XR-Prototypen in Unreal und Unity.",
+    },
   },
   {
     id: "03",
-    group: "The Canvas",
-    role: "Interface — Design to Code",
+    group: { en: "Frontend", de: "Frontend" },
+    role: { en: "Design to code", de: "Vom Design zum Code" },
     skills: ["HTML", "CSS", "TailwindCSS", "Sass", "Figma"],
-    desc: "Design-to-code execution. I bridge the gap between complex engineering and aesthetic interfaces with pixel-perfect attention to detail.",
+    desc: {
+      en: "I turn designs into fast, accessible interfaces, down to the pixel.",
+      de: "Ich setze Designs in schnelle, barrierearme Oberflächen um, bis aufs Pixel.",
+    },
   },
   {
     id: "04",
-    group: "The Databases",
-    role: "Persistence — Data Layer",
+    group: { en: "Databases", de: "Datenbanken" },
+    role: { en: "Data layer", de: "Datenschicht" },
     skills: ["MySQL", "MSSQL", "PostgreSQL", "Oracle"],
-    desc: "Relational architecture and optimization. I design data structures that ensure high availability and integrity for enterprise-scale systems.",
+    desc: {
+      en: "Relational databases designed to stay fast and consistent as they grow.",
+      de: "Relationale Datenbanken, die auch beim Wachsen schnell und konsistent bleiben.",
+    },
   },
   {
     id: "05",
-    group: "The Intelligence",
-    role: "The Brains — ML & RecSys",
+    group: { en: "Machine Learning", de: "Machine Learning" },
+    role: {
+      en: "Recommendations & neural networks",
+      de: "Empfehlungen & neuronale Netze",
+    },
     skills: [
-      "Recommender Systems",
-      "Neural Networks",
+      { en: "Recommender Systems", de: "Empfehlungssysteme" },
+      { en: "Neural Networks", de: "Neuronale Netze" },
       "PyTorch",
       "TensorFlow",
       "scikit-learn",
       "NumPy",
       "Pandas",
     ],
-    desc: "Teaching systems to predict and personalize. I write neural networks and recommendation engines from the ground up, turning raw behavioral signals into relevant, real-time decisions.",
+    desc: {
+      en: "Recommendation systems and neural networks built from scratch, turning user behaviour into useful suggestions.",
+      de: "Empfehlungssysteme und neuronale Netze, von Grund auf gebaut. Sie machen aus Nutzerverhalten hilfreiche Vorschläge.",
+    },
   },
 ];

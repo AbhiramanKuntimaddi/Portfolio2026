@@ -1,51 +1,68 @@
+import type { Text } from "@/lib/i18n";
+
 export interface ExperienceData {
   id: string;
   year: string;
-  title: string;
+  title: Text;
   company: string;
-  desc: string;
-  context: string;
+  desc: Text;
+  context: Text;
 }
 
 export const experiences: ExperienceData[] = [
   {
     id: "01",
     year: "2024",
-    title: "Java & ML Engineer",
+    title: { en: "Java & ML Engineer", de: "Java- & ML-Engineer" },
     company: "SoftDeCC Software",
-    desc: "Architecting high-load Java EE e-learning platforms. Designed and shipped the recommendation systems now personalizing what every learner sees next.",
-    context: "CURRENT_STATION",
+    desc: {
+      en: "I build high-load Java EE e-learning platforms and the recommendation system that decides what each learner sees next.",
+      de: "Ich entwickle Java-EE-E-Learning-Plattformen unter hoher Last und das Empfehlungssystem, das entscheidet, was Lernende als Nächstes sehen.",
+    },
+    context: { en: "Current role", de: "Aktuelle Stelle" },
   },
   {
     id: "02",
     year: "2022",
-    title: "Master's Thesis",
+    title: { en: "Master's Thesis", de: "Masterarbeit" },
     company: "RPTU Kaiserslautern",
-    desc: "Where scientific computing meets high-performance visualization. A deep dive into intelligent systems.",
-    context: "ACADEMIC_MILESTONE",
+    desc: {
+      en: "Research where scientific computing, visualization and intelligent systems meet.",
+      de: "Forschung an der Schnittstelle von wissenschaftlichem Rechnen, Visualisierung und intelligenten Systemen.",
+    },
+    context: { en: "Academic", de: "Studium" },
   },
   {
     id: "03",
     year: "2021",
-    title: "XR Frameworks",
+    title: { en: "XR Frameworks", de: "XR-Frameworks" },
     company: "RPTU Kaiserslautern",
-    desc: "Benchmarking the future of spatial computing. Unity, Unreal, and the OpenXR standard.",
-    context: "RESEARCH_PHASE",
+    desc: {
+      en: "Compared XR frameworks (Unity, Unreal and OpenXR) for spatial computing.",
+      de: "Vergleich von XR-Frameworks (Unity, Unreal und OpenXR) für Spatial Computing.",
+    },
+    context: { en: "Research", de: "Forschung" },
   },
   {
     id: "04",
     year: "2018",
-    title: "Full-Stack Engineer",
+    title: { en: "Full-Stack Engineer", de: "Full-Stack-Engineer" },
     company: "SM Chemicals",
-    desc: "Translating industrial scale into digital precision. Building robust product ecosystems.",
-    context: "INDUSTRIAL_LOGIC",
+    desc: {
+      en: "Built the company's product platform and catalog, end to end.",
+      de: "Aufbau der Produktplattform und des Katalogs, von Anfang bis Ende.",
+    },
+    context: { en: "Industry", de: "Industrie" },
   },
   {
     id: "05",
     year: "2018",
-    title: "Vision AI",
+    title: { en: "Vision AI", de: "Vision AI" },
     company: "PetPals Startup",
-    desc: "Neural networks in the palm of your hand. Implementing real-time animal recognition.",
-    context: "EMERGING_TECH",
+    desc: {
+      en: "Real-time animal recognition with neural networks, running on a phone.",
+      de: "Tiererkennung in Echtzeit mit neuronalen Netzen, direkt auf dem Smartphone.",
+    },
+    context: { en: "Startup", de: "Startup" },
   },
 ];

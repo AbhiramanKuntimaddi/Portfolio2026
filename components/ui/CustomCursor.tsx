@@ -1,13 +1,20 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useContent } from "@/components/providers/ContentProvider";
 
 export function CustomCursor() {
   const root = useRef<HTMLDivElement>(null);
   const ring = useRef<HTMLDivElement>(null);
   const dot = useRef<HTMLDivElement>(null);
   const label = useRef<HTMLSpanElement>(null);
+  const { c } = useContent();
+  const viewWord = useRef(c.ui.view);
+
+  useEffect(() => {
+    viewWord.current = c.ui.view;
+  }, [c.ui.view]);
 
   useGSAP(
     () => {
@@ -20,7 +27,6 @@ export function CustomCursor() {
       const dt = dot.current!;
       const lb = label.current!;
 
-      document.documentElement.classList.add("cursor-none");
       gsap.set([rg, dt], { xPercent: -50, yPercent: -50 });
 
       const rx = gsap.quickTo(rg, "x", { duration: 0.5, ease: "power3.out" });
@@ -28,19 +34,31 @@ export function CustomCursor() {
       const dx = gsap.quickTo(dt, "x", { duration: 0.12, ease: "power3.out" });
       const dy = gsap.quickTo(dt, "y", { duration: 0.12, ease: "power3.out" });
 
-      let shown = false;
+      let visible = false;
+      const show = () => {
+        if (visible) return;
+        visible = true;
+        document.documentElement.classList.add("cursor-none");
+        gsap.to(r, { autoAlpha: 1, duration: 0.3 });
+      };
+      const hide = () => {
+        if (!visible) return;
+        visible = false;
+        gsap.to(r, { autoAlpha: 0, duration: 0.15 });
+      };
 
       const resolve = (t: HTMLElement) => {
         const o = t.closest<HTMLElement>("[data-cursor]");
         if (o) {
           const v = o.dataset.cursor;
-          if (v === "view") return ["view", "view"];
+          if (v === "native") return ["native", ""];
+          if (v === "view") return ["view", viewWord.current];
           if (v === "link") return ["link", ""];
           if (v === "word") return ["word", ""];
           if (v === "text") return ["text", ""];
           return ["default", ""];
         }
-        if (t.closest("img")) return ["view", "view"];
+        if (t.closest("img")) return ["view", viewWord.current];
         if (t.closest("a, button, [role='button'], label, summary"))
           return ["link", ""];
         if (
@@ -53,28 +71,34 @@ export function CustomCursor() {
       };
 
       const onMove = (e: MouseEvent) => {
-        if (!shown) {
-          shown = true;
-          gsap.to(r, { autoAlpha: 1, duration: 0.3 });
-        }
         rx(e.clientX);
         ry(e.clientY);
         dx(e.clientX);
         dy(e.clientY);
 
         const [state, text] = resolve(e.target as HTMLElement);
+        if (state === "native") {
+          hide();
+          return;
+        }
+        show();
         if (r.dataset.state !== state) {
           r.dataset.state = state;
           lb.textContent = text;
         }
       };
 
-      const onLeave = () => gsap.to(r, { autoAlpha: 0, duration: 0.25 });
+      const onLeave = () => {
+        visible = false;
+        gsap.to(r, { autoAlpha: 0, duration: 0.25 });
+      };
+      const onEnter = () => show();
       const onDown = () => gsap.to(rg, { scale: 0.8, duration: 0.2 });
       const onUp = () => gsap.to(rg, { scale: 1, duration: 0.3 });
 
       window.addEventListener("mousemove", onMove);
       document.addEventListener("mouseleave", onLeave);
+      document.addEventListener("mouseenter", onEnter);
       window.addEventListener("mousedown", onDown);
       window.addEventListener("mouseup", onUp);
 
@@ -82,6 +106,7 @@ export function CustomCursor() {
         document.documentElement.classList.remove("cursor-none");
         window.removeEventListener("mousemove", onMove);
         document.removeEventListener("mouseleave", onLeave);
+        document.removeEventListener("mouseenter", onEnter);
         window.removeEventListener("mousedown", onDown);
         window.removeEventListener("mouseup", onUp);
       };
@@ -101,7 +126,7 @@ export function CustomCursor() {
       >
         <span
           ref={label}
-          className="cur-label font-mono text-[9px] tracking-widest uppercase text-accent"
+          className="cur-label font-label text-[9px] tracking-widest uppercase text-accent"
         />
       </div>
       <div ref={dot} className="cur-dot fixed top-0 left-0" />

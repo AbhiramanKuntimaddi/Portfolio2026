@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { gsap, useGSAP } from "@/lib/gsap";
+import { useContent } from "@/components/providers/ContentProvider";
 
 function MaskWords({
   text,
@@ -19,7 +20,7 @@ function MaskWords({
   return (
     <span className={className}>
       {text.split(" ").map((word, i) => {
-        const bare = word.replace(/[^a-zA-Z-]/g, "").toLowerCase();
+        const bare = word.replace(/[^\p{L}-]/gu, "").toLowerCase();
         const isEmph = emph.has(bare);
         return (
           <span
@@ -46,6 +47,8 @@ function MaskWords({
 }
 
 export function AboutAct() {
+  const { c } = useContent();
+  const a = c.about;
   const rootRef = useRef<HTMLElement>(null);
   const imgRef = useRef<HTMLDivElement>(null);
   const tiltX = useRef<(v: number) => void>(null);
@@ -84,58 +87,69 @@ export function AboutAct() {
       ref={rootRef}
       className="about-act absolute inset-0 flex items-center justify-center"
     >
-      <div className="about-content w-full max-w-6xl px-6 md:px-20 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-24 items-center">
-        <div className="lg:col-span-5 flex justify-center lg:justify-start relative">
+      <div className="about-content frame flex flex-col items-center justify-center gap-12 xl:flex-row xl:gap-24">
+        <div className="relative flex w-full justify-center xl:w-auto xl:shrink-0">
           <div
             ref={imgRef}
             data-cursor="default"
             onMouseMove={handleMouseMove}
             onMouseLeave={handleMouseLeave}
-            className="about-img relative w-full max-w-48 sm:max-w-60 lg:max-w-72"
+            className="about-img relative w-full max-w-48 sm:max-w-60 lg:max-w-72 xl:w-80 xl:max-w-none"
             style={{ perspective: 1000, transformStyle: "preserve-3d" }}
           >
-            <div className="absolute -inset-4 rounded-lg bg-linear-to-tr from-accent/25 to-background opacity-40 blur-3xl -z-10" />
-            <div
-              className="absolute -inset-3 border border-foreground/5 rounded-sm"
-              style={{ transform: "translateZ(-10px)" }}
-            />
-            <div
-              className="about-img-inner relative aspect-4/5 overflow-hidden rounded-sm border border-foreground/10 shadow-2xl"
-              style={{ transform: "translateZ(20px)" }}
-            >
-              <Image
-                src="/images/Profile.jpg"
-                alt="Abhiraman Kuntimaddi — Software & Machine Learning Engineer"
-                fill
-                priority
-                sizes="(max-width: 640px) 192px, (max-width: 1024px) 240px, 288px"
-                className="about-photo object-cover"
+            <div className="relative">
+              <span
+                aria-hidden
+                className="absolute -top-3 -left-3 h-4 w-4 border-t border-l border-accent"
               />
+              <span
+                aria-hidden
+                className="absolute -top-3 -right-3 h-4 w-4 border-t border-r border-accent"
+              />
+              <span
+                aria-hidden
+                className="absolute -bottom-3 -left-3 h-4 w-4 border-b border-l border-accent"
+              />
+              <span
+                aria-hidden
+                className="absolute -bottom-3 -right-3 h-4 w-4 border-b border-r border-accent"
+              />
+              <div
+                className="about-img-inner relative aspect-4/5 overflow-hidden rounded-sm border border-line"
+                style={{ transform: "translateZ(20px)" }}
+              >
+                <Image
+                  src="/images/Profile.jpg"
+                  alt={a.photoAlt}
+                  fill
+                  priority
+                  sizes="(max-width: 640px) 192px, (max-width: 1024px) 240px, 320px"
+                  className="about-photo object-cover"
+                />
+              </div>
             </div>
-            <div
-              className="absolute -bottom-4 left-1/2 bg-background px-4 py-2 border border-foreground/10 z-10 shadow-xl whitespace-nowrap"
-              style={{ transform: "translateX(-50%) translateZ(50px)" }}
-            >
-              <span className="text-accent font-mono text-[10px] tracking-[0.3em] uppercase">
-                SYSTEM_USER: ABHIRAMAN KUNTIMADDI
-              </span>
-            </div>
+            <p className="mt-7 font-label text-[10px] tracking-[0.2em] text-muted uppercase">
+              <span className="text-accent">user:</span> abhiraman kuntimaddi
+            </p>
           </div>
         </div>
 
-        <div className="lg:col-span-7 flex flex-col justify-center space-y-8 lg:space-y-12">
+        <div className="flex w-full max-w-2xl flex-col justify-center space-y-8 lg:space-y-10">
           <div className="about-quote max-w-2xl">
-            <span className="about-quote-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60">
-              The Philosophy
+            <span
+              data-decode
+              className="about-quote-label font-label text-accent font-bold tracking-[0.35em] text-[10px] uppercase mb-6 block opacity-60"
+            >
+              {a.label}
             </span>
-            <blockquote className="text-[clamp(1.2rem,2.8vw,2.4rem)] font-light leading-snug text-foreground tracking-tight">
+            <blockquote className="font-display text-[clamp(1.2rem,2.8vw,2.4rem)] font-light leading-snug text-foreground tracking-tight">
               <MaskWords
-                text="“Design is not just what it looks like, it is how it works.”"
+                text={a.quote}
                 className="inline"
-                accentFrom={8}
+                accentFrom={Number(a.quoteAccentFrom)}
               />
             </blockquote>
-            <cite className="about-cite mt-6 flex items-center gap-4 text-xs text-foreground/50 not-italic">
+            <cite className="about-cite mt-6 flex items-center gap-4 text-xs text-muted not-italic">
               <span className="h-px w-8 bg-foreground/20" />
               <span className="tracking-widest uppercase text-[10px]">
                 Steve Jobs
@@ -143,24 +157,19 @@ export function AboutAct() {
             </cite>
           </div>
 
-          <div className="border-l border-foreground/10 pl-6 lg:pl-8 max-w-xl flex flex-col gap-4 lg:gap-6">
-            <p className="text-foreground text-[clamp(1.1rem,1.9vw,1.5rem)] leading-relaxed font-light">
+          <div className="border-l border-line pl-6 lg:pl-8 max-w-xl flex flex-col gap-4 lg:gap-6">
+            <p className="font-body text-foreground/90 text-[clamp(1.05rem,1.6vw,1.35rem)] leading-relaxed">
               <MaskWords
                 className="about-p1"
-                text="I build the unseen architecture — systems where behavior matters more than appearance. From backend services and machine-learning models in Python to modern web interfaces, I focus on clarity under real use."
-                emphasis={[
-                  "architecture",
-                  "machine-learning",
-                  "models",
-                  "clarity",
-                ]}
+                text={a.p1}
+                emphasis={a.p1Emphasis.split(",")}
               />
             </p>
-            <p className="text-foreground/60 text-[clamp(0.95rem,1.6vw,1.2rem)] leading-relaxed font-light italic">
+            <p className="font-body text-foreground/70 text-[clamp(0.95rem,1.4vw,1.15rem)] leading-relaxed">
               <MaskWords
                 className="about-p2"
-                text="Good software feels obvious. My work is about removing friction until complexity fades and intent remains."
-                emphasis={["obvious", "friction", "intent"]}
+                text={a.p2}
+                emphasis={a.p2Emphasis.split(",")}
               />
             </p>
           </div>

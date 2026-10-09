@@ -1,10 +1,10 @@
-import { projects, type Project } from "@/lib/data/projects";
+import type { Project } from "@/lib/data/projects";
 
 export type SiteStatusState = "available" | "working" | "busy" | "away";
 
 export interface SiteStatusLine {
   state: SiteStatusState;
-  label: string;
+  key: "weekend" | "work" | "evening";
   dnd?: boolean;
 }
 
@@ -20,20 +20,13 @@ export function getJobLine(now: Date = new Date()): SiteStatusLine {
   const hour = Number(parts.find((p) => p.type === "hour")?.value ?? "0");
   const isWeekday = ["Mon", "Tue", "Wed", "Thu", "Fri"].includes(wd);
 
-  if (!isWeekday) {
-    return {
-      state: "available",
-      label: "off the clock · weekend builds welcome",
-    };
-  }
-  if (hour >= 9 && hour < 17) {
-    return { state: "busy", label: "9-to-5 at SoftDeCC Software GmbH", dnd: true };
-  }
-  return { state: "available", label: "side projects after hours" };
+  if (!isWeekday) return { state: "available", key: "weekend" };
+  if (hour >= 9 && hour < 17) return { state: "busy", key: "work", dnd: true };
+  return { state: "available", key: "evening" };
 }
 
-export function openProjects(): Project[] {
+export function openProjects(projects: Project[]): Project[] {
   return projects.filter(
-    (p) => p.status === "ONGOING" || p.status === "UPCOMING",
+    (p) => !p.hidden && (p.status === "ONGOING" || p.status === "UPCOMING"),
   );
 }

@@ -29,7 +29,8 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts",
-    "css-modules.d.ts"
+    "css-modules.d.ts",
+    ".design-lab/design-lab.d.ts"
   ],
   "exclude": ["node_modules"]
 }

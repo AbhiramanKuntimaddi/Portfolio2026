@@ -1,28 +1,47 @@
 import type { MetadataRoute } from "next";
 import { site } from "@/lib/site";
-import { projects } from "@/lib/data/projects";
+import { getPublished } from "@/lib/cms/content";
+import { visibleProjects } from "@/lib/cms/schema";
+import { locales } from "@/lib/i18n";
 
-export default function sitemap(): MetadataRoute.Sitemap {
+export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const now = new Date();
 
-  const slugs = Array.from(
-    new Set(projects.map((p) => p.link.replace("/archive/", ""))),
-  );
+  const slugs = visibleProjects(
+    await getPublished("projects", { allowDraft: false }),
+  ).map((p) => p.slug);
 
-  const projectRoutes: MetadataRoute.Sitemap = slugs.map((slug) => ({
-    url: `${site.url}/archive/${slug}`,
+  const langAlternates = (path: string) => ({
+    languages: Object.fromEntries(
+      locales.map((l) => [l, `${site.url}/${l}${path}`]),
+    ),
+  });
+
+  const home: MetadataRoute.Sitemap = locales.map((l) => ({
+    url: `${site.url}/${l}`,
     lastModified: now,
     changeFrequency: "monthly",
-    priority: 0.7,
+    priority: 1,
+    alternates: langAlternates(""),
   }));
 
-  return [
-    {
-      url: site.url,
+  const projectRoutes: MetadataRoute.Sitemap = locales.flatMap((l) =>
+    slugs.map((slug) => ({
+      url: `${site.url}/${l}/work/${slug}`,
       lastModified: now,
-      changeFrequency: "monthly",
-      priority: 1,
-    },
-    ...projectRoutes,
-  ];
+      changeFrequency: "monthly" as const,
+      priority: 0.7,
+      alternates: langAlternates(`/work/${slug}`),
+    })),
+  );
+
+  const work: MetadataRoute.Sitemap = locales.map((l) => ({
+    url: `${site.url}/${l}/work`,
+    lastModified: now,
+    changeFrequency: "monthly",
+    priority: 0.8,
+    alternates: langAlternates("/work"),
+  }));
+
+  return [...home, ...work, ...projectRoutes];
 }

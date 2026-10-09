@@ -1,31 +1,64 @@
 @import "tailwindcss";
-
-@theme {
-  --color-background: #040811;
-  --color-foreground: #dcdee2;
-  --color-accent: #1b54ff;
-
-  --font-sans: var(--font-clash), "Geist", sans-serif;
-}
+@import "./tokens.css";
 
 :root {
-  --background: #040811;
-  --foreground: #dcdee2;
-  --accent: #1b54ff;
+  --palette-background: #040811;
+  --palette-foreground: #dcdee2;
+  --palette-muted: #7d8597;
+  --palette-accent: #1b54ff;
+
+  --font-sans: var(--font-clash), sans-serif;
+  --font-display: var(--font-clash), sans-serif;
+  --font-label: var(--font-mono);
+
+  --grid-columns: 12;
+  --grid-gutter: 1.5rem;
+  --grid-margin: clamp(1.5rem, 4.5vw, 6rem);
+  --grid-max: 96rem;
+  --frame-x: max(
+    var(--grid-margin),
+    calc((100vw - var(--grid-max)) / 2 + var(--grid-margin))
+  );
+  --grid-baseline: 0.5rem;
+}
+
+@utility frame {
+  width: 100%;
+  max-width: var(--grid-max);
+  margin-inline: auto;
+  padding-inline: var(--grid-margin);
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  scroll-behavior: auto;
 }
 
 body {
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-background);
+  color: var(--color-foreground);
   font-family: var(--font-sans);
   letter-spacing: -0.02em;
   line-height: 1.2;
   -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+  overscroll-behavior-y: none;
+}
+
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a {
+  touch-action: manipulation;
 }
 
 ::selection {
-  background-color: var(--accent);
-  color: #ffffff;
+  background-color: var(--color-accent);
+  color: var(--color-background);
 }
 
 html.lenis,
@@ -53,7 +86,7 @@ html.lenis body {
 .cur-ring {
   width: 36px;
   height: 36px;
-  border: 1px solid rgba(27, 84, 255, 0.4);
+  border: 1px solid color-mix(in oklab, var(--color-accent) 40%, transparent);
   border-radius: 9999px;
   background: transparent;
   transition:
@@ -69,8 +102,7 @@ html.lenis body {
   width: 5px;
   height: 5px;
   border-radius: 9999px;
-  background: var(--accent);
-  box-shadow: 0 0 8px rgba(27, 84, 255, 0.6);
+  background: var(--color-accent);
   transition:
     width 0.25s ease,
     height 0.25s ease,
@@ -87,8 +119,8 @@ html.lenis body {
 .cur-root[data-state="link"] .cur-ring {
   width: 54px;
   height: 54px;
-  border-color: var(--accent);
-  background: rgba(27, 84, 255, 0.08);
+  border-color: var(--color-accent);
+  background: color-mix(in oklab, var(--color-accent) 8%, transparent);
 }
 .cur-root[data-state="link"] .cur-dot {
   opacity: 0;
@@ -97,8 +129,8 @@ html.lenis body {
 .cur-root[data-state="view"] .cur-ring {
   width: 76px;
   height: 76px;
-  border-color: var(--accent);
-  background: rgba(27, 84, 255, 0.1);
+  border-color: var(--color-accent);
+  background: color-mix(in oklab, var(--color-accent) 10%, transparent);
 }
 .cur-root[data-state="view"] .cur-dot {
   opacity: 0;
@@ -123,7 +155,6 @@ html.lenis body {
   width: 22px;
   height: 7px;
   border-radius: 2px;
-  box-shadow: 0 0 14px rgba(27, 84, 255, 0.85);
 }
 
 .np-bar {
@@ -135,7 +166,7 @@ html.lenis body {
   width: 2px;
   height: 0.9em;
   border-radius: 9999px;
-  background: var(--accent);
+  background: var(--color-accent);
   opacity: 0.8;
   animation: np-caret-soft 2s ease-in-out infinite;
 }

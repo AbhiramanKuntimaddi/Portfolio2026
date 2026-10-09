@@ -37,19 +37,17 @@ export function RollingDigit({
 
       gsap.fromTo(
         incoming,
-        { yPercent: 30, opacity: 0, filter: "blur(10px)" },
+        { yPercent: 60, opacity: 0 },
         {
           yPercent: 0,
           opacity: 1,
-          filter: "blur(0px)",
           duration: 0.7,
           ease: "power3.out",
         },
       );
       gsap.to(old, {
-        yPercent: -30,
+        yPercent: -60,
         opacity: 0,
-        filter: "blur(10px)",
         duration: 0.7,
         ease: "power3.out",
         onComplete: () => old.remove(),

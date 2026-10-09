@@ -4,10 +4,12 @@ import {
   useCallback,
   useEffect,
   useLayoutEffect,
+  useMemo,
   useRef,
   useState,
 } from "react";
 import { gsap } from "@/lib/gsap";
+import { decodeIn } from "@/lib/decode";
 import { loaderSignal } from "@/lib/loaderSignal";
 import { lenisRef } from "@/lib/lenis";
 import { enableSectionSnap } from "@/lib/sectionSnap";
@@ -18,16 +20,20 @@ import { ExperienceAct } from "@/components/acts/ExperienceAct";
 import { ProjectsAct } from "@/components/acts/ProjectsAct";
 import { ContactAct } from "@/components/acts/ContactAct";
 import { Footer } from "@/components/ui/Footer";
-import { SectionNav, type NavItem } from "@/components/ui/SectionNav";
+import { SectionHud, type NavItem } from "@/components/ui/SectionHud";
+import { useContent } from "@/components/providers/ContentProvider";
 
-const NAV_ITEMS: NavItem[] = [
-  { label: "hero", name: "intro" },
-  { label: "about", name: "about" },
-  { label: "skills", name: "skills" },
-  { label: "experience", name: "experience" },
-  { label: "projects", name: "work" },
-  { label: "contact", name: "contact" },
-];
+const NAV_LABELS = [
+  "hero",
+  "about",
+  "skills",
+  "experience",
+  "projects",
+  "contact",
+] as const;
+
+const OPEN = "inset(-10% -5% -10% -5%)";
+const SHUT = "inset(-10% -5% 110% -5%)";
 
 interface CycRange {
   key: "skills" | "exp" | "projects";
@@ -37,6 +43,11 @@ interface CycRange {
 }
 
 export function HomePinnedScroll() {
+  const { c } = useContent();
+  const navItems = useMemo<NavItem[]>(
+    () => NAV_LABELS.map((label) => ({ label, name: c.nav[label] })),
+    [c],
+  );
   const wrapperRef = useRef<HTMLDivElement>(null);
   const tlRef = useRef<gsap.core.Timeline | null>(null);
   const heroInRef = useRef<gsap.core.Timeline | null>(null);
@@ -46,6 +57,7 @@ export function HomePinnedScroll() {
 
   useLayoutEffect(() => {
     let off = () => {};
+    const restores: (() => void)[] = [];
     const ctx = gsap.context(() => {
       gsap.set(
         [
@@ -112,6 +124,10 @@ export function HomePinnedScroll() {
           "-=0.3",
         );
 
+      const q = gsap.utils.selector(wrapperRef);
+      decodeIn(heroIn, q(".hero-sub-text"), 0.45, restores, { duration: 0.7 });
+      decodeIn(heroIn, q(".hero-obj-label"), 1.1, restores, { duration: 0.5 });
+
       heroInRef.current = heroIn;
       off = loaderSignal.onComplete(() => heroIn.play());
     }, wrapperRef);
@@ -119,6 +135,7 @@ export function HomePinnedScroll() {
     return () => {
       off();
       ctx.revert();
+      restores.forEach((r) => r());
       heroInRef.current = null;
     };
   }, []);
@@ -129,373 +146,385 @@ export function HomePinnedScroll() {
       cancelIdleCallback?: (id: number) => void;
     };
     let ctx: ReturnType<typeof gsap.context> | undefined;
+    const restores: (() => void)[] = [];
     const run = () => {
       ctx = gsap.context(() => {
-      const ranges: CycRange[] = [];
+        const ranges: CycRange[] = [];
+        const q = gsap.utils.selector(wrapperRef);
 
-      const tl = gsap.timeline({
-        defaults: { ease: "none" },
-        scrollTrigger: {
-          trigger: wrapperRef.current,
-          start: "top top",
-          end: () => `+=${window.innerHeight * 28}`,
-          scrub: 1,
-          pin: true,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            if (self.progress > 0.01) heroInRef.current?.progress(1);
-            const t = self.progress * tl.duration();
-            const next = { ...idxRef.current };
-            let changed = false;
-            for (const r of ranges) {
-              if (t < r.start) {
-                if (next[r.key] !== 0) {
-                  next[r.key] = 0;
+        const tl = gsap.timeline({
+          defaults: { ease: "none" },
+          scrollTrigger: {
+            trigger: wrapperRef.current,
+            start: "top top",
+            end: () => `+=${window.innerHeight * 28}`,
+            scrub: 1,
+            pin: true,
+            anticipatePin: 1,
+            onUpdate: (self) => {
+              if (self.progress > 0.01) heroInRef.current?.progress(1);
+              const t = self.progress * tl.duration();
+              const next = { ...idxRef.current };
+              let changed = false;
+              for (const r of ranges) {
+                if (t < r.start) {
+                  if (next[r.key] !== 0) {
+                    next[r.key] = 0;
+                    changed = true;
+                  }
+                  continue;
+                }
+                const i = Math.min(
+                  Math.floor((t - r.start) / r.dur),
+                  r.count - 1,
+                );
+                if (i !== next[r.key]) {
+                  next[r.key] = i;
                   changed = true;
                 }
-                continue;
               }
-              const i = Math.min(
-                Math.floor((t - r.start) / r.dur),
-                r.count - 1,
-              );
-              if (i !== next[r.key]) {
-                next[r.key] = i;
-                changed = true;
+              if (changed) {
+                idxRef.current = next;
+                setIdx(next);
               }
-            }
-            if (changed) {
-              idxRef.current = next;
-              setIdx(next);
-            }
+            },
           },
-        },
-      });
+        });
 
-      const showAct = (sel: string, t: number) =>
-        tl.set(sel, { autoAlpha: 1 }, t);
-      const hideAct = (sel: string, t: number) =>
-        tl.to(sel, { autoAlpha: 0, duration: 0.01 }, t);
+        const showAct = (sel: string, t: number) =>
+          tl.set(sel, { autoAlpha: 1 }, t);
+        const hideAct = (sel: string, t: number) =>
+          tl.to(sel, { autoAlpha: 0, duration: 0.01 }, t);
 
-      const addCyclic = (
-        cfg: {
-          act: string;
-          intro: string;
-          content: string;
-          block: string;
-          bg: string;
-          key: "skills" | "exp" | "projects";
-        },
-        startT: number,
-      ): number => {
-        showAct(cfg.act, startT - 0.05);
+        const wipeOut = (sel: string, t: number, duration: number) => {
+          tl.fromTo(
+            sel,
+            { clipPath: OPEN },
+            { clipPath: SHUT, duration, ease: "power2.inOut" },
+            t,
+          )
+            .fromTo(
+              ".act-scan",
+              { top: "110%", autoAlpha: 1 },
+              {
+                top: "-10%",
+                duration,
+                ease: "power2.inOut",
+                immediateRender: false,
+              },
+              t,
+            )
+            .set(".act-scan", { autoAlpha: 0 }, t + duration);
+        };
 
-        tl.from(
-          `.${cfg.intro}-intro-label`,
-          { opacity: 0, y: 12, duration: 0.4, ease: "power3.out" },
-          startT,
-        )
-          .from(
+        const wipeIn = (
+          sel: string,
+          t: number,
+          { y = 16, ...vars }: gsap.TweenVars,
+        ) =>
+          tl.fromTo(
+            sel,
+            { clipPath: SHUT, y },
+            { clipPath: OPEN, y: 0, ease: "power3.out", ...vars },
+            t,
+          );
+
+        const addCyclic = (
+          cfg: {
+            act: string;
+            intro: string;
+            content: string;
+            block: string;
+            bg: string;
+            key: "skills" | "exp" | "projects";
+          },
+          startT: number,
+        ): number => {
+          showAct(cfg.act, startT - 0.05);
+
+          tl.from(
+            `.${cfg.intro}-intro-label`,
+            { opacity: 0, y: 12, duration: 0.4, ease: "power3.out" },
+            startT,
+          ).from(
             `.${cfg.intro}-intro-line`,
             { yPercent: 115, duration: 0.6, ease: "expo.out", stagger: 0.1 },
             startT + 0.1,
-          )
-          .from(
-            `.${cfg.intro}-intro-p`,
-            {
-              opacity: 0,
-              y: 20,
-              filter: "blur(6px)",
-              duration: 0.5,
-              ease: "power3.out",
-            },
-            startT + 0.3,
+          );
+          wipeIn(`.${cfg.intro}-intro-p`, startT + 0.3, { duration: 0.5 });
+          tl.from(
+            `.${cfg.intro}-intro-rule`,
+            { scaleX: 0, duration: 0.8, ease: "expo.out" },
+            startT,
+          );
+          wipeIn(`.${cfg.intro}-index [data-row]`, startT + 0.35, {
+            duration: 0.35,
+            y: 8,
+            stagger: 0.06,
+          });
+          decodeIn(
+            tl,
+            q(`.${cfg.intro}-intro [data-decode]`),
+            startT,
+            restores,
+            { duration: 0.55, stagger: 0.1 },
           );
 
-        const introOut = startT + 1.4;
-        const itemsStart = startT + 1.85;
-        const itemDur = 0.6;
+          const introOut = startT + 1.4;
+          const itemsStart = startT + 1.85;
+          const itemDur = 0.6;
 
-        tl.to(
-          `.${cfg.intro}-intro`,
-          {
-            opacity: 0,
-            scale: 0.96,
-            filter: "blur(10px)",
-            duration: 0.25,
-            ease: "power2.in",
-          },
-          introOut,
-        )
-          .fromTo(
+          wipeOut(`.${cfg.intro}-intro`, introOut, 0.35);
+          tl.fromTo(
             cfg.content,
             { opacity: 0, y: 30 },
             { opacity: 1, y: 0, duration: 0.3, ease: "power3.out" },
             introOut + 0.05,
-          )
-          .fromTo(
+          ).fromTo(
             cfg.bg,
             { opacity: 0 },
             { opacity: 0.05, duration: 0.4, ease: "power2.out" },
             itemsStart - 0.1,
           );
-        const blocks = gsap.utils.toArray<HTMLElement>(cfg.block);
-        blocks.forEach((b, i) => {
-          const s = itemsStart + i * itemDur;
-          tl.fromTo(
-            gsap.utils.toArray(b.children),
-            {
-              yPercent: 80,
-              opacity: 0,
-              clipPath: "inset(0% 0% 100% 0%)",
-            },
-            {
-              yPercent: 0,
-              opacity: 1,
-              clipPath: "inset(0% 0% -30% 0%)",
-              duration: 0.26,
-              ease: "power4.out",
-              stagger: 0.05,
-            },
-            s,
-          );
-          if (i < blocks.length - 1) {
-            tl.to(
+          const blocks = gsap.utils.toArray<HTMLElement>(cfg.block);
+          blocks.forEach((b, i) => {
+            const s = itemsStart + i * itemDur;
+            tl.fromTo(
               gsap.utils.toArray(b.children),
               {
-                yPercent: -80,
+                yPercent: 80,
                 opacity: 0,
-                clipPath: "inset(100% 0% 0% 0%)",
-                duration: 0.22,
-                ease: "power3.in",
+                clipPath: "inset(0% 0% 100% 0%)",
+              },
+              {
+                yPercent: 0,
+                opacity: 1,
+                clipPath: "inset(0% 0% -30% 0%)",
+                duration: 0.26,
+                ease: "power4.out",
+                stagger: 0.05,
+              },
+              s,
+            );
+            decodeIn(
+              tl,
+              gsap.utils.toArray(b.querySelectorAll("[data-decode]")),
+              s,
+              restores,
+              {
+                duration: 0.3,
                 stagger: 0.04,
               },
-              s + itemDur - 0.22,
+            );
+            if (i < blocks.length - 1) {
+              tl.to(
+                gsap.utils.toArray(b.children),
+                {
+                  yPercent: -80,
+                  opacity: 0,
+                  clipPath: "inset(100% 0% 0% 0%)",
+                  duration: 0.22,
+                  ease: "power3.in",
+                  stagger: 0.04,
+                },
+                s + itemDur - 0.22,
+              );
+            }
+          });
+
+          ranges.push({
+            key: cfg.key,
+            start: itemsStart,
+            dur: itemDur,
+            count: blocks.length,
+          });
+
+          for (let li = 0; li < blocks.length; li++) {
+            tl.addLabel(
+              `${cfg.key}-${li}`,
+              itemsStart + li * itemDur + itemDur * 0.45,
             );
           }
-        });
 
-        ranges.push({
-          key: cfg.key,
-          start: itemsStart,
-          dur: itemDur,
-          count: blocks.length,
-        });
-
-        for (let li = 0; li < blocks.length; li++) {
-          tl.addLabel(
-            `${cfg.key}-${li}`,
-            itemsStart + li * itemDur + itemDur * 0.45,
+          const itemsEnd = itemsStart + blocks.length * itemDur;
+          tl.to(
+            cfg.content,
+            { y: -24, duration: 0.35, ease: "power2.in" },
+            itemsEnd + 0.05,
           );
-        }
+          wipeOut(cfg.act, itemsEnd + 0.05, 0.35);
+          hideAct(cfg.act, itemsEnd + 0.4);
 
-        const itemsEnd = itemsStart + blocks.length * itemDur;
+          return itemsEnd + 0.4;
+        };
+
         tl.to(
-          cfg.content,
-          {
-            opacity: 0,
-            y: -30,
-            filter: "blur(8px)",
-            duration: 0.3,
-            ease: "power2.in",
-          },
-          itemsEnd + 0.05,
-        ).to(cfg.bg, { opacity: 0, duration: 0.2 }, itemsEnd + 0.05);
-        hideAct(cfg.act, itemsEnd + 0.4);
-
-        return itemsEnd + 0.4;
-      };
-
-      tl.to(
-        ".hero-name",
-        { yPercent: -20, duration: 0.6, ease: "power2.in" },
-        0,
-      )
-        .to(
+          ".hero-name",
+          { yPercent: -20, duration: 0.6, ease: "power2.in" },
+          0,
+        ).to(
           ".hero-content",
           { scale: 0.92, duration: 0.55, ease: "power2.in" },
           0,
-        )
-        .to(
-          ".hero-content",
-          {
-            autoAlpha: 0,
-            filter: "blur(18px)",
-            duration: 0.45,
-            ease: "power2.in",
-          },
-          0.1,
         );
-      hideAct(".hero-act", 0.75);
+        wipeOut(".hero-act", 0.1, 0.5);
+        hideAct(".hero-act", 0.75);
 
-      showAct(".about-act", 0.65);
-      tl.fromTo(
-        ".about-img",
-        { opacity: 0, scale: 1.05 },
-        { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" },
-        0.7,
-      )
-        .fromTo(
-          ".about-img-inner",
-          { clipPath: "inset(100% 0% 0% 0%)" },
-          {
-            clipPath: "inset(0% 0% 0% 0%)",
-            duration: 0.55,
-            ease: "power3.out",
-          },
+        showAct(".about-act", 0.65);
+        tl.fromTo(
+          ".about-img",
+          { opacity: 0, scale: 1.05 },
+          { opacity: 1, scale: 1, duration: 0.5, ease: "power3.out" },
           0.7,
         )
-        .fromTo(
-          ".about-photo",
-          { scale: 1.3 },
-          { scale: 1, duration: 0.6, ease: "power2.out" },
-          0.7,
-        )
-        .fromTo(
-          ".about-quote-label",
-          { opacity: 0, y: 10 },
-          { opacity: 1, y: 0, duration: 0.3 },
-          0.9,
-        )
-        .from(
-          ".about-quote .word",
+          .fromTo(
+            ".about-img-inner",
+            { clipPath: "inset(100% 0% 0% 0%)" },
+            {
+              clipPath: "inset(0% 0% 0% 0%)",
+              duration: 0.55,
+              ease: "power3.out",
+            },
+            0.7,
+          )
+          .fromTo(
+            ".about-photo",
+            { scale: 1.3 },
+            { scale: 1, duration: 0.6, ease: "power2.out" },
+            0.7,
+          )
+          .fromTo(
+            ".about-quote-label",
+            { opacity: 0, y: 10 },
+            { opacity: 1, y: 0, duration: 0.3 },
+            0.9,
+          )
+          .from(
+            ".about-quote .word",
+            {
+              yPercent: 110,
+              opacity: 0,
+              duration: 0.3,
+              ease: "power3.out",
+              stagger: 0.02,
+            },
+            0.95,
+          )
+          .fromTo(
+            ".about-cite",
+            { opacity: 0, x: -10 },
+            { opacity: 1, x: 0, duration: 0.3 },
+            1.2,
+          )
+          .from(
+            ".about-p1 .word",
+            {
+              yPercent: 110,
+              opacity: 0,
+              duration: 0.25,
+              ease: "power3.out",
+              stagger: 0.012,
+            },
+            1.25,
+          )
+          .from(
+            ".about-p2 .word",
+            {
+              yPercent: 110,
+              opacity: 0,
+              duration: 0.22,
+              ease: "power3.out",
+              stagger: 0.012,
+            },
+            1.5,
+          )
+          .to(
+            ".about-content",
+            { yPercent: -6, duration: 0.4, ease: "power2.in" },
+            2.4,
+          );
+        decodeIn(tl, q(".about-quote-label"), 0.9, restores, { duration: 0.4 });
+        wipeOut(".about-act", 2.4, 0.4);
+        hideAct(".about-act", 2.85);
+
+        const skillsStart = 2.85;
+        const skillsEnd = addCyclic(
           {
-            yPercent: 110,
-            opacity: 0,
-            duration: 0.3,
-            ease: "power3.out",
-            stagger: 0.02,
+            act: ".skills-act",
+            intro: "skills",
+            content: ".skills-content",
+            block: ".skill-block",
+            bg: ".skills-bgdigit",
+            key: "skills",
           },
-          0.95,
-        )
-        .fromTo(
-          ".about-cite",
-          { opacity: 0, x: -10 },
-          { opacity: 1, x: 0, duration: 0.3 },
-          1.2,
-        )
-        .from(
-          ".about-p1 .word",
-          {
-            yPercent: 110,
-            opacity: 0,
-            duration: 0.25,
-            ease: "power3.out",
-            stagger: 0.012,
-          },
-          1.25,
-        )
-        .from(
-          ".about-p2 .word",
-          {
-            yPercent: 110,
-            opacity: 0,
-            duration: 0.22,
-            ease: "power3.out",
-            stagger: 0.012,
-          },
-          1.5,
-        )
-        .to(
-          ".about-content",
-          {
-            opacity: 0,
-            yPercent: -12,
-            filter: "blur(8px)",
-            duration: 0.35,
-            ease: "power2.in",
-          },
-          2.4,
+          skillsStart,
         );
-      hideAct(".about-act", 2.85);
-
-      const skillsStart = 2.85;
-      const skillsEnd = addCyclic(
-        {
-          act: ".skills-act",
-          intro: "skills",
-          content: ".skills-content",
-          block: ".skill-block",
-          bg: ".skills-bgdigit",
-          key: "skills",
-        },
-        skillsStart,
-      );
-      const expStart = skillsEnd;
-      const expEnd = addCyclic(
-        {
-          act: ".exp-act",
-          intro: "exp",
-          content: ".exp-content",
-          block: ".exp-block",
-          bg: ".exp-bgyear",
-          key: "exp",
-        },
-        expStart,
-      );
-      const projStart = expEnd;
-      const projEnd = addCyclic(
-        {
-          act: ".projects-act",
-          intro: "projects",
-          content: ".projects-content",
-          block: ".project-block",
-          bg: ".projects-bgdigit",
-          key: "projects",
-        },
-        projStart,
-      );
-
-      const contactStart = projEnd;
-      showAct(".contact-act", contactStart - 0.05);
-      tl.from(
-        ".contact-headline-line",
-        { yPercent: 115, duration: 0.5, ease: "expo.out", stagger: 0.1 },
-        contactStart,
-      )
-        .from(
-          ".contact-sub",
+        const expStart = skillsEnd;
+        const expEnd = addCyclic(
           {
-            opacity: 0,
-            y: 16,
-            filter: "blur(6px)",
-            duration: 0.4,
-            ease: "power3.out",
-            stagger: 0.08,
+            act: ".exp-act",
+            intro: "exp",
+            content: ".exp-content",
+            block: ".exp-block",
+            bg: ".exp-bgyear",
+            key: "exp",
           },
-          contactStart + 0.25,
-        )
-        .from(
-          ".contact-fade",
+          expStart,
+        );
+        const projStart = expEnd;
+        const projEnd = addCyclic(
           {
-            opacity: 0,
-            y: 30,
-            filter: "blur(10px)",
-            duration: 0.5,
-            ease: "expo.out",
-            stagger: 0.1,
+            act: ".projects-act",
+            intro: "projects",
+            content: ".projects-content",
+            block: ".project-block",
+            bg: ".projects-bgdigit",
+            key: "projects",
           },
-          contactStart + 0.4,
+          projStart,
         );
 
-      tl.addLabel("hero", 0)
-        .addLabel("about", 2.0)
-        .addLabel("skills", skillsStart + 0.9)
-        .addLabel("experience", expStart + 0.9)
-        .addLabel("projects", projStart + 0.9)
-        .addLabel("contact", contactStart + 0.9);
+        const contactStart = projEnd;
+        showAct(".contact-act", contactStart - 0.05);
+        tl.from(
+          ".contact-headline-line",
+          { yPercent: 115, duration: 0.5, ease: "expo.out", stagger: 0.1 },
+          contactStart,
+        );
+        wipeIn(".contact-sub", contactStart + 0.25, {
+          duration: 0.4,
+          y: 12,
+          stagger: 0.08,
+        });
+        wipeIn(".contact-fade", contactStart + 0.4, {
+          duration: 0.5,
+          y: 24,
+          ease: "expo.out",
+          stagger: 0.1,
+        });
+        decodeIn(tl, q(".contact-act [data-decode]"), contactStart, restores, {
+          duration: 0.45,
+          stagger: 0.1,
+        });
 
-      tlRef.current = tl;
-      const dur = tl.duration();
-      setNavPos(
-        NAV_ITEMS.map((it) => (dur ? (tl.labels[it.label] ?? 0) / dur : 0)),
-      );
-      const cleanupSnap = enableSectionSnap(tl);
+        tl.addLabel("hero", 0)
+          .addLabel("about", 2.0)
+          .addLabel("skills", skillsStart + 0.9)
+          .addLabel("experience", expStart + 0.9)
+          .addLabel("projects", projStart + 0.9)
+          .addLabel("contact", contactStart + 0.9);
 
-      return () => {
-        cleanupSnap();
-        tlRef.current = null;
-      };
+        tlRef.current = tl;
+        const dur = tl.duration();
+        setNavPos(NAV_LABELS.map((l) => (dur ? (tl.labels[l] ?? 0) / dur : 0)));
+        const cleanupSnap = enableSectionSnap(tl);
+
+        return () => {
+          cleanupSnap();
+          tlRef.current = null;
+          restores.forEach((r) => r());
+          restores.length = 0;
+        };
       }, wrapperRef);
     };
     const handle = w.requestIdleCallback
@@ -512,15 +541,6 @@ export function HomePinnedScroll() {
     () => tlRef.current?.scrollTrigger?.progress ?? 0,
     [],
   );
-
-  const scrollToProgress = useCallback((p: number) => {
-    const st = tlRef.current?.scrollTrigger;
-    if (!st) return;
-    const target = st.start + p * (st.end - st.start);
-    const lenis = lenisRef.get();
-    if (lenis) lenis.scrollTo(target, { immediate: true });
-    else window.scrollTo({ top: target });
-  }, []);
 
   const scrollToLabel = (label: string) => {
     const tl = tlRef.current;
@@ -561,12 +581,15 @@ export function HomePinnedScroll() {
         <ExperienceAct activeIndex={idx.exp} />
         <ProjectsAct activeIndex={idx.projects} />
         <ContactAct />
+        <div
+          aria-hidden
+          className="act-scan pointer-events-none invisible absolute inset-x-0 top-0 z-40 h-px bg-linear-to-r from-transparent via-accent to-transparent opacity-0"
+        />
       </div>
-      <SectionNav
-        items={NAV_ITEMS}
+      <SectionHud
+        items={navItems}
         positions={navPos}
         getProgress={getProgress}
-        scrollToProgress={scrollToProgress}
         onJump={scrollToLabel}
       />
       <Footer />

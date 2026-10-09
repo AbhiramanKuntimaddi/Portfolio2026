@@ -1,35 +1,32 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import {
   getJobLine,
   openProjects,
   type SiteStatusLine,
   type SiteStatusState,
 } from "@/lib/status";
+import {
+  useContent,
+  useLocalized,
+} from "@/components/providers/ContentProvider";
 
-const STYLES: Record<
-  SiteStatusState,
-  { dot: string; shadow: string; pulse: boolean }
-> = {
+const STYLES: Record<SiteStatusState, { dot: string; pulse: boolean }> = {
   available: {
     dot: "bg-accent",
-    shadow: "shadow-[0_0_10px_rgba(27,84,255,0.45)]",
     pulse: true,
   },
   working: {
     dot: "bg-orange-400",
-    shadow: "shadow-[0_0_10px_rgba(251,146,60,0.55)]",
     pulse: true,
   },
   busy: {
     dot: "bg-red-500",
-    shadow: "shadow-[0_0_10px_rgba(239,68,68,0.6)]",
     pulse: true,
   },
   away: {
     dot: "bg-foreground/30",
-    shadow: "",
     pulse: false,
   },
 };
@@ -47,17 +44,17 @@ function StatusRow({
 
   return (
     <span
-      className={`inline-flex items-center gap-2.5 ${
+      className={`inline-flex max-w-full min-w-0 items-center gap-2.5 ${
         align === "right" ? "flex-row-reverse" : ""
       }`}
     >
       <span
         aria-hidden
-        className={`h-2 w-2 rounded-full ${s.dot} ${s.shadow} ${
+        className={`h-2 w-2 shrink-0 rounded-full ${s.dot} ${
           s.pulse ? "animate-pulse" : ""
         }`}
       />
-      <span className="whitespace-nowrap font-mono text-[11px] lowercase tracking-wide text-foreground/55">
+      <span className="min-w-0 truncate font-label text-[11px] lowercase tracking-wide text-muted">
         {label}
       </span>
     </span>
@@ -73,7 +70,9 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
   const [jobLine, setJobLine] = useState<SiteStatusLine | null>(null);
   const [typed, setTyped] = useState("");
 
-  const opens = openProjects();
+  const { c, data } = useContent();
+  const open = useMemo(() => openProjects(data.projects), [data.projects]);
+  const opens = useLocalized(open);
 
   const projectIdx = useRef(0);
   const charIdx = useRef(0);
@@ -143,7 +142,7 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
 
   return (
     <div
-      className={`flex flex-col gap-1.5 ${
+      className={`flex max-w-[86vw] flex-col gap-1.5 sm:max-w-sm lg:max-w-none ${
         align === "right" ? "items-end" : "items-start"
       }`}
     >
@@ -153,7 +152,7 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
           align={align}
           label={
             <>
-              <span className="text-foreground/45">currently building</span>{" "}
+              <span className="text-muted">{c.status.building}</span>{" "}
               <span className="normal-case text-foreground/85">{typed}</span>
               <span
                 aria-hidden
@@ -170,13 +169,13 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
         label={
           jobLine.dnd ? (
             <>
-              {jobLine.label}
+              {c.status[jobLine.key]}
               <span className="ml-2 rounded-sm border border-red-400/40 px-1 py-px text-[8px] font-bold uppercase tracking-[0.2em] text-red-400/90">
                 dnd
               </span>
             </>
           ) : (
-            jobLine.label
+            c.status[jobLine.key]
           )
         }
       />

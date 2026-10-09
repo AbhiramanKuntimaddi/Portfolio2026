@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useContent } from "@/components/providers/ContentProvider";
 
 interface Track {
   isPlaying: boolean;
@@ -12,6 +13,7 @@ interface Track {
 }
 
 export function NowPlaying() {
+  const { c } = useContent();
   const [track, setTrack] = useState<Track>({ isPlaying: false });
 
   useEffect(() => {
@@ -60,27 +62,17 @@ export function NowPlaying() {
     };
   }, []);
 
-  const label = (
-    <span className="text-[10px] sm:text-xs uppercase tracking-[0.3em] text-accent/60 font-bold font-mono">
-      What&apos;s AK Listening To
-    </span>
-  );
-
   if (!track.isPlaying) {
     return (
-      <div className="flex flex-col items-center gap-3 text-center">
-        {label}
-        <div className="flex items-center gap-2 text-foreground/40">
-          <span className="w-1.5 h-1.5 rounded-full bg-foreground/30" />
-          <span className="text-sm font-medium">Offline · Silence for now</span>
-        </div>
+      <div className="flex items-center gap-2 text-muted">
+        <span className="h-1.5 w-1.5 rounded-full bg-foreground/30" />
+        <span className="text-xs font-medium lg:text-sm">{c.hero.offline}</span>
       </div>
     );
   }
 
   return (
     <div className="flex flex-col items-center gap-3 text-center">
-      {label}
       <a
         href={track.url}
         target="_blank"
@@ -91,7 +83,7 @@ export function NowPlaying() {
           // eslint-disable-next-line @next/next/no-img-element
           <img
             src={track.albumImage}
-            alt={track.title ?? "Album art"}
+            alt={track.title ?? c.hero.albumArt}
             className="w-10 h-10 rounded-sm object-cover border border-foreground/10"
           />
         )}
@@ -99,7 +91,7 @@ export function NowPlaying() {
           <span className="text-sm text-foreground font-medium truncate max-w-45 group-hover:text-accent transition-colors">
             {track.title}
           </span>
-          <span className="text-[11px] text-foreground/50 truncate max-w-45">
+          <span className="text-[11px] text-muted truncate max-w-45">
             {track.artist}
           </span>
         </span>

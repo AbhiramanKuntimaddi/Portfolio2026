@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import { gsap, useGSAP } from "@/lib/gsap";
 import { loaderSignal } from "@/lib/loaderSignal";
+import { useContent } from "@/components/providers/ContentProvider";
 
 const greetings = [
   "Hello",
@@ -18,6 +19,7 @@ const greetings = [
 ];
 
 export function Preloader() {
+  const { c } = useContent();
   const rootRef = useRef<HTMLDivElement>(null);
   const barRef = useRef<HTMLDivElement>(null);
   const numRef = useRef<HTMLSpanElement>(null);
@@ -120,10 +122,10 @@ export function Preloader() {
       className="fixed inset-0 z-100 bg-background flex flex-col justify-between p-6 md:p-12 lg:p-16"
     >
       <div className="pl-top flex justify-between items-center">
-        <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] text-accent/70">
-          Portfolio_System
+        <span className="text-[10px] md:text-xs font-label uppercase tracking-[0.3em] text-accent/70">
+          {c.ui.preloader.system}
         </span>
-        <span className="text-[10px] md:text-xs font-mono uppercase tracking-[0.3em] text-foreground/40">
+        <span className="text-[10px] md:text-xs font-label uppercase tracking-[0.3em] text-muted">
           V.2026
         </span>
       </div>
@@ -148,8 +150,8 @@ export function Preloader() {
           >
             000
           </span>
-          <span className="hidden sm:block mb-4 text-[10px] font-mono uppercase tracking-[0.3em] text-foreground/40">
-            Loading_Assets
+          <span className="hidden sm:block mb-4 text-[10px] font-label uppercase tracking-[0.3em] text-muted">
+            {c.ui.preloader.loading}
           </span>
         </div>
       </div>
