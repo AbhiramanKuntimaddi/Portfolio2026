@@ -35,7 +35,50 @@ const PROJECT_FIELDS: FieldSpec[] = [
     kind: "i18n",
     hint: "e.g. Web platform · CMS",
   },
-  { key: "description", label: "description", kind: "i18n-area" },
+  {
+    key: "description",
+    label: "summary",
+    kind: "i18n-area",
+    hint: "one or two sentences · homepage & lists",
+  },
+  { key: "client", label: "client", kind: "text" },
+  {
+    key: "role",
+    label: "my role",
+    kind: "i18n",
+    hint: "e.g. Design, development & CMS",
+  },
+  { key: "url", label: "live url", kind: "text", hint: "https://… · optional" },
+  {
+    key: "repo",
+    label: "code url",
+    kind: "text",
+    hint: "github link · optional",
+  },
+  {
+    key: "challenge",
+    label: "the brief",
+    kind: "i18n-area",
+    hint: "the problem, in plain words",
+  },
+  {
+    key: "solution",
+    label: "what i built",
+    kind: "i18n-area",
+    hint: "how you solved it",
+  },
+  {
+    key: "highlights",
+    label: "key features",
+    kind: "list-i18n",
+    hint: "short points, one idea each",
+  },
+  {
+    key: "outcome",
+    label: "outcome",
+    kind: "i18n-area",
+    hint: "what changed for the client · optional",
+  },
   { key: "year", label: "year", kind: "text" },
   {
     key: "status",
@@ -81,6 +124,9 @@ export function ProjectsEditor({ initial }: { initial: Project[] }) {
         ...(!p.title.de.trim() || !p.description.de.trim()
           ? [{ label: "de missing", tone: "warn" as const }]
           : []),
+        ...(!p.challenge.en.trim() && !p.solution.en.trim()
+          ? [{ label: "no story yet", tone: "muted" as const }]
+          : []),
       ]}
       toggles={[{ key: "featured", label: "home" }]}
       create={(items) => ({
@@ -89,6 +135,14 @@ export function ProjectsEditor({ initial }: { initial: Project[] }) {
         title: { ...empty },
         category: { ...empty },
         description: { ...empty },
+        client: "",
+        role: { ...empty },
+        url: "",
+        repo: "",
+        challenge: { ...empty },
+        solution: { ...empty },
+        highlights: [],
+        outcome: { ...empty },
         stack: [],
         year: String(new Date().getFullYear()),
         status: "ONGOING",

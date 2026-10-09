@@ -9,6 +9,13 @@ const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const args = new Set(process.argv.slice(2));
 const push = args.has("--push");
 const force = args.has("--force");
+const asDraft = args.has("--draft");
+const only = process.argv
+  .slice(2)
+  .filter((a) => a.startsWith("--only="))
+  .flatMap((a) => a.slice("--only=".length).split(","))
+  .map((k) => k.trim())
+  .filter(Boolean);
 const DEFAULT_ADMIN = "admin@abhiramankuntimaddi.com";
 const admins = [
   ...new Set([
@@ -83,10 +90,17 @@ create policy "media is public"
 
 const { CMS_KEYS, DEFAULTS, normalize } = await import("../lib/cms/schema.ts");
 
-const content = CMS_KEYS.map((key) => ({
-  key,
-  data: normalize(key, DEFAULTS[key]),
-}));
+const unknown = only.filter((k) => !CMS_KEYS.includes(k));
+if (unknown.length) {
+  console.error(
+    `[cms] unknown section: ${unknown.join(", ")} (use ${CMS_KEYS.join(", ")})`,
+  );
+  process.exit(1);
+}
+
+const content = CMS_KEYS.filter(
+  (key) => !only.length || only.includes(key),
+).map((key) => ({ key, data: normalize(key, DEFAULTS[key]) }));
 
 const literal = (value) => {
   const json = JSON.stringify(value, null, 2);
@@ -117,23 +131,27 @@ on conflict (email) do nothing;
 `
   : "";
 
-const dir = path.join(root, "supabase");
-await mkdir(dir, { recursive: true });
-await writeFile(path.join(dir, "schema.sql"), SCHEMA);
-await writeFile(path.join(dir, "seed.sql"), seed + adminSql);
+const writeFiles = !only.length && !asDraft;
 
-const summary = content
-  .map((c) =>
-    Array.isArray(c.data) ? `${c.key}: ${c.data.length}` : `${c.key}: ok`,
-  )
-  .join(" · ");
-console.log(`[cms] wrote supabase/seed.sql (website content: ${summary})`);
-console.log("[cms] wrote supabase/schema.sql (tables, run once)");
-console.log(
-  admins.length
-    ? `[cms] admins in seed.sql: ${admins.join(", ")}`
-    : "[cms] no admin added; pass --admin=you@example.com to add one",
-);
+if (writeFiles) {
+  const dir = path.join(root, "supabase");
+  await mkdir(dir, { recursive: true });
+  await writeFile(path.join(dir, "schema.sql"), SCHEMA);
+  await writeFile(path.join(dir, "seed.sql"), seed + adminSql);
+
+  const summary = content
+    .map((c) =>
+      Array.isArray(c.data) ? `${c.key}: ${c.data.length}` : `${c.key}: ok`,
+    )
+    .join(" · ");
+  console.log(`[cms] wrote supabase/seed.sql (website content: ${summary})`);
+  console.log("[cms] wrote supabase/schema.sql (tables, run once)");
+  console.log(
+    admins.length
+      ? `[cms] admins in seed.sql: ${admins.join(", ")}`
+      : "[cms] no admin added; pass --admin=you@example.com to add one",
+  );
+}
 
 if (push) {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
@@ -167,6 +185,46 @@ if (push) {
       process.exit(1);
     }
     console.log(`[cms] admins: ${admins.join(", ")}`);
+  }
+  if (asDraft) {
+    const { data: drafts, error: draftError } = await db
+      .from("cms_drafts")
+      .select("key");
+    if (draftError) {
+      console.error(`[cms] can't read cms_drafts: ${draftError.message}`);
+      process.exit(1);
+    }
+    const hasDraft = new Set((drafts ?? []).map((r) => r.key));
+    const blocked = content.filter((c) => hasDraft.has(c.key) && !force);
+    if (blocked.length) {
+      console.log(
+        `[cms] skipped ${blocked.map((c) => c.key).join(", ")}: an unpublished draft exists (add --force to replace it)`,
+      );
+    }
+    const rows = content
+      .filter((c) => force || !hasDraft.has(c.key))
+      .map((c) => ({ ...c, updated_at: new Date().toISOString() }));
+    if (rows.length) {
+      const { error } = await db
+        .from("cms_drafts")
+        .upsert(rows, { onConflict: "key" });
+      if (error) {
+        console.error(`[cms] draft push failed: ${error.message}`);
+        process.exit(1);
+      }
+      await db.from("cms_activity").insert(
+        rows.map((r) => ({
+          actor: "cms:seed",
+          action: "edit",
+          target: r.key,
+          detail: "draft from code",
+        })),
+      );
+      console.log(
+        `[cms] saved as draft: ${rows.map((r) => r.key).join(", ")} · review and publish in /admin/publish`,
+      );
+    }
+    process.exit(0);
   }
   const have = new Set((existing ?? []).map((r) => r.key));
   const rows = content

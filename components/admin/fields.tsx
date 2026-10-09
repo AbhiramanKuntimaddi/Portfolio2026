@@ -15,6 +15,7 @@ export type FieldSpec =
     }
   | { key: string; label: string; kind: "bool"; hint?: string }
   | { key: string; label: string; kind: "tags" | "tags-i18n"; hint?: string }
+  | { key: string; label: string; kind: "list-i18n"; hint?: string }
   | { key: string; label: string; kind: "image" | "images"; folder: string };
 
 const inputCls =
@@ -250,6 +251,73 @@ export function TagsI18nField({
   );
 }
 
+export function ListI18nField({
+  value,
+  onChange,
+}: {
+  value: Text[];
+  onChange: (v: Text[]) => void;
+}) {
+  const set = (i: number, patch: Partial<Text>) =>
+    onChange(value.map((x, j) => (j === i ? { ...x, ...patch } : x)));
+  const move = (i: number, d: -1 | 1) => {
+    const j = i + d;
+    if (j < 0 || j >= value.length) return;
+    const next = [...value];
+    [next[i], next[j]] = [next[j], next[i]];
+    onChange(next);
+  };
+  return (
+    <div className="flex flex-col gap-4">
+      {value.map((row, i) => (
+        <div key={i} className="flex items-start gap-3">
+          <span className="pt-2.5 text-accent tabular-nums">
+            {String(i + 1).padStart(2, "0")}
+          </span>
+          <div className="flex-1">
+            <I18nField value={row} onChange={(v) => set(i, v)} />
+          </div>
+          <span className="flex gap-2 pt-2.5">
+            <button
+              type="button"
+              onClick={() => move(i, -1)}
+              disabled={i === 0}
+              className="cursor-pointer text-muted hover:text-accent disabled:opacity-20"
+              aria-label="Move up"
+            >
+              ↑
+            </button>
+            <button
+              type="button"
+              onClick={() => move(i, 1)}
+              disabled={i === value.length - 1}
+              className="cursor-pointer text-muted hover:text-accent disabled:opacity-20"
+              aria-label="Move down"
+            >
+              ↓
+            </button>
+            <button
+              type="button"
+              onClick={() => onChange(value.filter((_, j) => j !== i))}
+              className="cursor-pointer text-muted hover:text-red-400"
+              aria-label="Remove"
+            >
+              ×
+            </button>
+          </span>
+        </div>
+      ))}
+      <button
+        type="button"
+        onClick={() => onChange([...value, { en: "", de: "" }])}
+        className="cursor-pointer self-start text-accent lowercase"
+      >
+        + add point
+      </button>
+    </div>
+  );
+}
+
 function Uploader({
   folder,
   onUploaded,
@@ -426,6 +494,19 @@ export function FieldInput({
       return (
         <TagsI18nField
           value={Array.isArray(value) ? (value as (string | Text)[]) : []}
+          onChange={onChange}
+        />
+      );
+    case "list-i18n":
+      return (
+        <ListI18nField
+          value={
+            Array.isArray(value)
+              ? (value as unknown[]).map((v) =>
+                  isText(v) ? v : { en: "", de: "" },
+                )
+              : []
+          }
           onChange={onChange}
         />
       );

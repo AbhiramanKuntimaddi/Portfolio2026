@@ -20,7 +20,7 @@ export const CMS_LABELS: Record<CmsKey, string> = {
   projects: "Projects",
   experience: "Experience",
   skills: "Skills",
-  copy: "Page copy",
+  copy: "Site text",
 };
 
 export const DEFAULTS: CmsData = {
@@ -58,6 +58,16 @@ function normalizeProject(raw: unknown, i: number): Project {
     title: text(p.title),
     category: text(p.category),
     description: text(p.description),
+    client: str(p.client),
+    role: text(p.role),
+    url: str(p.url).trim(),
+    repo: str(p.repo).trim(),
+    challenge: text(p.challenge),
+    solution: text(p.solution),
+    highlights: list(p.highlights)
+      .map(text)
+      .filter((h) => h.en.trim() || h.de.trim()),
+    outcome: text(p.outcome),
     stack: list(p.stack)
       .map((s) => str(s))
       .filter(Boolean),

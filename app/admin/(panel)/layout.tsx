@@ -1,6 +1,7 @@
 import { requireOwner } from "@/lib/auth";
 import { cmsMode } from "@/lib/cms/store";
-import { AdminNav } from "@/components/admin/AdminNav";
+import { getStatuses } from "@/lib/cms/content";
+import { AdminSidebar } from "@/components/admin/AdminSidebar";
 
 export default async function PanelLayout({
   children,
@@ -9,30 +10,38 @@ export default async function PanelLayout({
 }) {
   const owner = await requireOwner();
   const mode = cmsMode();
+  const pending = (await getStatuses()).filter(
+    (s) => s.status !== "clean",
+  ).length;
+
   return (
-    <div className="min-h-dvh font-label text-[12px] tracking-[0.06em]">
-      <AdminNav email={owner.email} dev={owner.dev} mode={mode} />
-      {mode !== "supabase" && (
-        <div className="border-b border-line bg-surface">
-          <p className="mx-auto max-w-6xl px-6 py-3 text-muted lowercase md:px-10">
+    <div className="min-h-dvh font-label text-[12px] tracking-[0.06em] md:grid md:grid-cols-[15rem_1fr]">
+      <AdminSidebar
+        email={owner.email}
+        dev={owner.dev}
+        mode={mode}
+        pending={pending}
+      />
+      <div className="min-w-0">
+        {mode !== "supabase" && (
+          <div className="border-b border-line bg-surface px-6 py-3 font-body text-[13px] tracking-normal text-muted md:px-10">
             {mode === "local" ? (
               <>
-                <span className="text-accent">local mode</span> · edits save to
-                .cms-local/ on this machine. connect supabase to edit the live
-                site.
+                <span className="text-accent">Local mode.</span> Edits are saved
+                in .cms-local/ on this computer, not the live site.
               </>
             ) : (
               <>
-                <span className="text-red-400">not connected</span> · set the
-                supabase env vars to save and publish.
+                <span className="text-red-400">Not connected.</span> Add the
+                Supabase keys to save and publish.
               </>
             )}
-          </p>
-        </div>
-      )}
-      <main className="mx-auto max-w-6xl px-6 py-10 md:px-10 md:py-14">
-        {children}
-      </main>
+          </div>
+        )}
+        <main className="mx-auto max-w-5xl px-6 py-10 md:px-10 md:py-14">
+          {children}
+        </main>
+      </div>
     </div>
   );
 }

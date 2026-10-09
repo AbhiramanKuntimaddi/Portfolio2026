@@ -204,6 +204,18 @@ const content = {
     },
     cta: { en: "start_conversation", de: "gespräch_starten" },
     notFound: { en: "Project not found", de: "Projekt nicht gefunden" },
+    client: { en: "client", de: "kunde" },
+    role: { en: "my role", de: "meine rolle" },
+    year: { en: "year", de: "jahr" },
+    status: { en: "status", de: "status" },
+    live: { en: "visit site", de: "website besuchen" },
+    code: { en: "view code", de: "code ansehen" },
+    brief: { en: "the brief", de: "die aufgabe" },
+    built: { en: "what i built", de: "was ich gebaut habe" },
+    features: { en: "key features", de: "funktionen" },
+    outcome: { en: "outcome", de: "ergebnis" },
+    gallery: { en: "gallery", de: "galerie" },
+    next: { en: "next project", de: "nächstes projekt" },
   },
 
   ui: {

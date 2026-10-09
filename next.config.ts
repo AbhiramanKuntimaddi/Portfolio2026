@@ -20,6 +20,11 @@ const nextConfig: NextConfig = {
         destination: "/:lang/work/:slug",
         permanent: true,
       },
+      {
+        source: "/:lang(en|de)/work/sm-chemicals-2017",
+        destination: "/:lang/work/sm-chemicals-2018",
+        permanent: true,
+      },
     ];
   },
   experimental: {
