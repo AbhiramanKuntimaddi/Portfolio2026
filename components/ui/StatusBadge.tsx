@@ -102,6 +102,7 @@ export function StatusBadge({ align = "left" }: { align?: "left" | "right" }) {
         setTyped(target.slice(0, charIdx.current));
 
         if (charIdx.current >= target.length) {
+          if (opens.length === 1) return;
           phase.current = "hold";
           delay = HOLD_MS;
         }

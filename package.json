@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "predev": "node scripts/design-lab.mjs",
-    "dev": "next dev",
+    "dev": "node .design-lab/helper.mjs next dev",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",

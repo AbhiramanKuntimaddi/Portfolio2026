@@ -13,6 +13,8 @@ declare module "design-lab" {
     labels?: { palette?: string } & Partial<Record<FontRole, string>>;
     /** The fonts the project uses now, shown next to each picker. */
     current?: Partial<Record<FontRole, string>>;
+    /** The local helper's address, for setups other than Next (which reads NEXT_PUBLIC_DESIGN_LAB_HELPER). */
+    helper?: string;
 
     /**
      * @deprecated v1 only: map the Lab onto custom variable names. Projects on

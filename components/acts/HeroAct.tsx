@@ -1,5 +1,6 @@
 "use client";
 
+import { useLayoutEffect, useRef } from "react";
 import { NowPlaying } from "@/components/ui/NowPlaying";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { useContent } from "@/components/providers/ContentProvider";
@@ -7,6 +8,48 @@ import { useContent } from "@/components/providers/ContentProvider";
 export function HeroAct({ onContact }: { onContact?: () => void }) {
   const { c } = useContent();
   const h = c.hero;
+  const nameRef = useRef<HTMLHeadingElement>(null);
+
+  useLayoutEffect(() => {
+    const name = nameRef.current;
+    if (!name) return;
+    const lines = Array.from(
+      name.querySelectorAll<HTMLElement>(".hero-name-line"),
+    );
+    let frame = 0;
+    const fit = () => {
+      name.style.fontSize = "";
+      const ratio = Math.min(
+        1,
+        ...lines.map((l) =>
+          l.scrollWidth > 0 ? l.clientWidth / l.scrollWidth : 1,
+        ),
+      );
+      if (ratio < 1) {
+        const base = parseFloat(getComputedStyle(name).fontSize);
+        name.style.fontSize = `${Math.floor(base * ratio * 0.98)}px`;
+      }
+    };
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(fit);
+    };
+    fit();
+    const resize = new ResizeObserver(schedule);
+    resize.observe(name);
+    const lab = new MutationObserver(schedule);
+    lab.observe(document.head, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    document.fonts?.ready.then(schedule);
+    return () => {
+      cancelAnimationFrame(frame);
+      resize.disconnect();
+      lab.disconnect();
+    };
+  }, []);
 
   return (
     <section className="hero-act absolute inset-0 flex flex-col overflow-y-auto xl:overflow-hidden">
@@ -14,11 +57,14 @@ export function HeroAct({ onContact }: { onContact?: () => void }) {
         <div className="flex flex-1 flex-col justify-center gap-12 md:gap-16 xl:gap-20">
           <div className="grid grid-cols-1 items-end gap-8 xl:grid-cols-12 xl:gap-6">
             <div className="xl:col-span-8">
-              <h2 className="hero-name font-heading text-4xl leading-[0.85] font-bold tracking-wider text-foreground uppercase sm:text-5xl lg:text-6xl xl:text-[clamp(4.5rem,6vw,8rem)]">
-                <span className="block overflow-hidden py-[0.1em] pr-[0.05em]">
+              <h2
+                ref={nameRef}
+                className="hero-name font-heading text-4xl leading-[0.9] font-bold tracking-wider text-foreground uppercase sm:text-5xl lg:text-6xl xl:text-[clamp(4.5rem,6vw,8rem)]"
+              >
+                <span className="block overflow-hidden py-[0.14em] pr-[0.05em]">
                   <span className="hero-name-line block">Abhiraman</span>
                 </span>
-                <span className="-mr-[0.2em] block overflow-hidden py-[0.1em] pr-[0.2em]">
+                <span className="-mr-[0.2em] block overflow-hidden py-[0.14em] pr-[0.2em]">
                   <span className="hero-name-line block tracking-widest whitespace-nowrap text-accent">
                     Kuntimaddi
                   </span>

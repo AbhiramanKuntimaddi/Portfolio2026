@@ -46,28 +46,24 @@ export function DotField() {
       dpr = Math.min(window.devicePixelRatio || 1, 2);
       w = window.innerWidth;
       h = window.innerHeight;
-      canvas.width = Math.round(w * dpr);
-      canvas.height = Math.round(h * dpr);
+      canvas.width = Math.max(1, Math.round(w * dpr));
+      canvas.height = Math.max(1, Math.round(h * dpr));
     };
 
     const draw = () => {
+      if (w < 1 || h < 1) return;
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
       ctx.clearRect(0, 0, w, h);
 
       const ox = (w % gap) / 2;
       const oy = (h % gap) / 2;
-      const cols = Math.ceil(w / gap) + 1;
-      const rows = Math.ceil(h / gap) + 1;
       const r2 = RADIUS * RADIUS;
       const live = p.on > 0.01;
       const hot: number[] = [];
 
       ctx.fillStyle = fg;
-      for (let r = 0; r < rows; r++) {
-        const y = oy + r * gap;
-        const major = r % MAJOR === 0;
-        for (let c = 0; c < cols; c++) {
-          const x = ox + c * gap;
+      for (let r = 0, y = oy; y <= h; r++, y += gap) {
+        for (let c = 0, x = ox; x <= w; c++, x += gap) {
           if (live) {
             const dx = x - p.x;
             const dy = y - p.y;
@@ -80,7 +76,7 @@ export function DotField() {
               continue;
             }
           }
-          if (major && c % MAJOR === 0) {
+          if (r % MAJOR === 0 && c % MAJOR === 0) {
             ctx.globalAlpha = 0.22;
             ctx.fillRect(x - 3, y - 0.5, 6, 1);
             ctx.fillRect(x - 0.5, y - 3, 1, 6);
@@ -92,16 +88,14 @@ export function DotField() {
       }
 
       for (let i = 0; i < hot.length; i += 3) {
-        const x = hot[i];
-        const y = hot[i + 1];
         const e = hot[i + 2];
-        const sz = 1.5 + e * 1.5;
+        const s = 1.5 + e * 1.5;
         ctx.fillStyle = fg;
         ctx.globalAlpha = 0.11 + e * 0.2;
-        ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
+        ctx.fillRect(hot[i] - s / 2, hot[i + 1] - s / 2, s, s);
         ctx.fillStyle = accent;
         ctx.globalAlpha = e * 0.85;
-        ctx.fillRect(x - sz / 2, y - sz / 2, sz, sz);
+        ctx.fillRect(hot[i] - s / 2, hot[i + 1] - s / 2, s, s);
       }
       ctx.globalAlpha = 1;
     };
@@ -152,7 +146,7 @@ export function DotField() {
     });
     mo.observe(document.documentElement, {
       attributes: true,
-      attributeFilter: ["style", "class", "data-surface"],
+      attributeFilter: ["style", "class", "data-surface", "data-theme"],
     });
     mo.observe(document.head, {
       childList: true,

@@ -20,6 +20,34 @@
     calc((100vw - var(--grid-max)) / 2 + var(--grid-margin))
   );
   --grid-baseline: 0.5rem;
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --palette-background: #f3f1ec;
+  --palette-foreground: #121212;
+  --palette-muted: #5f5b54;
+  --palette-accent: #1b54ff;
+  color-scheme: light;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+::view-transition-new(root) {
+  animation: theme-reveal 0.75s cubic-bezier(0.7, 0, 0.2, 1);
+}
+
+@keyframes theme-reveal {
+  from {
+    clip-path: circle(0 at var(--vt-x, 100%) var(--vt-y, 0));
+  }
+  to {
+    clip-path: circle(var(--vt-r, 150vmax) at var(--vt-x, 100%) var(--vt-y, 0));
+  }
 }
 
 @utility frame {

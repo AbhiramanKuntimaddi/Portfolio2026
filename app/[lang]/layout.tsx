@@ -13,6 +13,7 @@ import { ContentProvider } from "@/components/providers/ContentProvider";
 import { LanguageSwitch } from "@/components/ui/LanguageSwitch";
 import { CustomCursor } from "@/components/ui/CustomCursor";
 import { ClientChrome } from "@/components/ui/ClientChrome";
+import { themeBootScript } from "@/lib/theme";
 import { LenisProvider } from "@/components/ui/LenisProvider";
 import { Preloader } from "@/components/ui/Preloader";
 
@@ -84,7 +85,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   viewportFit: "cover",
   themeColor: "#040811",
-  colorScheme: "dark",
+  colorScheme: "dark light",
 };
 
 export default async function RootLayout({
@@ -100,7 +101,14 @@ export default async function RootLayout({
   const c = getContent(lang, site.copy);
 
   return (
-    <html lang={lang} className={clashDisplay.variable}>
+    <html
+      lang={lang}
+      className={clashDisplay.variable}
+      suppressHydrationWarning
+    >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeBootScript }} />
+      </head>
       <body className="antialiased relative bg-background min-h-screen">
         <script
           type="application/ld+json"

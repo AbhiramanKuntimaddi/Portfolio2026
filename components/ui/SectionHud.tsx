@@ -127,38 +127,61 @@ export function SectionHud({
       onKeyDown={(e) => {
         if (e.key === "Escape") setOpen(false);
       }}
-      className="fixed top-8 left-[var(--frame-x,2rem)] z-70 hidden font-label text-[11px] tracking-[0.12em] lowercase opacity-0 md:block"
+      className="fixed top-6 left-[var(--frame-x,2rem)] z-70 hidden font-label text-[11px] tracking-[0.12em] lowercase opacity-0 md:block"
     >
       <button
         type="button"
-        onClick={() => jump("hero")}
-        aria-label={c.nav.backToTop}
+        onClick={() => setOpen(true)}
+        aria-label={c.nav.menu}
+        aria-haspopup="menu"
         aria-expanded={open}
         data-cursor="link"
-        className="group flex cursor-pointer items-center select-none"
+        className={`group flex h-9 cursor-pointer items-center gap-3 border bg-background/90 pr-3 pl-3.5 transition-colors duration-300 select-none hover:border-accent/70 ${
+          open ? "border-accent/70" : "border-line"
+        }`}
       >
-        <span className="text-muted transition-colors duration-300 group-hover:text-accent">
-          ~/abhiraman/
+        <span className="flex items-center">
+          <span
+            className={`transition-colors duration-300 group-hover:text-accent ${
+              open ? "text-accent" : "text-muted"
+            }`}
+          >
+            ~/abhiraman/
+          </span>
+          <span ref={name} className="text-foreground">
+            {items[active]?.name ?? ""}
+          </span>
+          <span aria-hidden className="np-caret ml-1.5 inline-block" />
         </span>
-        <span ref={name} className="text-foreground/85">
-          {items[active]?.name ?? ""}
-        </span>
-        <span aria-hidden className="np-caret ml-1.5 inline-block" />
+        <span aria-hidden className="h-3.5 w-px bg-line" />
+        <svg
+          aria-hidden
+          viewBox="0 0 12 12"
+          className={`h-2.5 w-2.5 transition-[transform,color] duration-300 group-hover:text-accent ${
+            open ? "rotate-180 text-accent" : "text-muted"
+          }`}
+          fill="none"
+          stroke="currentColor"
+          strokeWidth="1.5"
+        >
+          <path d="M2 4.5 6 8.5 10 4.5" />
+        </svg>
       </button>
 
       <div
-        className={`absolute top-full left-0 pt-3 ${
+        className={`absolute top-full left-0 pt-2 ${
           open ? "pointer-events-auto" : "pointer-events-none"
         }`}
       >
         <div
-          className={`min-w-60 border border-line bg-background/95 px-4 py-3 transition-[opacity,translate] duration-200 ${
+          role="menu"
+          className={`min-w-64 border border-line bg-background/95 p-2 transition-[opacity,translate] duration-200 ${
             open ? "translate-y-0 opacity-100" : "-translate-y-1 opacity-0"
           }`}
         >
           <p
             aria-hidden
-            className="whitespace-nowrap text-muted"
+            className="px-2 pt-1 pb-2 whitespace-nowrap text-muted"
             style={{
               clipPath: open ? "inset(0 0 0 0)" : "inset(0 100% 0 0)",
               transition: open ? "clip-path 0.28s steps(16)" : "none",
@@ -166,7 +189,7 @@ export function SectionHud({
           >
             <span className="text-accent">$</span> ls ~/abhiraman
           </p>
-          <ul ref={list} className="mt-2.5 space-y-1">
+          <ul ref={list} className="border-t border-line pt-1">
             {items.map((it, i) => (
               <li
                 key={it.label}
@@ -179,21 +202,39 @@ export function SectionHud({
               >
                 <button
                   type="button"
+                  role="menuitem"
                   data-cursor="link"
                   tabIndex={open ? 0 : -1}
                   onClick={() => jump(it.label)}
                   aria-current={i === active ? "true" : undefined}
-                  className={`flex w-full cursor-pointer items-baseline gap-3 py-0.5 text-left transition-colors duration-200 ${
+                  className={`group/row relative flex w-full cursor-pointer items-baseline gap-3 px-2 py-1.5 text-left transition-colors duration-200 hover:bg-surface focus-visible:bg-surface focus-visible:outline-none ${
                     i === active
                       ? "text-accent"
-                      : "text-foreground/65 hover:text-foreground"
+                      : "text-foreground/70 hover:text-foreground"
                   }`}
                 >
-                  <span aria-hidden className="w-2 text-accent">
-                    {i === active ? ">" : ""}
-                  </span>
+                  <span
+                    aria-hidden
+                    className={`absolute top-1 bottom-1 left-0 w-px bg-accent transition-opacity duration-200 group-hover/row:opacity-100 group-focus-visible/row:opacity-100 ${
+                      i === active ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
                   <span className="text-muted tabular-nums">{pad(i + 1)}</span>
                   <span data-entry>{it.name}/</span>
+                  <span
+                    aria-hidden
+                    className="ml-auto -translate-x-1 pl-6 text-accent opacity-0 transition-[opacity,translate] duration-200 group-hover/row:translate-x-0 group-hover/row:opacity-100 group-focus-visible/row:translate-x-0 group-focus-visible/row:opacity-100"
+                  >
+                    cd →
+                  </span>
+                  {i === active && (
+                    <span
+                      aria-hidden
+                      className="absolute right-2 text-muted transition-opacity duration-200 group-hover/row:opacity-0 group-focus-visible/row:opacity-0"
+                    >
+                      ●
+                    </span>
+                  )}
                 </button>
               </li>
             ))}

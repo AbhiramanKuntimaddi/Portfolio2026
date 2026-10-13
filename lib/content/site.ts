@@ -21,6 +21,7 @@ const content = {
     contact: { en: "contact", de: "kontakt" },
     goTo: { en: "Go to", de: "Gehe zu" },
     backToTop: { en: "Back to top", de: "Zurück nach oben" },
+    menu: { en: "Sections", de: "Bereiche" },
   },
 
   hero: {
@@ -220,6 +221,14 @@ const content = {
 
   ui: {
     language: { en: "Language", de: "Sprache" },
+    themeToLight: {
+      en: "Switch to light theme",
+      de: "Zum hellen Design wechseln",
+    },
+    themeToDark: {
+      en: "Switch to dark theme",
+      de: "Zum dunklen Design wechseln",
+    },
     items: { en: "items", de: "Einträge" },
     tools: { en: "tools", de: "Tools" },
     view: { en: "view", de: "ansehen" },

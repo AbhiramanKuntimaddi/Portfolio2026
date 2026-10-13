@@ -1,8 +1,12 @@
 "use client";
 
+import { useRef } from "react";
 import Link from "next/link";
+import { gsap, useGSAP } from "@/lib/gsap";
+import { loaderSignal } from "@/lib/loaderSignal";
 import { LOCALE_COOKIE, localeNames, locales } from "@/lib/i18n";
 import { useContent } from "@/components/providers/ContentProvider";
+import { ThemeToggle } from "@/components/ui/ThemeToggle";
 
 function remember(next: string) {
   try {
@@ -12,45 +16,56 @@ function remember(next: string) {
 
 export function LanguageSwitch() {
   const { locale, c } = useContent();
+  const root = useRef<HTMLDivElement>(null);
+
+  useGSAP(
+    () => {
+      const el = root.current;
+      if (!el) return;
+      gsap.set(el, { autoAlpha: 0 });
+      return loaderSignal.onComplete(() =>
+        gsap.to(el, { autoAlpha: 1, duration: 0.6, delay: 0.8 }),
+      );
+    },
+    { scope: root },
+  );
 
   return (
-    <nav
-      aria-label={c.ui.language}
-      className="fixed top-6 right-6 z-70 select-none md:top-8 md:right-[var(--frame-x,2rem)]"
+    <div
+      ref={root}
+      className="invisible fixed top-5 right-5 z-70 flex items-center gap-2 opacity-0 select-none md:top-6 md:right-[var(--frame-x,2rem)]"
     >
-      <ul className="flex items-center gap-2 font-label text-[11px] tracking-[0.25em] uppercase">
-        {locales.map((l, i) => (
-          <li key={l} className="flex items-center gap-2">
-            {i > 0 && (
-              <span aria-hidden className="text-foreground/25">
-                /
-              </span>
-            )}
-            {l === locale ? (
-              <span
-                aria-current="true"
-                title={localeNames[l]}
-                className="text-accent"
-              >
-                {l.toUpperCase()}
-              </span>
-            ) : (
-              <Link
-                href={`/${l}`}
-                scroll={false}
-                hrefLang={l}
-                lang={l}
-                title={localeNames[l]}
-                data-cursor="link"
-                onClick={() => remember(l)}
-                className="text-muted transition-colors duration-300 hover:text-foreground"
-              >
-                {l.toUpperCase()}
-              </Link>
-            )}
-          </li>
-        ))}
-      </ul>
-    </nav>
+      <ThemeToggle />
+      <nav aria-label={c.ui.language}>
+        <ul className="flex h-9 items-stretch border border-line bg-background/90 p-0.5 font-label text-[11px] tracking-[0.2em] uppercase transition-colors duration-300 hover:border-accent/70">
+          {locales.map((l) => (
+            <li key={l} className="flex">
+              {l === locale ? (
+                <span
+                  aria-current="true"
+                  title={localeNames[l]}
+                  className="flex items-center bg-accent px-3 text-background"
+                >
+                  {l.toUpperCase()}
+                </span>
+              ) : (
+                <Link
+                  href={`/${l}`}
+                  scroll={false}
+                  hrefLang={l}
+                  lang={l}
+                  title={localeNames[l]}
+                  data-cursor="link"
+                  onClick={() => remember(l)}
+                  className="flex items-center px-3 text-muted transition-colors duration-200 hover:bg-surface hover:text-foreground focus-visible:bg-surface focus-visible:text-foreground focus-visible:outline-none"
+                >
+                  {l.toUpperCase()}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ul>
+      </nav>
+    </div>
   );
 }

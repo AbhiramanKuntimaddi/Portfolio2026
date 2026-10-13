@@ -100,6 +100,7 @@ export const COPY_FIELDS: Record<string, FieldInfo> = {
   "nav.contact": { label: "Contact" },
   "nav.goTo": { label: "“Go to” prefix", hint: "Screen readers only" },
   "nav.backToTop": { label: "“Back to top”", hint: "Screen readers only" },
+  "nav.menu": { label: "Sections menu name", hint: "Screen readers only" },
 
   "hero.role": { label: "Job title", hint: "Under your name" },
   "hero.based": { label: "Location line", hint: "Right of your name" },
@@ -253,6 +254,14 @@ export const COPY_FIELDS: Record<string, FieldInfo> = {
   "archive.next": { label: "Next project link" },
 
   "ui.language": { label: "Language switch name", hint: "Screen readers only" },
+  "ui.themeToLight": {
+    label: "Theme button · to light",
+    hint: "Tooltip and screen readers",
+  },
+  "ui.themeToDark": {
+    label: "Theme button · to dark",
+    hint: "Tooltip and screen readers",
+  },
   "ui.items": { label: "“items” counter word" },
   "ui.tools": { label: "“tools” counter word" },
   "ui.view": { label: "Cursor label on images" },
