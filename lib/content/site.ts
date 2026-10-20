@@ -73,12 +73,12 @@ const content = {
       de: "backend-services,machine-learning-modelle,klar",
     },
     p2: {
-      en: "Good software feels obvious. I remove friction until only the intent is left.",
-      de: "Gute Software wirkt selbstverständlich. Ich entferne Reibung, bis nur noch die Absicht übrig bleibt.",
+      en: "I also love redesigns: taking a website that has grown tired and rebuilding it to be faster, easier to manage and good to look at. Good software feels obvious; I remove friction until only the intent is left.",
+      de: "Außerdem liebe ich Redesigns: Ich nehme eine in die Jahre gekommene Website und baue sie neu auf, schneller, leichter zu pflegen und schön anzusehen. Gute Software wirkt selbstverständlich; ich entferne Reibung, bis nur noch die Absicht übrig bleibt.",
     },
     p2Emphasis: {
-      en: "obvious,friction,intent",
-      de: "selbstverständlich,reibung,absicht",
+      en: "redesigns,friction,intent",
+      de: "redesigns,reibung,absicht",
     },
     photoAlt: {
       en: "Portrait of Abhiraman Kuntimaddi",

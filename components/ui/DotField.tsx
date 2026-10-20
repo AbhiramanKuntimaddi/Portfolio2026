@@ -2,9 +2,9 @@
 
 import { useEffect, useRef } from "react";
 
-const RADIUS = 190;
-const PUSH = 7;
-const MAJOR = 4;
+const RADIUS = 150;
+const PUSH = 4;
+const MAJOR = 8;
 
 export function DotField() {
   const ref = useRef<HTMLCanvasElement>(null);
@@ -38,7 +38,7 @@ export function DotField() {
       fg = getComputedStyle(probe).color;
       probe.style.color = "var(--color-accent)";
       accent = getComputedStyle(probe).color;
-      probe.style.height = "calc(var(--grid-baseline, 0.5rem) * 4)";
+      probe.style.height = "calc(var(--grid-baseline, 0.5rem) * 5)";
       gap = Math.max(16, probe.offsetHeight || 32);
     };
 
@@ -77,11 +77,11 @@ export function DotField() {
             }
           }
           if (r % MAJOR === 0 && c % MAJOR === 0) {
-            ctx.globalAlpha = 0.22;
+            ctx.globalAlpha = 0.12;
             ctx.fillRect(x - 3, y - 0.5, 6, 1);
             ctx.fillRect(x - 0.5, y - 3, 1, 6);
           } else {
-            ctx.globalAlpha = 0.11;
+            ctx.globalAlpha = 0.06;
             ctx.fillRect(x - 0.75, y - 0.75, 1.5, 1.5);
           }
         }
@@ -91,10 +91,10 @@ export function DotField() {
         const e = hot[i + 2];
         const s = 1.5 + e * 1.5;
         ctx.fillStyle = fg;
-        ctx.globalAlpha = 0.11 + e * 0.2;
+        ctx.globalAlpha = 0.06 + e * 0.14;
         ctx.fillRect(hot[i] - s / 2, hot[i + 1] - s / 2, s, s);
         ctx.fillStyle = accent;
-        ctx.globalAlpha = e * 0.85;
+        ctx.globalAlpha = e * 0.55;
         ctx.fillRect(hot[i] - s / 2, hot[i + 1] - s / 2, s, s);
       }
       ctx.globalAlpha = 1;

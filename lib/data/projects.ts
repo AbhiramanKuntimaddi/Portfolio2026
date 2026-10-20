@@ -46,47 +46,220 @@ const webCms: Text = {
 
 export const projects: Project[] = [
   {
+    id: "10",
+    slug: "sophie-taubmann",
+    title: {
+      en: "Sophie Taubmann Photography",
+      de: "Sophie Taubmann Fotografie",
+    },
+    category: {
+      en: "Photography portfolio",
+      de: "Fotografie-Portfolio",
+    },
+    description: {
+      en: "A bilingual portfolio for photographer Sophie Taubmann: portraits, landscapes and wildlife, with the page colour shifting from chapter to chapter.",
+      de: "Ein zweisprachiges Portfolio für die Fotografin Sophie Taubmann: Porträts, Landschaften und Wildtiere, mit einer Seitenfarbe, die sich von Kapitel zu Kapitel ändert.",
+    },
+    client: "Sophie Taubmann",
+    role: {
+      en: "Design & development",
+      de: "Design & Entwicklung",
+    },
+    url: "",
+    repo: "",
+    challenge: {
+      en: "Her photographs had to lead, in English and German, and each series needed its own pace instead of one long grid of images.",
+      de: "Ihre Fotos sollten im Mittelpunkt stehen, auf Englisch und Deutsch, und jede Serie brauchte ihr eigenes Tempo statt eines langen Bilderrasters.",
+    },
+    solution: {
+      en: "Every series moves differently: a sticky text column with parallax photos for Body & Form, a framed photo that opens to full screen for Landscapes, and a pinned horizontal journey for Nature & Wildlife. The page colour cross-fades between chapters, matched to her portrait.",
+      de: "Jede Serie bewegt sich anders: eine mitlaufende Textspalte mit Parallax-Fotos für Body & Form, ein gerahmtes Foto, das sich für die Landschaften zum Vollbild öffnet, und eine fixierte horizontale Reise für Natur & Wildtiere. Die Seitenfarbe blendet zwischen den Kapiteln über, abgestimmt auf ihr Porträt.",
+    },
+    highlights: [
+      {
+        en: "A viewfinder opening: corners draw in while the portrait comes into focus",
+        de: "Ein Sucher-Intro: Ecken zeichnen sich ein, während das Porträt scharf wird",
+      },
+      {
+        en: "A full-screen photo viewer with arrows, swipe and Esc",
+        de: "Ein Vollbild-Fotobetrachter mit Pfeilen, Wischen und Esc",
+      },
+      {
+        en: "Page colour that shifts per chapter: cachemire, fig leaf and rust",
+        de: "Seitenfarbe, die sich pro Kapitel ändert: Cachemire, Feigenblatt und Rost",
+      },
+      {
+        en: "English and German, both prerendered, with the language remembered",
+        de: "Englisch und Deutsch, beide vorgerendert, die Sprache wird gemerkt",
+      },
+      {
+        en: "Built on the shared Design Lab tokens",
+        de: "Aufgebaut auf den gemeinsamen Design-Lab-Tokens",
+      },
+    ],
+    outcome: {
+      en: "",
+      de: "",
+    },
+    stack: ["NextJS", "TypeScript", "TailwindCSS", "GSAP", "Lenis"],
+    year: "2026",
+    status: "UPCOMING",
+    featured: false,
+    hidden: false,
+    cover: "",
+    images: [],
+  },
+  {
+    id: "09",
+    slug: "raghav-puppala",
+    title: {
+      en: "Raghav Puppala",
+      de: "Raghav Puppala",
+    },
+    category: {
+      en: "Personal website",
+      de: "Persönliche Website",
+    },
+    description: {
+      en: "A new website for Raghav Puppala, an Air Force veteran turned financial advisor, that leads with his wealth practice and introduces his three ventures.",
+      de: "Eine neue Website für Raghav Puppala, Veteran der indischen Luftwaffe und heute Finanzberater, die mit seiner Vermögensberatung beginnt und seine drei Unternehmen vorstellt.",
+    },
+    client: "Raghav Puppala",
+    role: {
+      en: "Design & development",
+      de: "Design & Entwicklung",
+    },
+    url: "",
+    repo: "",
+    challenge: {
+      en: "One page had to present his wealth practice (investments, insurance and retirement planning) and introduce AdsXcell, SP Design Studio and the HridaySpandana Foundation, replacing his current site.",
+      de: "Eine Seite sollte seine Vermögensberatung (Geldanlage, Versicherung und Ruhestandsplanung) vorstellen und AdsXcell, SP Design Studio sowie die HridaySpandana Foundation zeigen, als Ersatz für seine bisherige Website.",
+    },
+    solution: {
+      en: "A single page planned like a flight: a jet takes off from his credentials, follows a dashed route through how it works and lands on a runway in the contact section. Sections pin while their content builds, the ventures stack like sheets, and every section enters along a 45° cut.",
+      de: "Eine einzige Seite, geplant wie ein Flug: Ein Jet startet bei seinen Qualifikationen, folgt einer gestrichelten Route durch den Ablauf und landet auf einer Landebahn im Kontaktbereich. Abschnitte bleiben stehen, während sich ihr Inhalt aufbaut, die Unternehmen stapeln sich wie Blätter, und jeder Abschnitt erscheint entlang eines 45°-Schnitts.",
+    },
+    highlights: [
+      {
+        en: "Flight-path storytelling drawn with GSAP MotionPath and DrawSVG",
+        de: "Erzählung als Flugroute, gezeichnet mit GSAP MotionPath und DrawSVG",
+      },
+      {
+        en: "A runway-lights preloader that follows real loading",
+        de: "Ein Preloader mit Landebahnlichtern, der dem echten Ladevorgang folgt",
+      },
+      {
+        en: "A live SIP calculator with animated projections",
+        de: "Ein Live-Sparplanrechner mit animierten Prognosen",
+      },
+      {
+        en: "Corner-cut section transitions with scrambled headline edges",
+        de: "Abschnittswechsel mit Eckschnitt und verwürfelten Überschriftkanten",
+      },
+      {
+        en: "A full reduced-motion fallback, with content that never depends on animation",
+        de: "Eine vollständige Variante für reduzierte Bewegung, Inhalte hängen nie von Animationen ab",
+      },
+    ],
+    outcome: {
+      en: "",
+      de: "",
+    },
+    stack: ["NextJS", "TypeScript", "TailwindCSS", "GSAP", "Lenis"],
+    year: "2026",
+    status: "ONGOING",
+    featured: true,
+    hidden: false,
+    cover: "",
+    images: [],
+  },
+  {
     id: "01",
     slug: "spandana-puppala",
     title: {
       en: "Spandana Puppala Official Portfolio",
       de: "Offizielles Portfolio von Spandana Puppala",
     },
-    category: { en: "Personal portfolio", de: "Persönliches Portfolio" },
+    category: {
+      en: "Interactive experience · Portfolio",
+      de: "Interaktives Erlebnis · Portfolio",
+    },
     description: {
-      en: "A personal portfolio for interior designer and singer Spandana Puppala, told as one horizontal story.",
-      de: "Ein persönliches Portfolio für die Innenarchitektin und Sängerin Spandana Puppala, erzählt als eine horizontale Geschichte.",
+      en: "An interactive portfolio for interior designer and Carnatic singer Spandana Puppala, built like an instrument: the page is a vibrating plate of sand, and scrolling through it plays the octave.",
+      de: "Ein interaktives Portfolio für die Innenarchitektin und Carnatic-Sängerin Spandana Puppala, gebaut wie ein Instrument: Die Seite ist eine schwingende Platte aus Sand, und wer scrollt, spielt die Oktave.",
     },
     client: "Spandana Puppala",
-    role: { en: "Design & development", de: "Design & Entwicklung" },
+    role: {
+      en: "Concept, design & development",
+      de: "Konzept, Design & Entwicklung",
+    },
     url: "",
     repo: "",
     challenge: {
-      en: "Her studio's website sells the business. This one had to show the person: her design work and her music, side by side, in one place.",
-      de: "Die Website ihres Studios verkauft das Geschäft. Diese sollte die Person zeigen: ihre Designarbeit und ihre Musik, Seite an Seite, an einem Ort.",
+      en: "Spandana is an interior designer and a Carnatic singer. Her studio's website sells the business; this one had to show the person, and let visitors feel her music instead of only reading about it.",
+      de: "Spandana ist Innenarchitektin und Carnatic-Sängerin. Die Website ihres Studios verkauft das Geschäft; diese sollte die Person zeigen und ihre Musik erlebbar machen, statt nur darüber zu erzählen.",
     },
     solution: {
-      en: "Scrolling down moves the page sideways through seven panels: intro, about, studio, music, story, accolades and contact. Each panel has its own reveals and parallax, in the same colours and type as her studio.",
-      de: "Beim Scrollen bewegt sich die Seite seitwärts durch sieben Bereiche: Intro, Über mich, Studio, Musik, Geschichte, Auszeichnungen und Kontakt. Jeder Bereich hat eigene Animationen und Parallax, in den Farben und Schriften ihres Studios.",
+      en: "Behind the page sits a Chladni plate: 65,536 grains of sand simulated on the GPU, settling into the same patterns real sand forms on a vibrating plate. The eight chapters are the eight notes of the octave, Sa to upper Sa, so scrolling retunes the plate and each chapter arrives with its own note. Visitors choose whether to enter with sound, watch the sand spell her name, and then the plate is struck and the page begins. All the music is synthesised in the browser by a Carnatic music engine written for the site.",
+      de: "Hinter der Seite liegt eine Chladni-Platte: 65.536 Sandkörner, auf der GPU simuliert, die sich in denselben Mustern ordnen wie echter Sand auf einer schwingenden Platte. Die acht Kapitel sind die acht Töne der Oktave, Sa bis zum oberen Sa: Beim Scrollen stimmt sich die Platte um, und jedes Kapitel erscheint mit seinem eigenen Ton. Besucher wählen, ob sie mit Ton eintreten, sehen zu, wie der Sand ihren Namen schreibt, dann wird die Platte angeschlagen und die Seite beginnt. Die gesamte Musik entsteht im Browser, mit einer eigens für die Website geschriebenen Carnatic-Musik-Engine.",
     },
     highlights: [
       {
-        en: "Horizontal storytelling driven by normal vertical scrolling",
-        de: "Horizontales Erzählen, gesteuert durch normales Scrollen",
+        en: "65,536 grains of sand simulated on the GPU with WebGL2, forming real Chladni patterns",
+        de: "65.536 Sandkörner, auf der GPU mit WebGL2 simuliert, die echte Chladni-Muster bilden",
       },
       {
-        en: "Seven panels with their own GSAP reveal and parallax effects",
-        de: "Sieben Bereiche mit eigenen GSAP-Reveal- und Parallax-Effekten",
+        en: "Eight chapters tuned to the octave: scrolling retunes the plate and plays each chapter's note",
+        de: "Acht Kapitel, gestimmt auf die Oktave: Scrollen stimmt die Platte um und spielt den Ton jedes Kapitels",
       },
       {
-        en: "Shares the SP Design Studio palette and typography",
-        de: "Teilt Farbpalette und Typografie von SP Design Studio",
+        en: "An opening that asks for sound, then lets the sand spell her name before the plate is struck",
+        de: "Ein Auftakt, der nach Ton fragt und dann den Sand ihren Namen schreiben lässt, bevor die Platte angeschlagen wird",
+      },
+      {
+        en: "A Carnatic music engine built for the site: nine ragas, eight talas, gamakas and pure shruti tuning over a tambura drone",
+        de: "Eine eigene Carnatic-Musik-Engine: neun Ragas, acht Talas, Gamakas und reine Shruti-Stimmung über einem Tambura-Bordun",
+      },
+      {
+        en: "Six instruments synthesised in Web Audio: veena, venu, violin, mandolin, nadaswaram and guitar",
+        de: "Sechs Instrumente, synthetisiert mit Web Audio: Veena, Venu, Violine, Mandoline, Nadaswaram und Gitarre",
+      },
+      {
+        en: "Sympathetic resonance: hovering a link gathers the sand into a ring and sounds a soft harmonic",
+        de: "Mitschwingende Resonanz: Beim Hovern über einen Link sammelt sich der Sand zu einem Ring, und ein leiser Oberton erklingt",
+      },
+      {
+        en: "Press and hold to bow the plate; the cursor scatters the sand like a fingertip",
+        de: "Gedrückt halten, um die Platte zu streichen; der Cursor verstreut den Sand wie eine Fingerspitze",
+      },
+      {
+        en: "A string in the margin that plucks with every chapter, shows the note, its frequency and the plate's mode, and jumps between chapters",
+        de: "Eine Saite am Rand, die mit jedem Kapitel gezupft wird, Ton, Frequenz und Plattenmodus zeigt und zwischen den Kapiteln springt",
+      },
+      {
+        en: "A 404 that plays a lost scale of wrong notes over restless sand",
+        de: "Eine 404-Seite, die eine verirrte Tonleiter aus falschen Noten über unruhigem Sand spielt",
+      },
+      {
+        en: "Adapts to every device: it lowers resolution, grains and frame rate on slower GPUs, and a reading veil keeps the text legible",
+        de: "Passt sich jedem Gerät an: Auf langsameren GPUs sinken Auflösung, Körnerzahl und Bildrate, und ein Lese-Schleier hält den Text lesbar",
       },
     ],
-    outcome: none,
-    stack: ["NextJS", "GSAP", "Lenis", "TailwindCSS"],
+    outcome: {
+      en: "",
+      de: "",
+    },
+    stack: [
+      "NextJS",
+      "TypeScript",
+      "WebGL2",
+      "Web Audio",
+      "GSAP",
+      "Lenis",
+      "TailwindCSS",
+    ],
     year: "2026",
-    status: "UPCOMING",
+    status: "ONGOING",
     featured: true,
     hidden: false,
     cover: "",
@@ -145,7 +318,7 @@ export const projects: Project[] = [
       "Resend",
     ],
     year: "2026",
-    status: "ONGOING",
+    status: "COMPLETED",
     featured: true,
     hidden: false,
     cover: "",
@@ -271,7 +444,7 @@ export const projects: Project[] = [
     ],
     year: "2025",
     status: "COMPLETED",
-    featured: false,
+    featured: true,
     hidden: false,
     cover: "",
     images: [],
