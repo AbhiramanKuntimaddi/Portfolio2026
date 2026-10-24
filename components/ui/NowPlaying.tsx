@@ -33,6 +33,7 @@ export function NowPlaying() {
         if (alive) setTrack(data);
       } catch {
         /* aborted or offline — keep last state */
+        // TODO: maybe set track.isPlaying = false if offline?
       }
     };
 
